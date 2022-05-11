@@ -5,10 +5,12 @@ import {ApiProperty} from "@nestjs/swagger";
 export class CategoriesEntity {
 
     @ApiProperty({example: 'id'})
+
     @PrimaryGeneratedColumn()
     id: number
 
     @ApiProperty({example: 'title'})
+
     @Column()
     title: string
 }
