@@ -65,6 +65,7 @@ POSTGRES_DB=categories
 Check again POSTGRES_HOST=localhost
 ```
 ```bash
+$ npm i
 $ npm run start:dev
 ```
 
