@@ -1,73 +1,75 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="200" alt="Nest Logo" /></a>
-</p>
-
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
-
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+ <p align="center">AGROEX</p>
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+AGROEX Backend description
 
-## Installation
+## Prerequisites
+There is a heading for software needed for development.
 
+| Source             | Link                                              |
+|--------------------|---------------------------------------------------|
+| Node(16+)          | [Node.js](https://nodejs.org/en/download/)
+| PostgreSQL         | [14](https://www.postgresql.org/download/)        |
+| Docker             | [Download]((https://www.docker.com/get-started/)) |
+
+## If you have docker you can run the application
 ```bash
-$ npm install
+$ docker-compose up
 ```
 
-## Running the app
 
+## If you don't have docker :(
+### Install PostgreSQL:
 ```bash
-# development
-$ npm run start
+- Select the all components
+- Installation of directories:
+    - Suggested Windows directory: /var/lib/postgresql
+    - Suggested MacOs directory: /Library/PostgreSQL/14
+- Database Port: 5432
+- Set Superuser of password: choose your own or just use "root"
+- Locale: en_US.UTF-8 or default
+```
+## Pre-setup
 
-# watch mode
+### pgAdmin:
+```bash
+- Set password user (you may also use "root") #This password and superuser password are different
+- Click on PostgreSQL 14 server
+- Enter the Superuser password you chose during the PostgreSQL installation
+- Create new Database "categories"
+```
+
+### If you have a MacBook, you need to change the paths in docker-compose.yml:
+```bash
+environment:
+    PG_DATA: /Library/PostgreSQL/14/data
+    volumes:
+      - pgdata:/Library/PostgreSQL/14/data
+```
+### .env configuration:
+```bash
+PORT=5000
+POSTGRES_TYPE=postgres
+POSTGRES_HOST=postgres #for local use POSTGRES_HOST=localhost
+POSTGRES_PORT=5432 
+POSTGRES_PASSWORD=root #or use your superuser password
+POSTGRES_USERNAME=postgres
+POSTGRES_DB=categories
+```
+
+
+
+## Run app on localhost
+```bash
+Check again POSTGRES_HOST=localhost
+```
+```bash
 $ npm run start:dev
-
-# production mode
-$ npm run start:prod
 ```
 
-## Test
 
+## After the launch, the description of the API will be available at:
 ```bash
-# unit tests
-$ npm run test
-
-# e2e tests
-$ npm run test:e2e
-
-# test coverage
-$ npm run test:cov
+$ http://localhost:5000/api/docs
 ```
-
-## Support
-
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
