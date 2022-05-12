@@ -66,6 +66,8 @@ Check again POSTGRES_HOST=localhost
 ```
 ```bash
 $ npm i
+```
+```bash
 $ npm run start:dev
 ```
 
