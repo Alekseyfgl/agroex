@@ -1,21 +1,38 @@
 {
+  "include": [
+    "src"
+  ],
   "compilerOptions": {
-    "module": "commonjs",
-    "declaration": true,
-    "removeComments": true,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "allowSyntheticDefaultImports": true,
+    "moduleResolution": "node",
     "target": "es2017",
-    "sourceMap": true,
-    "outDir": "./dist",
+    "module": "commonjs",
+    "outDir": "dist",
+    "emitDecoratorMetadata": true,
+    "lib": [
+      "es2017",
+      "dom"
+    ],
     "baseUrl": "./",
-    "incremental": true,
-    "skipLibCheck": true,
-    "strictNullChecks": false,
-    "noImplicitAny": false,
-    "strictBindCallApply": false,
-    "forceConsistentCasingInFileNames": false,
-    "noFallthroughCasesInSwitch": false,
-  }
+    "paths": {
+      "*": ["packages/*/src"]
+    },
+    "experimentalDecorators": true,
+    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "removeComments": true,
+    "pretty": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "noImplicitReturns": true,
+    "allowUnreachableCode": false,
+    "forceConsistentCasingInFileNames": true,
+    "newLine": "CRLF",
+    "alwaysStrict": true,
+    "sourceMap": true,
+    "skipLibCheck": true
+  },
+  "exclude": [
+    "node_modules",
+    "src/migrations/archive"
+  ]
 }
