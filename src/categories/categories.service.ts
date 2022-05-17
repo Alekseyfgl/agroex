@@ -11,6 +11,10 @@ export class CategoriesService {
   ) {}
 
   async findAll(): Promise<CategoriesEntity[]> {
-    return await this.CategoriesRepository.find();
+    return await this.CategoriesRepository.find({
+      order: {
+        title: 'ASC',
+      },
+    });
   }
 }
