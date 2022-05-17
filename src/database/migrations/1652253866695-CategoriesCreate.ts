@@ -8,7 +8,7 @@ export class Categories21652253866695 implements MigrationInterface {
       `CREATE TABLE "categories" ("id" SERIAL NOT NULL, "title" character varying NOT NULL, CONSTRAINT "PK_24dbc6126a28ff948da33e97d3b" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `INSERT INTO "categories" VALUES (1,'Овощи'),(2,'Фрукты'),(3,'Картошка'),(4,'Грибы')`,
+      `INSERT INTO "categories" VALUES (1,'Dry fruits'),(2,'Crops'),(3,'Vegetables'),(4,'Fruits')`,
     );
   }
 
