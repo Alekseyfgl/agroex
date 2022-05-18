@@ -10,4 +10,8 @@ export class CategoriesEntity {
   @ApiProperty({ example: 'title' })
   @Column()
   title: string;
+
+  @ApiProperty({ example: 'img' })
+  @Column()
+  img: string;
 }
