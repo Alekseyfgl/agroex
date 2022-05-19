@@ -76,3 +76,32 @@ $ npm run start:dev
 ```bash
 $ http://localhost:5000/api/docs
 ```
+
+## Project structure
+```js
++-- dist // Source build
++-- src
+|   +-- categories // A module that manages "categories" resources
+|   +-- config // Environment Configuration
+|   +-- constants // Constant value and Enum
+|   +-- database // 
+|   +-- types // App types
+|   +-- auth // Authentication
+|   |   +-- migrations // TypeORM migrations 
+|   +-- user // A module that manages "user" resources
+|   |   +-- decorators // User decorators
+|   |   +-- dto // DTO (Data Transfer Object) Schema, Validation
+|   |   +-- guards // User Nest Guards
+|   |   +-- middlewares // User Nest Middlewares
+|   |   +-- types // User types
+|   |   +-- repository // The logic to access data sources
+|   +-- app.controller.ts
+|   +-- app.module.ts
+|   +-- app.service.ts
+|   +-- config.ts
+|   +-- main.ts
++-- .env
++-- Dockerfile
++-- docker-compose.yml
++-- Procfile // Commands are run by Heroku
++-- tsconfig
