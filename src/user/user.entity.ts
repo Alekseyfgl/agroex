@@ -1,9 +1,10 @@
 import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { hash } from 'bcrypt';
+import { numToEncode } from '../constans/constans';
 
 @Entity({ name: 'users' })
 export class UserEntity {
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @Column()
@@ -18,14 +19,14 @@ export class UserEntity {
   @Column({ select: false }) //так мы исключаем пароль по умолчанию
   password: string;
 
-  @Column({ default: 'registered' })
-  status: string;
+  @Column({ default: null })
+  role: string;
 
-  @Column({ default: '' })
+  @Column({ default: null })
   image: string;
 
   @BeforeInsert()
   async hashPassword() {
-    this.password = await hash(this.password, 10);
+    this.password = await hash(this.password, numToEncode);
   }
 }

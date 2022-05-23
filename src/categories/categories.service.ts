@@ -7,11 +7,11 @@ import { InjectRepository } from '@nestjs/typeorm';
 export class CategoriesService {
   constructor(
     @InjectRepository(CategoriesEntity)
-    private readonly CategoriesRepository: Repository<CategoriesEntity>,
+    private readonly categoriesRepository: Repository<CategoriesEntity>,
   ) {}
 
   async findAll(): Promise<CategoriesEntity[]> {
-    return await this.CategoriesRepository.find({
+    return await this.categoriesRepository.find({
       order: {
         title: 'ASC',
       },

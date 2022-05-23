@@ -7,8 +7,11 @@ import { ConfigModule } from '@nestjs/config';
 import { typeOrmAsyncConfig } from './config/typeorm.config';
 import { EventEmitterModule } from '@nestjs/event-emitter';
 import { UserModule } from './user/user.module';
-import { MiddlewareConsumer, RequestMethod } from '@nestjs/common';
-import { AuthMiddleware } from './user/middlewares/auth.middleware';
+import { AuthModule } from './auth/auth.module';
+
+
+
+
 
 @Module({
   imports: [
@@ -17,15 +20,9 @@ import { AuthMiddleware } from './user/middlewares/auth.middleware';
     EventEmitterModule.forRoot(),
     CategoriesModule,
     UserModule,
+    AuthModule,
   ],
   controllers: [AppController],
   providers: [AppService],
 })
-export class AppModule {
-  configure(consumer: MiddlewareConsumer) {
-    consumer.apply(AuthMiddleware).forRoutes({
-      path: '*',
-      method: RequestMethod.ALL,
-    });
-  }
-}
+export class AppModule {}
