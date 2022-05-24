@@ -8,7 +8,13 @@ export class NewTables1653384523603 implements MigrationInterface {
       `CREATE TABLE "users" ("id" SERIAL NOT NULL, "email" character varying NOT NULL, "username" character varying NOT NULL, "phone" character varying NOT NULL, "password" character varying NOT NULL, "role" character varying, "image" character varying, CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
-      `CREATE TABLE "categories" ("id" SERIAL NOT NULL, "title" character varying NOT NULL, "img" character varying NOT NULL, CONSTRAINT "PK_24dbc6126a28ff948da33e97d3b" PRIMARY KEY ("id"))`,
+        `ALTER TABLE "categories" ADD COLUMN "img" character varying;`,
+    );
+    await queryRunner.query(
+        `UPDATE "categories" SET "img" = 'https://drive.google.com/uc?export=download&confirm=no_antivirus&id=1krN4q56_oS1ZBedGvbBCvrEAgxmA5kzJ'`,
+    );
+    await queryRunner.query(
+        `ALTER TABLE "categories" ALTER COLUMN "img" SET NOT NULL;`,
     );
   }
 

@@ -11,12 +11,10 @@ export class CategoriesService {
     private readonly categoriesRepository: Repository<CategoriesEntity>,
   ) {}
 
-  async findAllSortCategories(
-    ORDER_CATEGORIES: ORDER_CATEGORIES.ASC,
-  ): Promise<CategoriesEntity[]> {
+  async findAllSortCategories(): Promise<CategoriesEntity[]> {
     return await this.categoriesRepository.find({
       order: {
-        title: ORDER_CATEGORIES,
+        title: ORDER_CATEGORIES.ASC,
       },
     });
   }
