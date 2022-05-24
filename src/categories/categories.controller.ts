@@ -3,7 +3,6 @@ import { CategoriesService } from './categories.service';
 import { CategoriesEntity } from './categories.entity';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
-
 @ApiTags('Categories of products')
 @Controller('categories')
 export class CategoriesController {

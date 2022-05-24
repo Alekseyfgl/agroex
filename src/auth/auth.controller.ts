@@ -10,13 +10,9 @@ import { CreateUserDto } from './dto/createUser.dto';
 import { UserResponseInterface } from './interfacesAndTypes/userResponse.interface';
 import { UserEntity } from '../user/user.entity';
 
-
-
-
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
-
 
   @Post('register')
   @UsePipes(new ValidationPipe())
