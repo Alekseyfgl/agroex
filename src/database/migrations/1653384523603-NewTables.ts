@@ -5,7 +5,7 @@ export class NewTables1653384523603 implements MigrationInterface {
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
-      `CREATE TABLE "users" ("id" SERIAL NOT NULL, "email" character varying NOT NULL, "username" character varying NOT NULL, "phone" character varying NOT NULL, "password" character varying NOT NULL, "role" character varying, "image" character varying, CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`,
+        `CREATE TABLE "users" ("id" SERIAL NOT NULL, "email" character varying NOT NULL, "username" character varying NOT NULL, "phone" character varying NOT NULL, "password" character varying NOT NULL, "role" character varying, "image" character varying, CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
         `ALTER TABLE "categories" ADD COLUMN "img" character varying;`,

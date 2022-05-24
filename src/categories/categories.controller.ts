@@ -1,8 +1,8 @@
-import { Controller, Get, Query } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CategoriesEntity } from './categories.entity';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { ORDER_CATEGORIES } from '../constans/constans';
+
 
 @ApiTags('Categories of products')
 @Controller('categories')
