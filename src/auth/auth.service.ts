@@ -3,36 +3,33 @@ import { UserService } from '../user/user.service';
 import { CreateUserDto } from './dto/createUser.dto';
 import { UserEntity } from '../user/user.entity';
 import { sign } from 'jsonwebtoken';
-import { UserResponseInterface } from './interfacesAndTypes/userResponse.interface';
-
+import { expiresInForToken } from '../constans/constans';
+import { userToRegistration } from './auth.mapper';
 
 @Injectable()
 export class AuthService {
-
-  constructor(private readonly userService: UserService) {
-  }
-
+  constructor(private readonly userService: UserService) {}
 
   async registerUser(createUserDto: CreateUserDto): Promise<UserEntity> {
     return await this.userService.createUser(createUserDto);
   }
 
-
-  generateJwt(user: UserEntity): string {
-    return sign({
-      id: user.id,
-      username: user.username,
-      email: user.email,
-      role: user.role,
-    }, process.env.JWT_SECRET);
+  private static generateJwt(user: UserEntity): string {
+    return sign(
+      {
+        id: user.id,
+        email: user.email,
+        role: user.role,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: expiresInForToken },
+    );
   }
 
-  buildUserResponseWithToken(user: UserEntity): UserResponseInterface {
-    return {
-      user: {
-        ...user,
-        token: this.generateJwt(user),
-      },
-    };
+  public buildUserResponseWithToken(
+    user: UserEntity,
+  ): ReturnType<typeof userToRegistration> {
+    const token: string = AuthService.generateJwt(user);
+    return userToRegistration(user, token);
   }
 }

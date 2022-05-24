@@ -44,5 +44,4 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
     charset: 'utf8mb4_unicode_ci',
   },
   synchronize: false,
-
 };

@@ -10,7 +10,7 @@ export class CategoriesService {
     private readonly categoriesRepository: Repository<CategoriesEntity>,
   ) {}
 
-  async findAll(): Promise<CategoriesEntity[]> {
+  async findAllSortCategories(): Promise<CategoriesEntity[]> {
     return await this.categoriesRepository.find({
       order: {
         title: 'ASC',
