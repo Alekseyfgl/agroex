@@ -12,6 +12,6 @@ export class CategoriesController {
   @ApiResponse({ status: 200, type: [CategoriesEntity] })
   @Get()
   async findAll(): Promise<CategoriesEntity[]> {
-    return await this.categoriesService.findAll();
+    return await this.categoriesService.findAllSortCategories();
   }
 }

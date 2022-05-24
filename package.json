@@ -9,22 +9,27 @@
     "prebuild": "rimraf dist",
     "build": "nest build",
     "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
+
     "start": "nest start",
-    "start:prod": "node dist/main.js",
-    "start:dev": "npm run migration:run && nest start --watch",
+    "start:prod": "node dist/main",
+
+    "start:dev": "nest start --watch",
+
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register nodeodules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
+
     "typeorm:cli": "ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli -f src/config/typeorm.config-migrations.ts",
+
     "migration:generate": "npm run typeorm:cli -- migration:generate -d src/database/migrations -n",
     "migration:drop": "npm run typeorm:cli -- schema:drop",
     "migration:create": "npm run typeorm:cli -- migration:create -d src/database/migrations -n",
     "migration:run": "npm run typeorm:cli -- migration:run",
-    "migration:revert": "npm run typeorm:cli -- migration:revert",
-    "db:drop": "npm run typeorm:cli schema:drop"
+    "migration:revert": "npm run typeorm:cli -- migration:revert"
+
   },
   "dependencies": {
     "@nestjs/common": "^7.5.1",
@@ -41,7 +46,10 @@
     "reflect-metadata": "^0.1.13",
     "rimraf": "^3.0.2",
     "rxjs": "^6.6.3",
-    "typeorm": "^0.2.32"
+    "typeorm": "^0.2.32",
+    "class-transformer": "^0.5.1",
+    "class-validator": "^0.13.2",
+    "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {
     "@nestjs/cli": "^7.5.1",
