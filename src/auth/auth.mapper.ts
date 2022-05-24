@@ -6,7 +6,11 @@ export const userToRegistration = (
   token: string,
 ): UserResponseInterface => ({
   user: {
-    ...user,
+    id: user.id,
+    username: user.username,
+    phone: user.phone,
+    email: user.email,
     token: token,
+    image: user.image,
   },
 });
