@@ -1,7 +1,7 @@
 import { UserEntity } from '../user/user.entity';
 import { UserResponseInterface } from './interfacesAndTypes/userResponse.interface';
 
-export const userToRegistration = (
+export const userForResponse = (
   user: UserEntity,
   token: string,
 ): UserResponseInterface => ({
