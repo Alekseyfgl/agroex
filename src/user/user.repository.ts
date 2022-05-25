@@ -56,6 +56,7 @@ export class UserRepository extends AbstractRepository<UserEntity> {
 
   async checkUserByEmail(loginUserDto: LoginUserDto): Promise<CreateUserDto> {
     const user: UserEntity = await this.getUserByEmail(loginUserDto.email);
+    console.log(user);
     if (!user) {
       throw new HttpException(
         {

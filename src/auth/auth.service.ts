@@ -34,8 +34,4 @@ export class AuthService {
     const token: string = AuthService.generateJwt(user);
     return userForResponse(user, token);
   }
-
-  async getUserById(user: UserEntity): Promise<UserEntity> {
-    return await this.userService.getUserById(user);
-  }
 }
