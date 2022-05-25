@@ -37,9 +37,4 @@ export class AuthService {
         return userForResponse(user, token);
     }
 
-    async getUserById(user: UserEntity): Promise<UserEntity> {
-        return await this.userService.getUserById(user)
-    }
-
-
 }

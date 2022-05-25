@@ -14,25 +14,25 @@ import { RolesEntity } from '../roles/roles.entity';
 @Entity({ name: 'userRoles' })
 export class UserRolesEntity {
     @PrimaryGeneratedColumn()
-    id?: number;
+    id: number;
 
     @Column()
-    user_id?: number;
+    user_id: number;
 
     @Column()
-    role_id?: number;
+    role_id: number;
 
     @CreateDateColumn()
-    created_at?: Date;
+    created_at: Date;
 
     @UpdateDateColumn()
-    updated_at?: Date;
+    updated_at: Date;
 
     @ManyToOne(() => UserEntity, userEntity => userEntity.userRoles)
     @JoinColumn({name: 'user_id'})
-    user?: UserEntity;
+    user: UserEntity;
 
     @ManyToOne(() => RolesEntity, rolesEntity => rolesEntity.userRoles)
     @JoinColumn({name: 'role_id'})
-    role?: RolesEntity;
+    role: RolesEntity;
 }

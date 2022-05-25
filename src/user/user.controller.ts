@@ -6,6 +6,8 @@ import {RolesGuard} from "../auth/guards/roles.guard";
 import {ROLES_ID} from "../constans/constans";
 import {AddRoleDto} from "./dto/add-role.dto";
 import {BanUserDto} from "./dto/ban-user.dto";
+import {AuthGuard} from "../auth/guards/auth.guard";
+import {UserEntity} from "./user.entity";
 
 @Controller('users')
 export class UserController {
@@ -14,18 +16,19 @@ export class UserController {
   @ApiOperation({summary: 'Выдать роль'})
   @ApiResponse({status: 200})
   @Roles(ROLES_ID.ADMIN)
-  @UseGuards(RolesGuard)
+  @UseGuards(AuthGuard, RolesGuard)
   @Post('/role')
-  addRole(@Body() dto: AddRoleDto) {
+  addRole(@Body() dto: AddRoleDto): Promise<AddRoleDto> {
     return this.userService.addRole(dto);
   }
 
   @ApiOperation({summary: 'Забанить пользователя'})
   @ApiResponse({status: 200})
+  @UseGuards(AuthGuard, RolesGuard)
   @Roles(ROLES_ID.ADMIN)
   @UseGuards(RolesGuard)
   @Post('/ban')
-  addBan(@Body() dto: BanUserDto) {
+  addBan(@Body() dto: BanUserDto): Promise<UserEntity> {
     return this.userService.addBan(dto);
   }
 

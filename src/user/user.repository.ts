@@ -2,12 +2,14 @@ import {AbstractRepository, EntityRepository} from 'typeorm';
 import {UserEntity} from './user.entity';
 import {CreateUserDto} from '../auth/dto/createUser.dto';
 import {HttpException, HttpStatus} from '@nestjs/common';
-import {MessageError, ROLES_ID} from '../constans/constans';
+import {DB_RELATIONS, MessageError, ROLES_ID} from '../constans/constans';
 import {LoginUserDto} from "../auth/dto/loginUserDto";
 import {compare} from 'bcrypt';
 import {RolesEntity} from "../roles/roles.entity";
 import {AddRoleDto} from "./dto/add-role.dto";
 import {BanUserDto} from "./dto/ban-user.dto";
+import {Optional} from "../interfacesAndTypes/optional.interface";
+
 
 @EntityRepository(UserEntity)
 export class UserRepository extends AbstractRepository<UserEntity> {
@@ -26,10 +28,8 @@ export class UserRepository extends AbstractRepository<UserEntity> {
         }
 
         const newUser: UserEntity = new UserEntity();
-        Object.assign(newUser, createUserDto);
-
-        newUser.userRoles = [{ role_id: +ROLES_ID.ADMIN }]; // по умолчанию добавляем роль юзер
-
+        Object.assign(newUser, createUserDto, {userRoles: [{ role_id: +ROLES_ID.USER }]});
+        // Listeners currently only work when attempting to save proper Entity class instances (not plain objects)
         return await this.repository.save(newUser);
     }
 
@@ -38,7 +38,7 @@ export class UserRepository extends AbstractRepository<UserEntity> {
             where: {
                 email: email,
             },
-            relations: ['userRoles'],
+            relations: [DB_RELATIONS.USER_ROLES],
         });
     }
 
@@ -48,7 +48,6 @@ export class UserRepository extends AbstractRepository<UserEntity> {
             loginUserDto.password,
             user.password
         )
-
 
         if (!isPassword) {
             throw new HttpException(
@@ -79,7 +78,7 @@ export class UserRepository extends AbstractRepository<UserEntity> {
     async findUserById(id: number): Promise<UserEntity> {
         const user: UserEntity = await this.repository.findOne({
             where: { id: id },
-            relations: ['userRoles'],
+            relations: [DB_RELATIONS.USER_ROLES],
         });
 
         if(!user) {
@@ -94,24 +93,38 @@ export class UserRepository extends AbstractRepository<UserEntity> {
         return user
     }
 
-    async addRole(dto: AddRoleDto, role: RolesEntity) {
+    async addRole(dto: AddRoleDto, role: Optional<RolesEntity>): Promise<AddRoleDto> {
         const user = await this.findUserById(dto.userId);
 
-        if (role && user) {
+        if (role) {
             if (user.userRoles.some((userRole) => [role.id].includes(userRole.role_id))) {
-                throw new HttpException('Пользователь уже обладает данной ролью', HttpStatus.NOT_FOUND);
+                throw new HttpException(
+                    {
+                        status: HttpStatus.NOT_FOUND,
+                        message: [MessageError.ROLE_IS_ALREADY_ADDED],
+                    },
+                    HttpStatus.NOT_FOUND);
             }
-            user.userRoles.push({role_id: role.id})
-            await this.repository.save(user);
+            await this.repository.save({...user, userRoles: [...user.userRoles, {role_id: role.id}]});
             return dto;
         }
-        throw new HttpException('Пользователь или роль не найдены', HttpStatus.NOT_FOUND);
+        throw new HttpException(
+            {
+                status: HttpStatus.NOT_FOUND,
+                message: [MessageError.ROLE_OR_USER_NOT_FOUND],
+            },
+            HttpStatus.NOT_FOUND);
     }
 
-    async addBan(dto: BanUserDto) {
+    async addBan(dto: BanUserDto): Promise<UserEntity> {
         const user = await this.findUserById(dto.userId);
         if (!user) {
-            throw new HttpException('Пользователь не найден', HttpStatus.NOT_FOUND);
+            throw new HttpException(
+                {
+                    status: HttpStatus.NOT_FOUND,
+                    message: [MessageError.USER_NOT_FOUND],
+                },
+                HttpStatus.NOT_FOUND);
         }
         user.banned = true;
         user.banReason = dto.banReason;

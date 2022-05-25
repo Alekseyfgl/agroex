@@ -29,12 +29,12 @@ export class UserService {
         return await this.userRepository.findUserById(user.id)
     }
 
-    async addRole(dto: AddRoleDto) {
+    async addRole(dto: AddRoleDto): Promise<AddRoleDto> {
         const role = await this.roleService.getRoleByValue(dto.value);
         return await this.userRepository.addRole(dto, role)
     }
 
-    async addBan(dto: BanUserDto) {
+    async addBan(dto: BanUserDto):Promise<UserEntity> {
         return await this.userRepository.addBan(dto);
     }
 }

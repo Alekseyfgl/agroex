@@ -19,4 +19,13 @@ export const enum MessageError {
     WRONG_PASSWORD_TRY_AGAIN= 'Wrong password try again',
     USER_ID_NOT_FOUND = 'User with this id not found',
     NOT_AUTHORIZED = 'Not authorized',
+    ROLE_IS_ALREADY_ADDED = 'The user already has this role',
+    ROLE_IS_ALREADY_EXISTS = 'The role already exists',
+    ROLE_OR_USER_NOT_FOUND = 'User or role not found',
+    USER_NOT_FOUND = 'User not found',
+    ACCESS_DENIED = 'Access denied',
+}
+
+export enum DB_RELATIONS {
+    USER_ROLES = 'userRoles',
 }
