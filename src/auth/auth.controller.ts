@@ -3,13 +3,15 @@ import {
     Post,
     Body,
     UsePipes,
-    ValidationPipe,
+    ValidationPipe, Get, UseGuards,
 } from '@nestjs/common';
 import {AuthService} from './auth.service';
 import {CreateUserDto} from './dto/createUser.dto';
 import {UserResponseInterface} from './interfacesAndTypes/userResponse.interface';
 import {UserEntity} from '../user/user.entity';
 import {LoginUserDto} from "./dto/loginUserDto";
+import {User} from "../user/decorators/user.decarator";
+import {AuthGuard} from "./guards/auth.guard";
 
 @Controller('auth')
 export class AuthController {
@@ -29,7 +31,14 @@ export class AuthController {
     @Post('login')
     @UsePipes(new ValidationPipe())
     async login(@Body('user') loginUserDto: LoginUserDto): Promise<UserResponseInterface> {
-        const user = await this.authService.loginUser(loginUserDto)
+        const user: CreateUserDto = await this.authService.loginUser(loginUserDto)
         return this.authService.buildUserResponseWithToken(user); // ответ для клиента после авторизации
+    }
+
+    @Get('user')
+    @UseGuards(AuthGuard)// проверяем регистрац
+    async currentUser(@User() user: UserEntity, @User('id') currentUserId: number): Promise<UserResponseInterface> { // здесь всегда получим пользоватля, т.к. могут заходить только зарегестрированные
+        // console.log('------ currentUserId--------', currentUserId)
+        return this.authService.buildUserResponseWithToken(user);
     }
 }

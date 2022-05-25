@@ -21,7 +21,7 @@ export class UserEntity {
   password: string;
 
   @Column({ default: null })
-  image: string;
+  image?: string;
 
   @BeforeInsert()
   async hashPassword() {

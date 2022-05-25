@@ -70,5 +70,23 @@ export class UserRepository extends AbstractRepository<UserEntity> {
         return user
     }
 
+    async findUserById(id: number): Promise<UserEntity> {
+        const user: UserEntity = await this.repository.findOne({
+            where: {
+                id: id,
+            },
+        });
+
+        if(!user) {
+            throw new HttpException(
+                {
+                    status: HttpStatus.UNPROCESSABLE_ENTITY,
+                    message: [MessageError.USER_ID_NOT_FOUND],
+                },
+                HttpStatus.UNPROCESSABLE_ENTITY,
+            );
+        }
+        return user
+    }
 
 }

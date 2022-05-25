@@ -17,7 +17,7 @@ export class AuthService {
     }
 
     async loginUser(loginUserDto: LoginUserDto): Promise<CreateUserDto> {
-        return await this.userService.getUserFromDB(loginUserDto)
+        return await this.userService.getRegisteredUser(loginUserDto)
     }
 
     private static generateJwt(user: UserEntity): string {
@@ -35,5 +35,10 @@ export class AuthService {
         const token: string = AuthService.generateJwt(user);
         return userForResponse(user, token);
     }
+
+    async getUserById(user: UserEntity): Promise<UserEntity> {
+        return await this.userService.getUserById(user)
+    }
+
 
 }

@@ -11,12 +11,16 @@ export class UserService {
     }
 
     async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
-        return  await this.userRepository.createUser(createUserDto);
+        return await this.userRepository.createUser(createUserDto);
     }
 
-    async getUserFromDB(loginUserDto: LoginUserDto): Promise<CreateUserDto> {
-        const user = await this.userRepository.checkUserByEmail(loginUserDto)
-        const isPassword = await this.userRepository.checkPasswordFromEmail(loginUserDto)
+    async getRegisteredUser(loginUserDto: LoginUserDto): Promise<CreateUserDto> {
+        const user: CreateUserDto = await this.userRepository.checkUserByEmail(loginUserDto)
+        const isPassword: UserEntity = await this.userRepository.checkPasswordFromEmail(loginUserDto)
         return user && isPassword ? user : null
+    }
+
+    async getUserById(user: UserEntity): Promise<UserEntity> {
+        return await this.userRepository.findUserById(user.id)
     }
 }

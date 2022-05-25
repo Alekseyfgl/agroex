@@ -10,5 +10,7 @@ export enum ORDER_CATEGORIES {
 export const enum MessageError {
     EMAIL_IS_TAKEN = 'This email is already taken',
     EMAIL_NOT_FOUND = 'Email not found',
-    WRONG_PASSWORD_TRY_AGAIN= 'Wrong password try again'
+    WRONG_PASSWORD_TRY_AGAIN= 'Wrong password try again',
+    USER_ID_NOT_FOUND = 'User with this id not found',
+    NOT_AUTHORIZED = 'Not authorized',
 }
