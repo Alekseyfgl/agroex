@@ -1,7 +1,32 @@
-import { Controller } from '@nestjs/common';
+import {Body, Controller, Post, UseGuards} from '@nestjs/common';
 import { UserService } from './user.service';
+import {ApiOperation, ApiResponse} from "@nestjs/swagger";
+import {Roles} from "../roles/decorators/roles-auth.decorator";
+import {RolesGuard} from "../auth/guards/roles.guard";
+import {ROLES_ID} from "../constans/constans";
+import {AddRoleDto} from "./dto/add-role.dto";
+import {BanUserDto} from "./dto/ban-user.dto";
 
-@Controller()
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @ApiOperation({summary: 'Выдать роль'})
+  @ApiResponse({status: 200})
+  @Roles(ROLES_ID.ADMIN)
+  @UseGuards(RolesGuard)
+  @Post('/role')
+  addRole(@Body() dto: AddRoleDto) {
+    return this.userService.addRole(dto);
+  }
+
+  @ApiOperation({summary: 'Забанить пользователя'})
+  @ApiResponse({status: 200})
+  @Roles(ROLES_ID.ADMIN)
+  @UseGuards(RolesGuard)
+  @Post('/ban')
+  addBan(@Body() dto: BanUserDto) {
+    return this.userService.addBan(dto);
+  }
+
 }
