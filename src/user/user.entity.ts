@@ -1,7 +1,6 @@
 import { BeforeInsert, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 import { hash } from 'bcrypt';
 import { numToEncode } from '../constans/constans';
-import { ApiProperty } from '@nestjs/swagger';
 
 @Entity({ name: 'users' })
 export class UserEntity {
