@@ -94,7 +94,7 @@ export class UserRepository extends AbstractRepository<UserEntity> {
     }
 
     async addRole(dto: AddRoleDto, role: Optional<RolesEntity>): Promise<AddRoleDto> {
-        const user = await this.findUserById(dto.userId);
+        const user: UserEntity = await this.findUserById(dto.userId);
 
         if (role) {
             if (user.userRoles.some((userRole) => [role.id].includes(userRole.role_id))) {
@@ -117,7 +117,7 @@ export class UserRepository extends AbstractRepository<UserEntity> {
     }
 
     async addBan(dto: BanUserDto): Promise<UserEntity> {
-        const user = await this.findUserById(dto.userId);
+        const user: UserEntity = await this.findUserById(dto.userId);
         if (!user) {
             throw new HttpException(
                 {

@@ -26,12 +26,12 @@ export class RolesService {
                 HttpStatus.UNPROCESSABLE_ENTITY,
             );
         }
-        const role = await this.roleRepository.save(dto)
+        const role: RolesEntity = await this.roleRepository.save(dto)
         return role;
     }
 
     async getRoleByValue(value: string): Promise<Optional<RolesEntity>> {
-        const role = await this.roleRepository.findOne({where: {value}})
+        const role: RolesEntity = await this.roleRepository.findOne({where: {value}})
         return role;
     }
 
