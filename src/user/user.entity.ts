@@ -1,8 +1,15 @@
-import {BeforeInsert, Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { hash } from 'bcrypt';
 import { numToEncode } from '../constans/constans';
 import { ApiProperty } from '@nestjs/swagger';
-import {UserRolesEntity} from "../roles/user-roles.entity";
+import { UserRolesEntity } from '../roles/user-roles.entity';
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -37,7 +44,6 @@ export class UserEntity {
   })
   @JoinColumn({ referencedColumnName: 'user_id' })
   userRoles!: UserRolesEntity[];
-
 
   @BeforeInsert()
   async hashPassword() {
