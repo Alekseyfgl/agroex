@@ -27,4 +27,5 @@ export const enum MessageError {
 
 export const enum DB_RELATIONS {
   USER_ROLES = 'userRoles',
+  ROLES = 'userRoles.role',
 }
