@@ -8,6 +8,9 @@ export class AdvertisementsEntity {
     @Column("varchar", { length: 200 })
     title: string;
 
+    @Column()
+    description: string;
+
     @Column('decimal', {precision: 18, scale: 2})
     price: number;
 
