@@ -9,6 +9,7 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthMiddleware } from './auth/middlewares/auth.middleware';
+import { AdvertisementsModule } from './advertisements/advertisements.module';
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { AuthMiddleware } from './auth/middlewares/auth.middleware';
     CategoriesModule,
     UserModule,
     AuthModule,
+    AdvertisementsModule,
   ],
   controllers: [AppController],
   providers: [AppService],
