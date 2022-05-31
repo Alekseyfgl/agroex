@@ -8,6 +8,7 @@ export interface AdvertResponseInterfaceForGetOne {
 export interface AdvertResponseInterfaceForCreate {
     advertisement: {
         status: string,
-        id_advert: number
+        id_advertisement: number,
+        slug: string
     }
 }

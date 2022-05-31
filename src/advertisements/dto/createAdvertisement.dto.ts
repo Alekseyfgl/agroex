@@ -9,7 +9,7 @@ export class CreateAdvertisementDto {
     @IsNotEmpty()
     readonly description: string;
 
-    @Transform(({ value }) => Number(value), { toClassOnly: true })
+    @Transform(({ value }) => Number(value), { toClassOnly: true }) //преобразует в number
     @IsNumber()
     @Min(0)
     @Max(10000000000)
@@ -18,9 +18,11 @@ export class CreateAdvertisementDto {
     @Length(2, 3)
     readonly currency: string;
 
-    img: string;
 
-    @Transform(({ value }) => Number(value), { toClassOnly: true })
+     img: string;
+
+
+    @Transform(({ value }) => Number(value), { toClassOnly: true }) //преобразует в number
     @IsNumber()
     @Min(0)
     @Max(10000000000)

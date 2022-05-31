@@ -5,7 +5,8 @@ import {AdvertResponseInterfaceForGetOne, AdvertResponseInterfaceForCreate} from
 export const advertisementForResponse = (advert: AdvertisementsEntity): AdvertResponseInterfaceForCreate => ({
     advertisement: {
         status: 'success',
-        id_advert: advert.id,
+        id_advertisement: advert.id,
+        slug: advert.slug
     },
 })
 

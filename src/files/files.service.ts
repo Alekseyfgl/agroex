@@ -10,15 +10,16 @@ import { MFile } from './InterfacesAndTypes/mfile.class'
 export class FilesService {
 
     async saveFiles(file: MFile): Promise<FileElementResponse> {
-        const dateFolder = format(new Date(), 'yyyy-MM-dd');
-        const uploadFolder = `${path}/uploads/${dateFolder}`;
+        const dateFolder = format(new Date(), 'yyyy-MM-dd'); //форматирует дату по нужному шаблону
+        const uploadFolder = `${path}/uploads/${dateFolder}`; // создаем путь для файла
         await ensureDir(uploadFolder);
-        await writeFile(`${uploadFolder}/${file.originalname.replace(/\s/g, '')}`, file.buffer);
+        await writeFile(`${uploadFolder}/${file.originalname.replace(/\s/g, '')}`, file.buffer); // указываем путь куда мы cохраняем файл и буфер
         const res: FileElementResponse = {url: `http://localhost:5000/static/${dateFolder}/${file.originalname.replace(/\s/g, '')}`, name: file.originalname.replace(/\s/g, '')}
 
         return res;
     }
 
+    //конвертируем файл
     async convertToWebP(file: Buffer): Promise<Buffer> {
         return sharp(file)
             .webp()
