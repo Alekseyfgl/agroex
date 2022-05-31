@@ -1,4 +1,5 @@
 import {IsNotEmpty, IsNumber, Length, Max, Min} from "class-validator";
+import {Transform} from "class-transformer";
 
 export class CreateAdvertisementDto {
 
@@ -8,6 +9,7 @@ export class CreateAdvertisementDto {
     @IsNotEmpty()
     readonly description: string;
 
+    @Transform(({ value }) => Number(value), { toClassOnly: true })
     @IsNumber()
     @Min(0)
     @Max(10000000000)
@@ -16,9 +18,9 @@ export class CreateAdvertisementDto {
     @Length(2, 3)
     readonly currency: string;
 
-    @IsNotEmpty()
-    readonly img: string;
+    img: string;
 
+    @Transform(({ value }) => Number(value), { toClassOnly: true })
     @IsNumber()
     @Min(0)
     @Max(10000000000)
