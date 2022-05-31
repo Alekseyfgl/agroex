@@ -7,7 +7,7 @@ import {ROLES_ID} from "../constans/constans";
 import {AddRoleDto} from "./dto/add-role.dto";
 import {BanUserDto} from "./dto/ban-user.dto";
 import {AuthGuard} from "../auth/guards/auth.guard";
-import {UserEntity} from "./user.entity";
+
 
 @Controller('users')
 export class UserController {

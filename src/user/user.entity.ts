@@ -3,6 +3,7 @@ import { hash } from 'bcrypt';
 import { numToEncode } from '../constans/constans';
 import { ApiProperty } from '@nestjs/swagger';
 import {UserRolesEntity} from "../roles/user-roles.entity";
+import {AdvertisementsEntity} from "../advertisements/advertisements.entity";
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -38,9 +39,12 @@ export class UserEntity {
   @JoinColumn({ referencedColumnName: 'user_id' })
   userRoles!: UserRolesEntity[];
 
-
   @BeforeInsert()
   async hashPassword() {
     this.password = await hash(this.password, numToEncode);
   }
+
+  @OneToMany(()=> AdvertisementsEntity,(advertisement) => advertisement.author)
+  advertisements: AdvertisementsEntity[]
+
 }
