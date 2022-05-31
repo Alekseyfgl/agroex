@@ -8,10 +8,8 @@ import slugify from "slugify";
 export class AdvertisementsRepository extends AbstractRepository<AdvertisementsEntity> {
 
 
-
-
-    async createAdvertisement(currentUser: UserEntity, createAdvertDto : CreateAdvertisementDto) {
-        const advertisement  = new  AdvertisementsEntity()
+    async createAdvertisement(currentUser: UserEntity, createAdvertDto: CreateAdvertisementDto) {
+        const advertisement = new AdvertisementsEntity()
 
         console.log('------advertisement-----', advertisement)
         console.log('currentUser===>>>', currentUser)
@@ -28,6 +26,6 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
 
 
     private static getSlug(title: string): string {
-        return slugify(title,{lower: true})+ "-" + ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
+        return slugify(title, {lower: true}) + "-" + ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
     }
 }
