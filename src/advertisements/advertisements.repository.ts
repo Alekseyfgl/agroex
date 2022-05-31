@@ -3,6 +3,8 @@ import {AdvertisementsEntity} from "./advertisements.entity";
 import {UserEntity} from "../user/user.entity";
 import {CreateAdvertisementDto} from "./dto/createAdvertisement.dto";
 import slugify from "slugify";
+import {HttpException, HttpStatus} from "@nestjs/common";
+import {MessageError} from "../constans/constans";
 
 @EntityRepository(AdvertisementsEntity)
 export class AdvertisementsRepository extends AbstractRepository<AdvertisementsEntity> {
@@ -27,6 +29,18 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
     }
 
     async findBySlug(slug: string): Promise<AdvertisementsEntity> {
-        return await this.repository.findOne({slug})
+        const  advert = await this.repository.findOne({slug})
+
+        if(!advert) {
+            throw new HttpException(
+                {
+                    status: HttpStatus.NOT_FOUND,
+                    message: [MessageError.ADVERTISEMENT_NOT_FOUND],
+                },
+                HttpStatus.NOT_FOUND,
+            );
+        }
+
+        return  advert
     }
 }
