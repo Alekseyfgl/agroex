@@ -8,7 +8,6 @@ export class CreateUserDto {
   readonly email: string;
 
   @IsNotEmpty()
-  @IsPhoneNumber()
   readonly phone: string;
 
   @Length(5, 30)

@@ -2,9 +2,8 @@ import {Injectable} from '@nestjs/common';
 import {AdvertisementsRepository} from "./advertisements.repository";
 import {UserEntity} from "../user/user.entity";
 import {CreateAdvertisementDto} from "./dto/createAdvertisement.dto";
-import {advertisementForResponse} from "./advertisements.mapper";
+import {advertisementForGetBySlug, advertisementForResponse} from "./advertisements.mapper";
 import {AdvertisementsEntity} from "./advertisements.entity";
-
 
 
 @Injectable()
@@ -19,10 +18,15 @@ export class AdvertisementsService {
     }
 
 
-    public buildArticleResponse(advert: AdvertisementsEntity): ReturnType<typeof advertisementForResponse> {
-        // console.log('----buildArticleResponse----', advert)
-        return advertisementForResponse(advert)
+    async getAdvertisementBySlug(slug: string): Promise<AdvertisementsEntity> {
+        return await this.advertisementsRepository.findBySlug(slug)
     }
 
+    public buildAdvertisementResponseForCreate(advertisement: AdvertisementsEntity): ReturnType<typeof advertisementForResponse> {
+        return advertisementForResponse(advertisement)
+    }
 
+    public buildAdvertisementResponseForGetOne(advertisement: AdvertisementsEntity): ReturnType<typeof advertisementForGetBySlug> {
+        return advertisementForGetBySlug(advertisement)
+    }
 }

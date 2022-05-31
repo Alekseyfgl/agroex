@@ -42,6 +42,6 @@ export class AdvertisementsEntity {
         this.updatedAt = new Date();
     }
 
-    @ManyToOne(() => UserEntity, user => user.advertisements)
+    @ManyToOne(() => UserEntity, user => user.advertisements, {eager: true})
     author: UserEntity
 }

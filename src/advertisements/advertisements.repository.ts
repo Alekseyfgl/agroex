@@ -25,4 +25,8 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
     private static createSlug(title: string): string {
         return slugify(title, {lower: true}) + "-" + ((Math.random() * Math.pow(36, 6)) | 0).toString(36);
     }
+
+    async findBySlug(slug: string): Promise<AdvertisementsEntity> {
+        return await this.repository.findOne({slug})
+    }
 }
