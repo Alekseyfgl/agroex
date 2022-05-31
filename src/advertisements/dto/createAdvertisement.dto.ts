@@ -1,24 +1,29 @@
-import {IsNotEmpty} from "class-validator";
+import {IsNotEmpty, IsNumber, Length, Max, Min} from "class-validator";
 
 export class CreateAdvertisementDto {
-    @IsNotEmpty()
+
+    @Length(5, 200)
     readonly title: string;
 
     @IsNotEmpty()
     readonly description: string;
 
-    @IsNotEmpty()
+    @IsNumber()
+    @Min(0)
+    @Max(10000000000)
     readonly price: number;
 
-    @IsNotEmpty()
+    @Length(2, 3)
     readonly currency: string;
 
     @IsNotEmpty()
     readonly img: string;
 
-    @IsNotEmpty()
+    @IsNumber()
+    @Min(0)
+    @Max(10000000000)
     readonly weight: number;
 
-    @IsNotEmpty()
+    @Length(1, 5)
     readonly unit: string;
 }

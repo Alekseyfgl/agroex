@@ -1,10 +1,11 @@
-import {Body, Controller, Get, Post, UseGuards} from '@nestjs/common';
+import {Body, Controller, Get, Post, UseGuards, UsePipes, ValidationPipe} from '@nestjs/common';
 import {AdvertisementsService} from './advertisements.service';
 import {User} from "../user/decorators/user.decarator";
 import {UserEntity} from "../user/user.entity";
 import {CreateAdvertisementDto} from "./dto/createAdvertisement.dto";
 import {AuthGuard} from "../auth/guards/auth.guard";
-import {request} from "express";
+import {AdvertisementsEntity} from "./advertisements.entity";
+import {AdvertResponseInterfaceForCreate} from "./interface/advertResponseInterface";
 
 
 @Controller('advertisements')
@@ -15,10 +16,12 @@ export class AdvertisementsController {
 
     @Post()
     @UseGuards(AuthGuard)
-    async createAdvertisement(@User() currentUser: UserEntity, @Body('advertisement') createAdvertDto: CreateAdvertisementDto) {
-        const advert =await  this.advertisementsService.createAdvertisement(currentUser, createAdvertDto)
-        // return this.advertisementsService.buildAdvertisementResponse(advert)
-        return await this.advertisementsService.buildArticleResponse(advert)
+    @UsePipes(new ValidationPipe())
+    async createAdvertisement(
+        @User() currentUser: UserEntity,
+        @Body('advertisement') createAdvertDto: CreateAdvertisementDto): Promise<AdvertResponseInterfaceForCreate> {
+        const advert: AdvertisementsEntity = await this.advertisementsService.createAdvertisement(currentUser, createAdvertDto)
+        return this.advertisementsService.buildArticleResponse(advert);
     }
 
 

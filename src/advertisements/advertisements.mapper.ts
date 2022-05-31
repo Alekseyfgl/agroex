@@ -1,7 +1,10 @@
 import {AdvertisementsEntity} from "./advertisements.entity";
-import {AdvertResponseInterface} from "./interface/advertResponseInterface";
+import { AdvertResponseInterfaceForCreate} from "./interface/advertResponseInterface";
 
 
-export const advertisementForResponse = (advert: AdvertisementsEntity) => ({
-    advertisement: AdvertisementsEntity,
+export const advertisementForResponse = (advert: AdvertisementsEntity) : AdvertResponseInterfaceForCreate => ({
+    advertisement: {
+        status: 'success',
+        id_advert: advert.id,
+    },
 })
