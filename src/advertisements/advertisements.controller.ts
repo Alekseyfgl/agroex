@@ -3,7 +3,7 @@ import {
     Controller,
     Get,
     Param,
-    Post,
+    Post, Query,
     UploadedFile,
     UseGuards,
     UseInterceptors,
@@ -18,7 +18,7 @@ import {AuthGuard} from "../auth/guards/auth.guard";
 import {AdvertisementsEntity} from "./advertisements.entity";
 import {
     AdvertResponseInterfaceForGetOne,
-    AdvertResponseInterfaceForCreate
+    AdvertResponseInterfaceForCreate, AdvertsResponseInterface
 } from "./interface/advertResponseInterfaceForGetOne";
 import {FileInterceptor} from "@nestjs/platform-express";
 import {FileElementResponse} from "../files/dto/file-response-element.response";
@@ -45,7 +45,6 @@ export class AdvertisementsController {
 
 
         const imgSavedData: FileElementResponse = await this.filesService.getImgUrl(file);
-        console.log('imgSavedData====>>>', imgSavedData)
         createAdvertDto.img = imgSavedData.url;
 
         const advertisement: AdvertisementsEntity = await this.advertisementsService.createAdvertisement(currentUser, createAdvertDto)
@@ -57,6 +56,11 @@ export class AdvertisementsController {
     async getSingleAdvertisement(@Param('slug') slug: string): Promise<AdvertResponseInterfaceForGetOne> {
         const advertisement: AdvertisementsEntity = await this.advertisementsService.getAdvertisementBySlug(slug)
         return this.advertisementsService.buildAdvertisementResponseForGetOne(advertisement)
+    }
+
+    @Get()
+    async findAllAdvertisements(@User('id') currentUserId: number, @Query() query: any) : Promise<AdvertsResponseInterface> {
+        return await this.advertisementsService.findAll(currentUserId, query)
     }
 
 }

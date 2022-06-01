@@ -12,3 +12,8 @@ export interface AdvertResponseInterfaceForCreate {
         slug: string
     }
 }
+
+export interface AdvertsResponseInterface {
+    advertisement: AdvertisementsEntity[],
+    advertisementCount: number
+}

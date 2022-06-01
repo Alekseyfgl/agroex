@@ -1,10 +1,11 @@
-import {AbstractRepository, EntityRepository} from "typeorm";
+import {AbstractRepository, EntityRepository, getRepository} from "typeorm";
 import {AdvertisementsEntity} from "./advertisements.entity";
 import {UserEntity} from "../user/user.entity";
 import {CreateAdvertisementDto} from "./dto/createAdvertisement.dto";
 import slugify from "slugify";
 import {HttpException, HttpStatus} from "@nestjs/common";
 import {MessageError} from "../constans/constans";
+import {AdvertsResponseInterface} from "./interface/advertResponseInterfaceForGetOne";
 
 @EntityRepository(AdvertisementsEntity)
 export class AdvertisementsRepository extends AbstractRepository<AdvertisementsEntity> {
@@ -42,5 +43,17 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
         }
 
         return  advert
+    }
+
+    async findAll(currentUserId: number, query: any): Promise<any> {
+        const queryBuilder = getRepository(AdvertisementsEntity)
+            .createQueryBuilder('advertisements')
+            .leftJoinAndSelect('advertisements.author', 'author');
+
+        const advert = await queryBuilder.getMany()
+        const advertisementCount = await queryBuilder.getCount()
+        console.log(advert)
+
+        return  {advert, advertisementCount}
     }
 }
