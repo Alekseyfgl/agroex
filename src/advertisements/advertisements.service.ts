@@ -2,7 +2,11 @@ import {Injectable} from '@nestjs/common';
 import {AdvertisementsRepository} from "./advertisements.repository";
 import {UserEntity} from "../user/user.entity";
 import {CreateAdvertisementDto} from "./dto/createAdvertisement.dto";
-import {advertisementForGetBySlug, advertisementForResponse} from "./advertisements.mapper";
+import {
+    advertisementForGetBySlug,
+    advertisementForResponse,
+    advertisementsResponseAll
+} from "./advertisements.mapper";
 import {AdvertisementsEntity} from "./advertisements.entity";
 import {AdvertsResponseInterface, QueryInterface} from "./interface/advertResponseInterface";
 
@@ -24,7 +28,8 @@ export class AdvertisementsService {
     }
 
     async findAll(currentUserId: number, query: QueryInterface): Promise<AdvertsResponseInterface> {
-        return await this.advertisementsRepository.findAll(currentUserId, query)
+        const advert = await this.advertisementsRepository.findAll(currentUserId, query)
+        return advertisementsResponseAll(advert)
     }
 
     public buildAdvertisementResponseForCreate(advertisement: AdvertisementsEntity): ReturnType<typeof advertisementForResponse> {

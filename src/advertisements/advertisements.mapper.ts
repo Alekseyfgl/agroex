@@ -1,5 +1,9 @@
 import {AdvertisementsEntity} from "./advertisements.entity";
-import {AdvertResponseInterface, AdvertResponseInterfaceForCreate} from "./interface/advertResponseInterface";
+import {
+    AdvertResponseInterface,
+    AdvertResponseInterfaceForCreate,
+    AdvertsResponseInterface
+} from "./interface/advertResponseInterface";
 
 
 export const advertisementForResponse = (advert: AdvertisementsEntity): AdvertResponseInterfaceForCreate => ({
@@ -10,9 +14,12 @@ export const advertisementForResponse = (advert: AdvertisementsEntity): AdvertRe
     },
 })
 
-export const advertisementForGetBySlug = (advert: AdvertisementsEntity) : AdvertResponseInterface => {
-
+export const advertisementForGetBySlug = (advert: AdvertisementsEntity): AdvertResponseInterface => {
     delete advert.author.password
     return {advertisement: advert}
+}
 
+export const advertisementsResponseAll = (advertAll: AdvertsResponseInterface): AdvertsResponseInterface => {
+    advertAll.advertisements.forEach(advertisement => delete advertisement.author.password)
+    return advertAll
 }
