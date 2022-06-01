@@ -19,7 +19,6 @@ export const enum MessageError {
     USER_ID_NOT_FOUND = 'User with this id not found',
     NOT_AUTHORIZED = 'Not authorized',
     ROLE_IS_ALREADY_ADDED = 'The user already has this role',
-    ROLE_IS_ALREADY_EXISTS = 'The role already exists',
     ROLE_OR_USER_NOT_FOUND = 'User or role not found',
     USER_NOT_FOUND = 'User not found',
     ACCESS_DENIED = 'Access denied',
@@ -42,4 +41,9 @@ export const enum HOST_URL {
     TEST_HOST = 'https://agroex-for-test.herokuapp.com',
     MAIN_HOST = 'https://agroex-backend.herokuapp.com',
     LOCAL_HOST = 'http://localhost:5000'
+}
+
+export const enum FILES_ERRORS {
+    FILE_TYPE_IS_NOT_MATCHING = 'File type is not matching',
+    FILE_EXPECTED = 'File expected'
 }

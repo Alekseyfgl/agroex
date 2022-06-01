@@ -23,6 +23,8 @@ import {
 import {FileInterceptor} from "@nestjs/platform-express";
 import {FileElementResponse} from "../files/dto/file-response-element.response";
 import {FilesService} from "../files/files.service";
+import {fileMimetypeFilter} from "../files/filters/file-mimetype-filter";
+import { ParseFile } from '../files/pipes/parse-file.pipe';
 
 
 @Controller('advertisements')
@@ -37,17 +39,16 @@ export class AdvertisementsController {
     @Post()
     @UseGuards(AuthGuard)
     @UsePipes(new ValidationPipe())
-    @UseInterceptors(FileInterceptor('files'))
+    @UseInterceptors(FileInterceptor('files', {fileFilter: fileMimetypeFilter('image')}))
     async createAdvertisement(
-        @UploadedFile() file: Express.Multer.File, // получаем 1 файл, который нам отправляют
+        @UploadedFile(ParseFile) file: Express.Multer.File, // получаем 1 файл, который нам отправляют
         @User() currentUser: UserEntity,
         @Body() createAdvertDto: CreateAdvertisementDto): Promise<AdvertResponseInterfaceForCreate> {
 
-
         const imgSavedData: FileElementResponse = await this.filesService.getImgUrl(file);
-        createAdvertDto.img = imgSavedData.url;
-
+        Object.assign(createAdvertDto, {img: imgSavedData.url})
         const advertisement: AdvertisementsEntity = await this.advertisementsService.createAdvertisement(currentUser, createAdvertDto)
+
         return this.advertisementsService.buildAdvertisementResponseForCreate(advertisement);
     }
 
