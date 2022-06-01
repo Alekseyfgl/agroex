@@ -28,7 +28,7 @@ export class UserEntity {
   @Column({ default: false })
   banned: boolean;
 
-  @Column({ default: '' })
+  @Column({ default: null })
   banReason: string;
 
   @OneToMany(() => UserRolesEntity, (userRolesEntity) => userRolesEntity.user, {

@@ -13,8 +13,17 @@ export class AdvertisementsEntity {
     @Column({unique: true})
     slug: string
 
-    @Column()
+    @Column({ default: null })
+    category: string
+
+    @Column({ default: null })
+    subCategory: string
+
+    @Column({ default: null })
     description: string;
+
+    @Column({ default: false })
+    isModerated: boolean
 
     @Column('decimal', {precision: 18, scale: 2})
     price: number;
@@ -26,7 +35,7 @@ export class AdvertisementsEntity {
     img: string;
 
     @Column('decimal', {precision: 18, scale: 2})
-    weight: number;
+    quantity: number;
 
     @Column("varchar", { length: 5 })
     unit: string;
