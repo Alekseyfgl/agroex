@@ -2,7 +2,7 @@ export const numToEncode = 10;
 
 export const expiresInForToken = '168h';
 
-export const enum ORDER_CATEGORIES {
+export const enum ORDER {
     ASC = 'ASC',
     DESC = 'DESC',
 }
@@ -29,4 +29,11 @@ export const enum MessageError {
 export const enum DB_RELATIONS {
     USER_ROLES = 'userRoles',
     ROLES = 'userRoles.role',
+}
+
+export const enum DB_RELATIONS_ADVERTISEMENTS_AND_USER {
+    TABLE = 'advertisements',
+    USER = 'author',
+    LEFT_JOIN_AND_SELECT = 'advertisements.author',
+    SORT_COLUMN_BY_CREATE_AT = 'advertisements.createAt',
 }

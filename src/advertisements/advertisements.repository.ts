@@ -4,7 +4,7 @@ import {UserEntity} from "../user/user.entity";
 import {CreateAdvertisementDto} from "./dto/createAdvertisement.dto";
 import slugify from "slugify";
 import {HttpException, HttpStatus} from "@nestjs/common";
-import {MessageError} from "../constans/constans";
+import {DB_RELATIONS_ADVERTISEMENTS_AND_USER, MessageError, ORDER} from "../constans/constans";
 import {AdvertsResponseInterface} from "./interface/advertResponseInterfaceForGetOne";
 
 @EntityRepository(AdvertisementsEntity)
@@ -14,13 +14,11 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
     async createAdvertisement(currentUser: UserEntity, createAdvertDto: CreateAdvertisementDto): Promise<AdvertisementsEntity> {
         const advertisement: AdvertisementsEntity = new AdvertisementsEntity()
 
-        // console.log('------advertisement-----', advertisement)
-        // console.log('currentUser===>>>', currentUser)
         Object.assign(advertisement, createAdvertDto)
 
         advertisement.slug = AdvertisementsRepository.createSlug(createAdvertDto.title)
         advertisement.author = currentUser
-
+        
         return await this.repository.save(advertisement)
     }
 
@@ -30,9 +28,9 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
     }
 
     async findBySlug(slug: string): Promise<AdvertisementsEntity> {
-        const  advert = await this.repository.findOne({slug})
+        const advertisements = await this.repository.findOne({slug})
 
-        if(!advert) {
+        if (!advertisements) {
             throw new HttpException(
                 {
                     status: HttpStatus.NOT_FOUND,
@@ -41,19 +39,20 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
                 HttpStatus.NOT_FOUND,
             );
         }
-
-        return  advert
+        return advertisements
     }
 
     async findAll(currentUserId: number, query: any): Promise<any> {
         const queryBuilder = getRepository(AdvertisementsEntity)
-            .createQueryBuilder('advertisements')
-            .leftJoinAndSelect('advertisements.author', 'author');
+            .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER.TABLE)
+            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT, DB_RELATIONS_ADVERTISEMENTS_AND_USER.USER);
 
-        const advert = await queryBuilder.getMany()
+        queryBuilder.orderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_COLUMN_BY_CREATE_AT, ORDER.DESC)
+
+        const advertisements = await queryBuilder.getMany()
         const advertisementCount = await queryBuilder.getCount()
-        console.log(advert)
 
-        return  {advert, advertisementCount}
+
+        return {advertisements, advertisementCount}
     }
 }

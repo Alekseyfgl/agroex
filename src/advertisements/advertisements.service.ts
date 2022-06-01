@@ -24,20 +24,7 @@ export class AdvertisementsService {
     }
 
     async findAll(currentUserId: number, query: any): Promise<AdvertsResponseInterface> {
-        const advert =  await this.advertisementsRepository.findAll(currentUserId, query)
-
-
-        // ************   logic for get all advert   *************
-        //==================================================================
-        //==================================================================
-        //==================================================================
-        //==================================================================
-        //==================================================================
-        //==================================================================
-        //==================================================================
-
-
-        return advert;
+        return await this.advertisementsRepository.findAll(currentUserId, query)
     }
 
     public buildAdvertisementResponseForCreate(advertisement: AdvertisementsEntity): ReturnType<typeof advertisementForResponse> {
