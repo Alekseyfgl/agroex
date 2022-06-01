@@ -5,6 +5,7 @@ import { path } from 'app-root-path';
 import { ensureDir, writeFile } from 'fs-extra';
 import * as sharp from 'sharp';
 import { MFile } from './InterfacesAndTypes/mfile.class'
+import {HOST_URL} from "../constans/constans";
 
 @Injectable()
 export class FilesService {
@@ -14,7 +15,7 @@ export class FilesService {
         const uploadFolder = `${path}/uploads/${dateFolder}`; // создаем путь для файла
         await ensureDir(uploadFolder);
         await writeFile(`${uploadFolder}/${file.originalname.replace(/\s/g, '')}`, file.buffer); // указываем путь куда мы cохраняем файл и буфер
-        const res: FileElementResponse = {url: `http://localhost:5000/static/${dateFolder}/${file.originalname.replace(/\s/g, '')}`, name: file.originalname.replace(/\s/g, '')}
+        const res: FileElementResponse = {url: `${HOST_URL.TEST_HOST}/${dateFolder}/${file.originalname.replace(/\s/g, '')}`, name: file.originalname.replace(/\s/g, '')}
 
         return res;
     }
