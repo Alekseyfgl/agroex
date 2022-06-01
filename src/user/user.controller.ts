@@ -1,4 +1,4 @@
-import {Body, Controller, HttpStatus, Post, Res, UseGuards} from '@nestjs/common';
+import {Body, Controller, HttpStatus, Post, UseGuards} from '@nestjs/common';
 import { UserService } from './user.service';
 import {ApiOperation, ApiResponse} from "@nestjs/swagger";
 import {Roles} from "../roles/decorators/roles-auth.decorator";

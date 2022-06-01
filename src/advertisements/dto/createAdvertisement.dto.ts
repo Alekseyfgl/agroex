@@ -1,4 +1,4 @@
-import {IsNotEmpty, IsNumber, Length, Max, Min} from "class-validator";
+import {IsNotEmpty, IsNumber, IsString, Length, Max, Min} from "class-validator";
 import {Transform} from "class-transformer";
 
 export class CreateAdvertisementDto {

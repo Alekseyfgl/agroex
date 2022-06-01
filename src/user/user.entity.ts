@@ -1,7 +1,6 @@
 import {BeforeInsert, Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
 import { hash } from 'bcrypt';
 import { numToEncode } from '../constans/constans';
-import { ApiProperty } from '@nestjs/swagger';
 import {UserRolesEntity} from "../roles/user-roles.entity";
 import {AdvertisementsEntity} from "../advertisements/advertisements.entity";
 
