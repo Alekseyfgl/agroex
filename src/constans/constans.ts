@@ -37,3 +37,9 @@ export const enum DB_RELATIONS_ADVERTISEMENTS_AND_USER {
     LEFT_JOIN_AND_SELECT = 'advertisements.author',
     SORT_COLUMN_BY_CREATE_AT = 'advertisements.createAt',
 }
+
+export const enum HOST_URL {
+    TEST_HOST = 'https://agroex-for-test.herokuapp.com',
+    MAIN_HOST = 'https://agroex-backend.herokuapp.com',
+    LOCAL_HOST = 'http://localhost:5000'
+}
