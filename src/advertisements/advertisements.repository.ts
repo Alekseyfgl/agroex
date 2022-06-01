@@ -18,7 +18,7 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
 
         advertisement.slug = AdvertisementsRepository.createSlug(createAdvertDto.title)
         advertisement.author = currentUser
-        
+
         return await this.repository.save(advertisement)
     }
 
@@ -48,9 +48,20 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
             .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT, DB_RELATIONS_ADVERTISEMENTS_AND_USER.USER);
 
         queryBuilder.orderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_COLUMN_BY_CREATE_AT, ORDER.DESC)
+        const advertisementCount = await queryBuilder.getCount()//тотал по нашей таблице
+
+        //create limit
+        if(query.limit) {
+            queryBuilder.limit(query.limit)
+        }
+
+        //create offset
+        if(query.offset) {
+            queryBuilder.offset(query.offset)
+        }
 
         const advertisements = await queryBuilder.getMany()
-        const advertisementCount = await queryBuilder.getCount()
+
 
 
         return {advertisements, advertisementCount}
