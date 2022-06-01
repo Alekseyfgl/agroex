@@ -1,6 +1,6 @@
 import {BeforeUpdate, Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {UserEntity} from "../user/user.entity";
-import {UserResponseInterface} from "../auth/interfacesAndTypes/userResponse.interface";
+
 
 @Entity({name: 'advertisements'})
 export class AdvertisementsEntity {

@@ -17,9 +17,9 @@ import {CreateAdvertisementDto} from "./dto/createAdvertisement.dto";
 import {AuthGuard} from "../auth/guards/auth.guard";
 import {AdvertisementsEntity} from "./advertisements.entity";
 import {
-    AdvertResponseInterfaceForGetOne,
-    AdvertResponseInterfaceForCreate, AdvertsResponseInterface
-} from "./interface/advertResponseInterfaceForGetOne";
+    AdvertResponseInterface,
+    AdvertResponseInterfaceForCreate, AdvertsResponseInterface, QueryInterface,
+} from "./interface/advertResponseInterface";
 import {FileInterceptor} from "@nestjs/platform-express";
 import {FileElementResponse} from "../files/dto/file-response-element.response";
 import {FilesService} from "../files/files.service";
@@ -53,13 +53,13 @@ export class AdvertisementsController {
 
 
     @Get(':slug')
-    async getSingleAdvertisement(@Param('slug') slug: string): Promise<AdvertResponseInterfaceForGetOne> {
+    async getSingleAdvertisement(@Param('slug') slug: string): Promise<AdvertResponseInterface> {
         const advertisement: AdvertisementsEntity = await this.advertisementsService.getAdvertisementBySlug(slug)
         return this.advertisementsService.buildAdvertisementResponseForGetOne(advertisement)
     }
 
     @Get()
-    async findAllAdvertisements(@User('id') currentUserId: number, @Query() query: any) : Promise<AdvertsResponseInterface> {
+    async findAllAdvertisements(@User('id') currentUserId: number, @Query() query: QueryInterface) : Promise<AdvertsResponseInterface> {
         return await this.advertisementsService.findAll(currentUserId, query)
     }
 

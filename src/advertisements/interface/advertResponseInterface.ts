@@ -1,7 +1,7 @@
 import {AdvertisementsEntity} from "../advertisements.entity";
 
 
-export interface AdvertResponseInterfaceForGetOne {
+export interface AdvertResponseInterface {
     advertisement: AdvertisementsEntity
 }
 
@@ -14,6 +14,11 @@ export interface AdvertResponseInterfaceForCreate {
 }
 
 export interface AdvertsResponseInterface {
-    advertisement: AdvertisementsEntity[],
+    advertisements: AdvertisementsEntity[],
     advertisementCount: number
+}
+
+export interface QueryInterface {
+    limit: number,
+    offset: number
 }

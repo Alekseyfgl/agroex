@@ -4,7 +4,7 @@ import {UserEntity} from "../user/user.entity";
 import {CreateAdvertisementDto} from "./dto/createAdvertisement.dto";
 import {advertisementForGetBySlug, advertisementForResponse} from "./advertisements.mapper";
 import {AdvertisementsEntity} from "./advertisements.entity";
-import {AdvertsResponseInterface} from "./interface/advertResponseInterfaceForGetOne";
+import {AdvertsResponseInterface, QueryInterface} from "./interface/advertResponseInterface";
 
 
 @Injectable()
@@ -23,7 +23,7 @@ export class AdvertisementsService {
         return await this.advertisementsRepository.findBySlug(slug)
     }
 
-    async findAll(currentUserId: number, query: any): Promise<AdvertsResponseInterface> {
+    async findAll(currentUserId: number, query: QueryInterface): Promise<AdvertsResponseInterface> {
         return await this.advertisementsRepository.findAll(currentUserId, query)
     }
 
