@@ -2,7 +2,31 @@ import {AdvertisementsEntity} from "../advertisements.entity";
 
 
 export interface AdvertResponseInterface {
-    advertisement: AdvertisementsEntity
+    advertisement: {
+        id: number,
+        title: string,
+        slug: string,
+        category: string,
+        subCategory: string,
+        description: string,
+        isModerated: boolean,
+        price: number,
+        currency : string,
+        img: string,
+        quantity: number,
+        unit: string,
+        createAt: Date,
+        updatedAt: Date,
+        author: {
+            id: number,
+            email: string,
+            username: string,
+            phone: string,
+            image: string,
+            banned: boolean,
+            banReason: string
+        }
+    }
 }
 
 export interface AdvertResponseInterfaceForCreate {

@@ -1,4 +1,12 @@
-import {BeforeUpdate, Column, Entity, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {
+    BeforeUpdate,
+    Column,
+    CreateDateColumn,
+    Entity,
+    ManyToOne,
+    PrimaryGeneratedColumn,
+    UpdateDateColumn
+} from "typeorm";
 import {UserEntity} from "../user/user.entity";
 
 
@@ -40,16 +48,12 @@ export class AdvertisementsEntity {
     @Column("varchar", { length: 5 })
     unit: string;
 
-    @Column({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
+    @CreateDateColumn()
     createAt: Date
 
-    @Column({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP'})
+    @UpdateDateColumn()
     updatedAt: Date
 
-    @BeforeUpdate()//чтобы автоматически обновлять updatedAt
-    updateTimestamp() {
-        this.updatedAt = new Date();
-    }
 
     @ManyToOne(() => UserEntity, user => user.advertisements, {eager: true})
     author: UserEntity

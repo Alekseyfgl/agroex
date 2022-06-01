@@ -4,6 +4,7 @@ import {
     AdvertResponseInterfaceForCreate,
     AdvertsResponseInterface
 } from "./interface/advertResponseInterface";
+import {UserEntity} from "../user/user.entity";
 
 
 export const advertisementForResponse = (advert: AdvertisementsEntity): AdvertResponseInterfaceForCreate => ({
@@ -14,10 +15,35 @@ export const advertisementForResponse = (advert: AdvertisementsEntity): AdvertRe
     },
 })
 
-export const advertisementForGetBySlug = (advert: AdvertisementsEntity): AdvertResponseInterface => {
-    delete advert.author.password
-    return {advertisement: advert}
-}
+
+
+export const advertisementForGetBySlug = (advert: AdvertisementsEntity) : AdvertResponseInterface => ({
+    advertisement: {
+        id: advert.id,
+        title: advert.title,
+        slug: advert.slug,
+        category: advert.slug,
+        subCategory: advert.subCategory,
+        description: advert.description,
+        isModerated: advert.isModerated,
+        price: advert.price,
+        currency : advert.currency,
+        img: advert.img,
+        quantity: advert.quantity,
+        unit: advert.unit,
+        createAt: advert.createAt,
+        updatedAt: advert.updatedAt,
+        author: {
+            id: advert.author.id,
+            email: advert.author.email,
+            username: advert.author.username,
+            phone: advert.author.phone,
+            image: advert.author.image,
+            banned: advert.author.banned,
+            banReason: advert.author.banReason
+        }
+    }
+})
 
 export const advertisementsResponseAll = (advertAll: AdvertsResponseInterface): AdvertsResponseInterface => {
     advertAll.advertisements.forEach(advertisement => delete advertisement.author.password)
