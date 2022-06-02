@@ -29,8 +29,8 @@
     "noImplicitReturns": true,
     "noImplicitThis": true,
     "allowUnreachableCode": true,
-    // "noImplicitAny" : true,
-    // "noUnusedParameters": true,
+//     "noImplicitAny" : true,
+//     "noUnusedParameters": true,
 
 
 

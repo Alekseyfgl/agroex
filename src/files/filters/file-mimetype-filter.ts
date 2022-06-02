@@ -3,7 +3,7 @@ import { FILES_ERRORS } from "../../constans/constans";
 
 export function fileMimetypeFilter(...mimetypes: string[]) {
     return (
-        req,
+        req : Request,
         file: Express.Multer.File,
         callback: (error: Error | null, acceptFile: boolean) => void,
     ) => {
