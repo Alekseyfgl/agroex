@@ -22,7 +22,7 @@ export const advertisementForGetBySlug = (advert: AdvertisementsEntity) : Advert
         id: advert.id,
         title: advert.title,
         slug: advert.slug,
-        category: advert.slug,
+        category: advert.category,
         subCategory: advert.subCategory,
         country: advert.country,
         location: advert.location,
