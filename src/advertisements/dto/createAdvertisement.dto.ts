@@ -4,7 +4,7 @@ import {Transform} from "class-transformer";
 
 export class CreateAdvertisementDto {
 
-    @Length(5, 200)
+    @Length(5, 40)
     readonly title: string;
 
     @IsNotEmpty()
