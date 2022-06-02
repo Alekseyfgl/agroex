@@ -9,7 +9,7 @@ import {RolesEntity} from "../roles/roles.entity";
 import {AddRoleDto} from "./dto/add-role.dto";
 import {BanUserDto} from "./dto/ban-user.dto";
 import {Optional} from "../interfacesAndTypes/optional.interface";
-import {response} from "express";
+
 
 @EntityRepository(UserEntity)
 export class UserRepository extends AbstractRepository<UserEntity> {

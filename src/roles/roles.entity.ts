@@ -6,13 +6,9 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import { UserEntity } from '../user/user.entity';
+
 import { UserRolesEntity } from './user-roles.entity';
 
-interface RoleCreationAttrs {
-  value: string;
-  description: string;
-}
 
 @Entity({ name: 'roles' })
 export class RolesEntity {

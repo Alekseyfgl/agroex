@@ -1,8 +1,8 @@
 import {BeforeInsert, Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
 import { hash } from 'bcrypt';
 import { numToEncode } from '../constans/constans';
-import { ApiProperty } from '@nestjs/swagger';
 import {UserRolesEntity} from "../roles/user-roles.entity";
+import {AdvertisementsEntity} from "../advertisements/advertisements.entity";
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -27,7 +27,7 @@ export class UserEntity {
   @Column({ default: false })
   banned: boolean;
 
-  @Column({ default: '' })
+  @Column({ default: null })
   banReason: string;
 
   @OneToMany(() => UserRolesEntity, (userRolesEntity) => userRolesEntity.user, {
@@ -38,9 +38,12 @@ export class UserEntity {
   @JoinColumn({ referencedColumnName: 'user_id' })
   userRoles!: UserRolesEntity[];
 
-
   @BeforeInsert()
   async hashPassword() {
     this.password = await hash(this.password, numToEncode);
   }
+
+  @OneToMany(()=> AdvertisementsEntity,(advertisement) => advertisement.author)
+  advertisements: AdvertisementsEntity[]
+
 }
