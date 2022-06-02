@@ -21,10 +21,11 @@ import {
     AdvertResponseInterfaceForCreate, AdvertsResponseInterface, QueryInterface,
 } from "./interface/advertResponseInterface";
 import {FileInterceptor} from "@nestjs/platform-express";
-import {FileElementResponse} from "../files/dto/file-response-element.response";
 import {FilesService} from "../files/files.service";
 import {fileMimetypeFilter} from "../files/filters/file-mimetype-filter";
 import { ParseFile } from '../files/pipes/parse-file.pipe';
+import {UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
+//import {FileElementResponse} from "../files/dto/file-response-element.response";
 
 
 @Controller('advertisements')
@@ -45,8 +46,8 @@ export class AdvertisementsController {
         @User() currentUser: UserEntity,
         @Body() createAdvertDto: CreateAdvertisementDto): Promise<AdvertResponseInterfaceForCreate> {
 
-        const imgSavedData: FileElementResponse = await this.filesService.getImgUrl(file);
-        Object.assign(createAdvertDto, {img: imgSavedData.url})
+        const imgSavedData: UploadApiResponse | UploadApiErrorResponse = await this.filesService.getSavedImgData(file);
+        Object.assign(createAdvertDto, {img: imgSavedData.secure_url})
         const advertisement: AdvertisementsEntity = await this.advertisementsService.createAdvertisement(currentUser, createAdvertDto)
 
         return this.advertisementsService.buildAdvertisementResponseForCreate(advertisement);

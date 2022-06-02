@@ -7,8 +7,6 @@ export class CreateAdvertisementDto {
     @Length(5, 200)
     readonly title: string;
 
-
-
     @IsNotEmpty()
     country: string;
 

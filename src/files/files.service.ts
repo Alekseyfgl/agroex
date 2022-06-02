@@ -1,23 +1,33 @@
-import { Injectable } from '@nestjs/common';
-import { FileElementResponse } from "./dto/file-response-element.response";
-import { format } from 'date-fns';
-import { path } from 'app-root-path';
-import { ensureDir, writeFile } from 'fs-extra';
+import {BadRequestException, Injectable} from '@nestjs/common';
 import * as sharp from 'sharp';
 import { MFile } from './InterfacesAndTypes/mfile.class'
-import {HOST_URL} from "../constans/constans";
+import {CloudinaryService} from "../cloudinary/cloudinary.service";
+import {UploadApiErrorResponse, UploadApiResponse} from "cloudinary";
+import {MessageError} from "../constans/constans";
+//import { path } from 'app-root-path';
+//import { FileElementResponse } from "./dto/file-response-element.response";
+//import { format } from 'date-fns';
+//import { ensureDir, writeFile } from 'fs-extra';
+//import {HOST_URL} from "../constans/constans";
 
 @Injectable()
 export class FilesService {
+    constructor(private readonly cloudinaryService: CloudinaryService) {
+    }
 
-    async saveFiles(file: MFile): Promise<FileElementResponse> {
-        const dateFolder = format(new Date(), 'yyyy-MM-dd'); //форматирует дату по нужному шаблону
-        const uploadFolder = `${path}/uploads/${dateFolder}`; // создаем путь для файла
-        await ensureDir(uploadFolder);
-        await writeFile(`${uploadFolder}/${file.originalname.replace(/\s/g, '')}`, file.buffer); // указываем путь куда мы cохраняем файл и буфер
-        const res: FileElementResponse = {url: `${HOST_URL.LOCAL_HOST}/${dateFolder}/${file.originalname.replace(/\s/g, '')}`, name: file.originalname.replace(/\s/g, '')}
+    async saveFiles(file: MFile): Promise<UploadApiResponse | UploadApiErrorResponse>{ //: Promise<FileElementResponse> {
+        return await this.cloudinaryService.uploadImage(file).catch(() => {
+            throw new BadRequestException(MessageError.ERROR_WHILE_SAVING_ON_CLOUDINARY);
+        });
 
-        return res;
+        // для локального сохранения:
+        // const dateFolder = format(new Date(), 'yyyy-MM-dd'); //форматирует дату по нужному шаблону
+        // const uploadFolder = `${path}/uploads/${dateFolder}`; // создаем путь для файла
+        // await ensureDir(uploadFolder);
+        // await writeFile(`${uploadFolder}/${file.originalname.replace(/\s/g, '')}`, file.buffer); // указываем путь куда мы cохраняем файл и буфер
+        // const res: FileElementResponse = {url: `${HOST_URL.TEST_HOST}/static/${dateFolder}/${file.originalname.replace(/\s/g, '')}`, name: file.originalname.replace(/\s/g, '')}
+
+        // return res;
     }
 
     //конвертируем файл
@@ -27,15 +37,15 @@ export class FilesService {
             .toBuffer()
     }
 
-    async getImgUrl(file: Express.Multer.File): Promise<FileElementResponse> {
+    async getSavedImgData(file: MFile) {
         let saveFile: MFile;
-        if (file.mimetype.includes('image')) {
-            const buffer: Buffer = await this.convertToWebP(file.buffer);
-            saveFile = new MFile({
-                originalname: `${file.originalname.split('.')[0]}.webp`,
-                buffer
-            });
-        }
+
+        const buffer: Buffer = await this.convertToWebP(file.buffer);
+        saveFile = new MFile({
+            originalname: `${file.originalname.split('.')[0]}.webp`,
+            buffer
+        });
+
 
         return this.saveFiles(saveFile);
     }

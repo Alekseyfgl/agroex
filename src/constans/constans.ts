@@ -23,6 +23,7 @@ export const enum MessageError {
     USER_NOT_FOUND = 'User not found',
     ACCESS_DENIED = 'Access denied',
     ADVERTISEMENT_NOT_FOUND = 'This advertisement was not found',
+    ERROR_WHILE_SAVING_ON_CLOUDINARY = 'Error while saving on cloudinary',
 }
 
 export const enum DB_RELATIONS {
