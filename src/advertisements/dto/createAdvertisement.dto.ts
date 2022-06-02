@@ -18,11 +18,8 @@ export class CreateAdvertisementDto {
     @IsNotEmpty()
     category: string
 
-    @IsNotEmpty()
-    subCategory: string
 
 
-    isModerated: boolean
 
     @Transform(({value}) => Number(value), {toClassOnly: true}) //преобразует в number
     @IsNumber()
