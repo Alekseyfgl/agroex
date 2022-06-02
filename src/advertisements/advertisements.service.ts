@@ -8,7 +8,7 @@ import {
     advertisementsResponseAll
 } from "./advertisements.mapper";
 import {AdvertisementsEntity} from "./advertisements.entity";
-import {AdvertResponseInterface, AdvertsResponseInterface, QueryInterface} from "./interface/advertResponseInterface";
+import { AdvertsResponseInterface, QueryInterface} from "./interface/advertResponseInterface";
 
 
 @Injectable()

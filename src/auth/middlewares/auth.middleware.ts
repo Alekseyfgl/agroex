@@ -2,9 +2,9 @@ import { Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Response } from 'express';
 import { ExpressRequestInterface } from '../interfacesAndTypes/expressRequest.interface';
 import { verify } from 'jsonwebtoken';
-
 import { UserService } from '../../user/user.service';
-import { UserEntity } from '../../user/user.entity';
+import {UserEntity} from "../../user/user.entity";
+
 
 //декодируем токен и получаем текущеного пользователя до контроллера т.к. - мидлвары вызываются до контроллера
 @Injectable()

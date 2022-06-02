@@ -14,7 +14,9 @@
     ],
     "baseUrl": "./",
     "paths": {
-      "*": ["packages/*/src"]
+      "*": [
+        "packages/*/src"
+      ]
     },
     "experimentalDecorators": true,
     "allowJs": true,
@@ -22,19 +24,21 @@
     "removeComments": true,
     "pretty": true,
 
-//    "noUnusedLocals": true,
-//    "noUnusedParameters": true,
-//    "noImplicitReturns": true,
-//    "noImplicitThis": true,
-//    "noImplicitAny" : true,
 
-    "allowUnreachableCode": false,
+    "noUnusedLocals": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "allowUnreachableCode": true,
+    // "noImplicitAny" : true,
+    // "noUnusedParameters": true,
+
+
+
     "forceConsistentCasingInFileNames": true,
     "newLine": "CRLF",
     "alwaysStrict": true,
     "sourceMap": true,
-    "skipLibCheck": true,
-
+    "skipLibCheck": true
   },
   "exclude": [
     "node_modules",
