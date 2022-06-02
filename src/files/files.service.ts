@@ -1,4 +1,4 @@
-import {BadRequestException, Injectable} from '@nestjs/common';
+import {BadRequestException, HttpStatus, Injectable} from '@nestjs/common';
 import * as sharp from 'sharp';
 import { MFile } from './InterfacesAndTypes/mfile.class'
 import {CloudinaryService} from "../cloudinary/cloudinary.service";
@@ -17,7 +17,12 @@ export class FilesService {
 
     async saveFiles(file: MFile): Promise<UploadApiResponse | UploadApiErrorResponse>{ //: Promise<FileElementResponse> {
         return await this.cloudinaryService.uploadImage(file).catch(() => {
-            throw new BadRequestException(MessageError.ERROR_WHILE_SAVING_ON_CLOUDINARY);
+            throw new BadRequestException(
+                {
+                    status: HttpStatus.NOT_ACCEPTABLE,
+                    message: [MessageError.ERROR_WHILE_SAVING_ON_CLOUDINARY],
+                },
+            );
         });
 
         // для локального сохранения:
