@@ -8,7 +8,7 @@ import {
     advertisementsResponseAll
 } from "./advertisements.mapper";
 import {AdvertisementsEntity} from "./advertisements.entity";
-import { AdvertsResponseInterface, QueryInterface} from "./interface/advertResponseInterface";
+import {AdvertsResponseInterface, QueryInterface} from "./interface/advertResponseInterface";
 
 
 @Injectable()
@@ -18,7 +18,7 @@ export class AdvertisementsService {
     }
 
 
-    async createAdvertisement(currentUser: UserEntity, createAdvertDto: CreateAdvertisementDto) {
+    async createAdvertisement(currentUser: UserEntity, createAdvertDto: CreateAdvertisementDto): Promise<AdvertisementsEntity> {
         return await this.advertisementsRepository.createAdvertisement(currentUser, createAdvertDto)
     }
 
@@ -28,7 +28,7 @@ export class AdvertisementsService {
     }
 
     async findAll(currentUserId: number, query: QueryInterface): Promise<AdvertsResponseInterface> {
-        const advert = await this.advertisementsRepository.findAll(currentUserId, query)
+        const advert: AdvertsResponseInterface = await this.advertisementsRepository.findAll(currentUserId, query)
         return advertisementsResponseAll(advert)
     }
 
