@@ -1,13 +1,19 @@
 import {IsNotEmpty, IsNumber, Length, Max, Min} from "class-validator";
 import {Transform} from "class-transformer";
 
+
 export class CreateAdvertisementDto {
 
     @Length(5, 200)
     readonly title: string;
 
+
+
     @IsNotEmpty()
-    readonly description: string;
+    country: string;
+
+    @IsNotEmpty()
+    location: string;
 
     @IsNotEmpty()
     category: string

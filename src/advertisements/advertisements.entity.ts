@@ -17,6 +17,12 @@ export class AdvertisementsEntity {
     @Column("varchar", { length: 200 })
     title: string;
 
+    @Column("varchar", { length: 100 })
+    country: string;
+
+    @Column()
+    location: string;
+
     @Column({unique: true})
     slug: string
 
@@ -26,8 +32,6 @@ export class AdvertisementsEntity {
     @Column({ default: null })
     subCategory: string
 
-    @Column({ default: null })
-    description: string;
 
     @Column({ default: false })
     isModerated: boolean
