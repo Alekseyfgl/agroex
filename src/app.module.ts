@@ -9,6 +9,9 @@ import { EventEmitterModule } from '@nestjs/event-emitter';
 import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthMiddleware } from './auth/middlewares/auth.middleware';
+import { AdvertisementsModule } from './advertisements/advertisements.module';
+import {CloudinaryModule} from "./cloudinary/cloudinary.module";
+import {CloudinaryProvider} from './cloudinary/cloudinary.provider';
 
 @Module({
   imports: [
@@ -18,9 +21,11 @@ import { AuthMiddleware } from './auth/middlewares/auth.middleware';
     CategoriesModule,
     UserModule,
     AuthModule,
+    AdvertisementsModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, CloudinaryProvider],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer): void {

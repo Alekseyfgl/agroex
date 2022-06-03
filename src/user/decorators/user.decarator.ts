@@ -9,6 +9,7 @@ export const User = createParamDecorator((data: any, ctx: ExecutionContext) => {
   if (!request.user) {
     return null;
   }
+  console.log(data)
   if (data) {
     // data - это то что мы передали @User() user: UserEntity или  @User('id')
     return request.user[data];

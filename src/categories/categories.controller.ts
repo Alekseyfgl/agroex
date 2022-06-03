@@ -1,10 +1,8 @@
-import { Controller, Get, UseGuards } from '@nestjs/common';
+import { Controller, Get } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CategoriesEntity } from './categories.entity';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { Roles } from '../roles/decorators/roles-auth.decorator';
-import { RolesGuard } from '../auth/guards/roles.guard';
-import { ROLES_ID } from '../constans/constans';
+
 
 @ApiTags('Categories of products')
 @Controller('categories')
