@@ -3,6 +3,7 @@ import { hash } from 'bcrypt';
 import { numToEncode } from '../constans/constans';
 import {UserRolesEntity} from "../roles/user-roles.entity";
 import {AdvertisementsEntity} from "../advertisements/advertisements.entity";
+import {UserBetEntity} from "../bet/user-bet.entity";
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -37,6 +38,14 @@ export class UserEntity {
   })
   @JoinColumn({ referencedColumnName: 'user_id' })
   userRoles!: UserRolesEntity[];
+
+  @OneToMany(() => UserBetEntity, (userBetEntity) => userBetEntity.user, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn({ referencedColumnName: 'user_id' })
+  userBets!: UserBetEntity[];
 
   @BeforeInsert()
   async hashPassword() {
