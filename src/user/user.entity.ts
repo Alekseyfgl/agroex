@@ -39,13 +39,7 @@ export class UserEntity {
   @JoinColumn({ referencedColumnName: 'user_id' })
   userRoles!: UserRolesEntity[];
 
-  @OneToMany(() => UserBetEntity, (userBetEntity) => userBetEntity.user, {
-    cascade: true,
-    onDelete: 'CASCADE',
-    onUpdate: 'CASCADE',
-  })
-  @JoinColumn({ referencedColumnName: 'user_id' })
-  userBets!: UserBetEntity[];
+
 
   @BeforeInsert()
   async hashPassword() {
@@ -55,4 +49,13 @@ export class UserEntity {
   @OneToMany(()=> AdvertisementsEntity,(advertisement) => advertisement.author)
   advertisements: AdvertisementsEntity[]
 
+
+
+  @OneToMany(() => UserBetEntity, (userBetEntity) => userBetEntity.user, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn({ referencedColumnName: 'user_id' })
+  userBets!: UserBetEntity[];
 }

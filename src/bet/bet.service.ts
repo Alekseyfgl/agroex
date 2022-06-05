@@ -1,26 +1,23 @@
-import { Injectable } from '@nestjs/common';
+import {Body, Injectable, Param} from '@nestjs/common';
 import { CreateBetDto } from './dto/create-bet.dto';
 import { UpdateBetDto } from './dto/update-bet.dto';
+import {InjectRepository} from "@nestjs/typeorm";
+import {BetEntity} from "./entities/bet.entity";
+import {Repository} from "typeorm";
+import {User} from "../user/decorators/user.decarator";
+import {UserEntity} from "../user/user.entity";
 
 @Injectable()
 export class BetService {
-  create(createBetDto: CreateBetDto) {
-    return 'This action adds a new bet';
-  }
+constructor(@InjectRepository(BetEntity) private readonly betRepository: Repository<BetEntity>) {
+}
 
-  findAll() {
-    return `This action returns all bet`;
-  }
 
-  findOne(id: number) {
-    return `This action returns a #${id} bet`;
-  }
+async foo(@Body() bet: CreateBetDto, @User() currentUser: UserEntity, @Param() slug) {
+    console.log('slug', slug)
+    console.log('dto', bet)
+    console.log('currentUser', currentUser)
+    return 'aaa' as any
+}
 
-  update(id: number, updateBetDto: UpdateBetDto) {
-    return `This action updates a #${id} bet`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} bet`;
-  }
 }

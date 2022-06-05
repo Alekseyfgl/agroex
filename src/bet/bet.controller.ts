@@ -1,34 +1,20 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { BetService } from './bet.service';
-import { CreateBetDto } from './dto/create-bet.dto';
-import { UpdateBetDto } from './dto/update-bet.dto';
+import {Controller, Get, Post, Body, Patch, Param, Delete, UseGuards} from '@nestjs/common';
+import {BetService} from './bet.service';
+import {CreateBetDto} from './dto/create-bet.dto';
+import {UpdateBetDto} from './dto/update-bet.dto';
+import {AuthGuard} from "../auth/guards/auth.guard";
+import {User} from "../user/decorators/user.decarator";
+import {UserEntity} from "../user/user.entity";
 
-@Controller('bet')
+@Controller()
 export class BetController {
-  constructor(private readonly betService: BetService) {}
+    constructor(private readonly betService: BetService) {
+    }
 
-  @Post()
-  create(@Body() createBetDto: CreateBetDto) {
-    return this.betService.create(createBetDto);
-  }
+    @Post(':id/bet')
+    @UseGuards(AuthGuard)
+    async createBet(@Body() bet: CreateBetDto, @User() currentUser: UserEntity, @Param() slug) {
+            return this.betService.foo(bet, currentUser, slug)
+    }
 
-  @Get()
-  findAll() {
-    return this.betService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.betService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBetDto: UpdateBetDto) {
-    return this.betService.update(+id, updateBetDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.betService.remove(+id);
-  }
 }

@@ -24,7 +24,8 @@ export class RolesEntity {
   @Column()
   description: string;
 
-  @OneToMany(() => UserRolesEntity, (userRolesEntity) => userRolesEntity.role, {
+  @OneToMany(() => UserRolesEntity,
+      (userRolesEntity) => userRolesEntity.role, {
     cascade: true,
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
