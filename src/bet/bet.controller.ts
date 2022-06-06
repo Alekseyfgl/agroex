@@ -1,7 +1,6 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, UseGuards} from '@nestjs/common';
+import {Controller, Post, Body, Param, UseGuards} from '@nestjs/common';
 import {BetService} from './bet.service';
-import {CreateBetDto} from './dto/create-bet.dto';
-import {UpdateBetDto} from './dto/update-bet.dto';
+import {CreateBetDto} from './dto/createBet.dto';
 import {AuthGuard} from "../auth/guards/auth.guard";
 import {User} from "../user/decorators/user.decarator";
 import {UserEntity} from "../user/user.entity";
@@ -13,8 +12,7 @@ export class BetController {
 
     @Post(':id/bet')
     @UseGuards(AuthGuard)
-    async createBet(@Body() bet: CreateBetDto, @User() currentUser: UserEntity, @Param() slug) {
-            return this.betService.foo(bet, currentUser, slug)
+    async createBet(@Body() createBetDto: CreateBetDto, @User() currentUser: UserEntity, @Param() slug: string) {
+        return this.betService.createBet(createBetDto, currentUser, slug)
     }
-
 }
