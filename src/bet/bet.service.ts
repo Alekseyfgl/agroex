@@ -22,6 +22,8 @@ export class BetService {
         const user : UserEntity = await this.userService.getUserById(currentUser);
 
         return await this.betRepository.createBet(advert, user, bet)
+
+
     }
 
 }

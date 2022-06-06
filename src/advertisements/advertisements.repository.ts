@@ -51,6 +51,7 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
             .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT, DB_RELATIONS_ADVERTISEMENTS_AND_USER.USER)
             .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT_USERBETS, DB_RELATIONS_ADVERTISEMENTS_AND_USER.USERBETS)
 
+
         queryBuilder.orderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_COLUMN_BY_CREATE_AT, ORDER.DESC)
         const advertisementCount = await queryBuilder.getCount()//тотал по нашей таблице
 
@@ -64,7 +65,7 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
         if (query.offset) {
             queryBuilder.offset(query.offset)
         }
-        
+
         const advertisements: AdvertisementsEntity[] = await queryBuilder.getMany()
         return {advertisements, advertisementCount}
     }
