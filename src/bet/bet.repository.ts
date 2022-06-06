@@ -15,9 +15,10 @@ export class BetRepository extends AbstractRepository<UserBetEntity> {
         // console.log(advertisement)
         // console.log(user)
         Object.assign(newBet, createBetDto, user, advertisement)
+        console.log(user)
 
-        // console.log('---------XXX-------', newBet)
-
+        console.log('---------XXX-------', newBet)
+        // newBet.user_id = user.id
 
         await this.repository.save(newBet)
     }

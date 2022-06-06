@@ -12,6 +12,7 @@ export class BetController {
 
     @Post(':slug/bet')
     @UseGuards(AuthGuard)
+
     async createBet(@Body() createBetDto: CreateBetDto, @User() currentUser: UserEntity,@Param() slug: string) {
         return this.betService.createBet(createBetDto, currentUser, slug)
     }

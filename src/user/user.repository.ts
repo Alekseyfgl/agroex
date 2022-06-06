@@ -91,10 +91,10 @@ export class UserRepository extends AbstractRepository<UserEntity> {
 
     async findUserById(id: number): Promise<UserEntity> {
         const user: UserEntity = await this.repository.findOne({
-            // where: {id: id},
+            where: {id: id},
             //      userRoles- назв таблицы               userRoles.role
             //      userBets- назв таблицы             userBets
-            // relations: ['userBets', DB_RELATIONS.USER_ROLES, DB_RELATIONS.ROLES],
+            relations: ['userBets', DB_RELATIONS.USER_ROLES, DB_RELATIONS.ROLES],
         });
 
         if (!user) {
