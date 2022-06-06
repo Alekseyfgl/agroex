@@ -27,7 +27,10 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
 
     async findBySlug(slug: string): Promise<AdvertisementsEntity> {
         // console.log('slug=====>>>>>', slug)
-        const advertisements: AdvertisementsEntity = await this.repository.findOne({slug})
+        const advertisements: AdvertisementsEntity = await this.repository.findOne({
+            where: {slug : slug},
+            // relations: ['userBets']
+        })
 
 
         if (!advertisements) {
@@ -45,7 +48,8 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
     async findAll(currentUserId: number, query: QueryInterface): Promise<AdvertsResponseInterface> {
         const queryBuilder = getRepository(AdvertisementsEntity)
             .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER.TABLE)
-            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT, DB_RELATIONS_ADVERTISEMENTS_AND_USER.USER);
+            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT, DB_RELATIONS_ADVERTISEMENTS_AND_USER.USER)
+
 
         queryBuilder.orderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_COLUMN_BY_CREATE_AT, ORDER.DESC)
         const advertisementCount = await queryBuilder.getCount()//тотал по нашей таблице
@@ -62,7 +66,6 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
         }
 
         const advertisements: AdvertisementsEntity[] = await queryBuilder.getMany()
-
         return {advertisements, advertisementCount}
     }
 }

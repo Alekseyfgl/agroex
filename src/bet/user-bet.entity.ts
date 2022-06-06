@@ -1,6 +1,5 @@
-import {Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import {BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {UserEntity} from "../user/user.entity";
-import {BetEntity} from "./entities/bet.entity";
 import {AdvertisementsEntity} from "../advertisements/advertisements.entity";
 
 
@@ -13,19 +12,25 @@ export class UserBetEntity {
     @Column()
     user_id: number;
 
-    @Column()
-    bet_id: number;
 
     @CreateDateColumn()
     created_at: Date;
+
+    @CreateDateColumn({default: null})
+    expireDays: Date
+
+
+    @Column()
+    betValue: number;
+
+    @Column({default: true})
+    isActive: boolean
+
 
     @ManyToOne(() => UserEntity, (userEntity) => userEntity.userBets)
     @JoinColumn({name: 'user_id'})
     user: UserEntity;
 
-    @ManyToOne(() => BetEntity, (betEntity) => betEntity.userBets)
-    @JoinColumn({name: 'bet_id'})
-    bet: BetEntity;
 
     @ManyToOne(() => AdvertisementsEntity, (advertisementEntity) => advertisementEntity.userBets)
     @JoinColumn({name: 'advertisement_id'})

@@ -10,9 +10,9 @@ export class BetController {
     constructor(private readonly betService: BetService) {
     }
 
-    @Post(':id/bet')
+    @Post(':slug/bet')
     @UseGuards(AuthGuard)
-    async createBet(@Body() createBetDto: CreateBetDto, @User() currentUser: UserEntity, @Param() slug: string) {
+    async createBet(@Body() createBetDto: CreateBetDto, @User() currentUser: UserEntity,@Param() slug: string) {
         return this.betService.createBet(createBetDto, currentUser, slug)
     }
 }
