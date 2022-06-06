@@ -10,7 +10,7 @@ export class BetRepository extends AbstractRepository<UserBetEntity> {
 
 
         const currentBet = Object.values(bet)[0]
-        //
+
 
 
         const rawData = await this.repository.query(`INSERT INTO "userBets" (user_id, "betValue", advertisement_id) VALUES (${user.id},${currentBet},${advert.id});`)
