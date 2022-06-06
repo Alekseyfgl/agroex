@@ -2,6 +2,8 @@ export const numToEncode = 10;
 
 export const expiresInForToken = '168h';
 
+export const MAX_IMAGE_SIZE=5242880;
+
 export const enum ORDER {
     ASC = 'ASC',
     DESC = 'DESC',
@@ -34,6 +36,7 @@ export const enum DB_RELATIONS {
 export const enum DB_RELATIONS_ADVERTISEMENTS_AND_USER {
     TABLE = 'advertisements',
     USER = 'author',
+    ISMODERATED = 'advertisements.isModerated = :isModerated',
     LEFT_JOIN_AND_SELECT = 'advertisements.author',
     SORT_COLUMN_BY_CREATE_AT = 'advertisements.createAt',
 }
@@ -47,4 +50,9 @@ export const enum HOST_URL {
 export const enum FILES_ERRORS {
     FILE_TYPE_IS_NOT_MATCHING = 'File type is not matching',
     FILE_EXPECTED = 'File expected'
+}
+
+export const BOOLEAN = {
+    'TRUE': true,
+    'FALSE': false
 }

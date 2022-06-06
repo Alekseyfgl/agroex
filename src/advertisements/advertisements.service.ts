@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common';
+import {HttpStatus, Injectable} from '@nestjs/common';
 import {AdvertisementsRepository} from "./advertisements.repository";
 import {UserEntity} from "../user/user.entity";
 import {CreateAdvertisementDto} from "./dto/createAdvertisement.dto";
@@ -9,6 +9,7 @@ import {
 } from "./advertisements.mapper";
 import {AdvertisementsEntity} from "./advertisements.entity";
 import {AdvertsResponseInterface, QueryInterface} from "./interface/advertResponseInterface";
+import {PromiseOptional} from "../interfacesAndTypes/optional.interface";
 
 
 @Injectable()
@@ -27,9 +28,13 @@ export class AdvertisementsService {
         return await this.advertisementsRepository.findBySlug(slug)
     }
 
-    async findAll(currentUserId: number, query: QueryInterface): Promise<AdvertsResponseInterface> {
-        const advert: AdvertsResponseInterface = await this.advertisementsRepository.findAll(currentUserId, query)
+    async findAll(currentUserId: number, query: QueryInterface, isModerated: boolean): Promise<AdvertsResponseInterface> {
+        const advert: AdvertsResponseInterface = await this.advertisementsRepository.findAll(currentUserId, query, isModerated)
         return advertisementsResponseAll(advert)
+    }
+
+    async setModeratedData(updateAdvertDto): PromiseOptional<HttpStatus> {
+        return this.advertisementsRepository.updateModeratedData(updateAdvertDto)
     }
 
     public buildAdvertisementResponseForCreate(advertisement: AdvertisementsEntity): ReturnType<typeof advertisementForResponse> {
