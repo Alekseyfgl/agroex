@@ -57,7 +57,7 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
             .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER.TABLE)
             .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT, DB_RELATIONS_ADVERTISEMENTS_AND_USER.USER)
             .leftJoinAndSelect('advertisements.userBets', 'userBets')
-            .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER.ISMODERATED, {isModerated: isModerated});
+            .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER.ISMODERATED, {isModerated: isModerated})
 
             .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_COLUMN_BY_CREATE_AT, `${isModerated? ORDER.DESC : ORDER.ASC}`)
             .addOrderBy('userBets.created_at', 'DESC')        
@@ -78,13 +78,25 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
         return {advertisements, advertisementCount}
     }
 
-    async updateModeratedData(updateAdvertDto): PromiseOptional<HttpStatus> {
-        const advertisement: AdvertisementsEntity = await this.findBySlug(updateAdvertDto.slug);
-        advertisement.isModerated=updateAdvertDto.isModerated;
-        advertisement.moderationComment=updateAdvertDto.moderationComment;
+    async updateModeratedData(updateAdvertDto: AdvertisementsEntity): Promise<void> {
+        //const advertisement: AdvertisementsEntity = await this.findBySlug(updateAdvertDto.slug);
+
+        if (await this.findBySlug(updateAdvertDto.slug)) {
+            await this.repository.update({
+                slug: updateAdvertDto.slug,
+            }, {
+                isModerated: updateAdvertDto.isModerated,
+                moderationComment: updateAdvertDto.moderationComment
+            })
+        }
+
+
+
+
+        //advertisement.isModerated=updateAdvertDto.isModerated;
+        //advertisement.moderationComment=updateAdvertDto.moderationComment;
         //Object.assign(advertisement, updateAdvertDto) // есть ли у модератора права изменять все данные?
 
-        await this.repository.save(advertisement);
-        return HttpStatus.OK;
+        //await this.repository.save(advertisement);
     }
 }

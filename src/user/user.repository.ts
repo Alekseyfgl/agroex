@@ -132,7 +132,7 @@ export class UserRepository extends AbstractRepository<UserEntity> {
             HttpStatus.NOT_FOUND);
     }
 
-    async addBan(dto: BanUserDto): Promise<HttpStatus> {
+    async addBan(dto: BanUserDto): Promise<void> {
         const user: UserEntity = await this.findUserById(dto.userId);
         if (!user) {
             throw new HttpException(
@@ -145,8 +145,6 @@ export class UserRepository extends AbstractRepository<UserEntity> {
         user.banned = true;
         user.banReason = dto.banReason;
         await this.repository.save(user);
-
-        return HttpStatus.OK;
     }
 
 }

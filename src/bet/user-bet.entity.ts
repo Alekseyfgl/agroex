@@ -19,7 +19,7 @@ export class UserBetEntity {
     created_at: Date;
 
     @CreateDateColumn({default: null})
-    expireBet: Date
+    expireDays: Date
 
 
     @Column('decimal', {precision: 18, scale: 2})
