@@ -6,19 +6,21 @@ import {CreateBetDto} from "./dto/createBet.dto";
 
 @EntityRepository(UserBetEntity)
 export class BetRepository extends AbstractRepository<UserBetEntity> {
-    async createBet(advert, user, bet) {
+    async createBet(advert, user, betObj) {
+
+       // const currentBet = Object.values(bet)[0]
+
+        const betData: UserBetEntity = new UserBetEntity();
+        Object.assign(betData, {
+            user_id: user.id,
+            advertisement_id: advert.id,
+            betValue: +betObj.bet
+        })
+        //const rawData = await this.repository.query(`INSERT INTO "userBets" (user_id, "betValue", advertisement_id) VALUES (${user.id},${currentBet},${advert.id});`)
+
+        return await this.repository.save(betData)
 
 
-        const currentBet = Object.values(bet)[0]
-
-
-
-        const rawData = await this.repository.query(`INSERT INTO "userBets" (user_id, "betValue", advertisement_id) VALUES (${user.id},${currentBet},${advert.id});`)
-        // const join = await this.repository.query(`SELECT * FROM advertisements INNER JOIN "userBets" ON advertisements.id = "userBets".advertisement_id;`)
-        //
-        // await this.repository.save(rawData)
-        //
-      await this.repository.save(rawData)
     }
 
 
