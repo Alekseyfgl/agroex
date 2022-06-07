@@ -46,22 +46,11 @@ export const advertisementForGetBySlug = (advert: AdvertisementsEntity): AdvertR
 })
 
 export const advertisementsResponseAll = (advertAll: AdvertsResponseInterface): AdvertsResponseInterface => {
-    advertAll.advertisements.forEach(advertisement => delete advertisement.author.password)
+    advertAll.advertisements.forEach(advertisement => {
+        delete advertisement.author.password
+        // const isActiveBet = advertisement.userBets.find(bet => bet.isActive === true);
+        // advertisement.userBets = [isActiveBet]
+    })
 
-    // const arrAdvert = advertAll.advertisements
-    // for (let i = 0; i < arrAdvert.length; i++) {
-    //     const userBets = arrAdvert[i].userBets;
-    //
-    //     if (userBets.length > 0) {
-    //         for (let i = 0; i < userBets.length; i++) {
-    //             // console.log(userBets[i].isActive)
-    //             if(!userBets[i].isActive) {
-    //                 console.log('-----userBets-----',userBets.length )
-    //                 delete userBets[i]
-    //             }
-    //
-    //         }
-    //     }
-    // }
     return advertAll
 }

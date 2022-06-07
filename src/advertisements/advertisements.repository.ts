@@ -56,11 +56,22 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
         const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> = getRepository(AdvertisementsEntity)
             .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER.TABLE)
             .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT, DB_RELATIONS_ADVERTISEMENTS_AND_USER.USER)
-            .leftJoinAndSelect('advertisements.userBets', 'userBets')
-            .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER.ISMODERATED, {isModerated: isModerated});
+            .leftJoinAndSelect('advertisements.userBets', 'userBets', 'userBets.isActive = :isActive', {isActive: true})
 
-            .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_COLUMN_BY_CREATE_AT, `${isModerated? ORDER.DESC : ORDER.ASC}`)
-            .addOrderBy('userBets.created_at', 'DESC')        
+            .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER.ISMODERATED, {isModerated: isModerated})
+
+            .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_COLUMN_BY_CREATE_AT, `${isModerated ? ORDER.DESC : ORDER.ASC}`)
+            .addOrderBy('userBets.created_at', 'DESC');
+
+
+        const rawData = await this.repository.query(`SELECT * FROM advertisements AS adv 
+LEFT JOIN users AS u ON u.id=adv."authorId"
+LEFT JOIN "userBets" AS ub ON adv.id=ub.advertisement_id
+AND "isActive"=true
+ORDER BY adv."createAt" DESC, ub.created_at DESC`)
+
+        console.log(rawData)
+
         const advertisementCount: number = await queryBuilder.getCount()//тотал по нашей таблице
         // console.log(query)
 
@@ -80,8 +91,8 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
 
     async updateModeratedData(updateAdvertDto): PromiseOptional<HttpStatus> {
         const advertisement: AdvertisementsEntity = await this.findBySlug(updateAdvertDto.slug);
-        advertisement.isModerated=updateAdvertDto.isModerated;
-        advertisement.moderationComment=updateAdvertDto.moderationComment;
+        advertisement.isModerated = updateAdvertDto.isModerated;
+        advertisement.moderationComment = updateAdvertDto.moderationComment;
         //Object.assign(advertisement, updateAdvertDto) // есть ли у модератора права изменять все данные?
 
         await this.repository.save(advertisement);
