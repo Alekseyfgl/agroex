@@ -49,9 +49,8 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
             .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT, DB_RELATIONS_ADVERTISEMENTS_AND_USER.USER)
             .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER.ISMODERATED, {isModerated: isModerated});
 
-        queryBuilder.orderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_COLUMN_BY_CREATE_AT, ORDER.DESC)
+        queryBuilder.orderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_COLUMN_BY_CREATE_AT, `${isModerated? ORDER.DESC : ORDER.ASC}`)
         const advertisementCount = await queryBuilder.getCount()//тотал по нашей таблице
-
         // console.log(query)
         //create limit
         if (query.limit) {
