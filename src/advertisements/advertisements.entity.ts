@@ -37,6 +37,9 @@ export class AdvertisementsEntity {
     @Column({default: false})
     isModerated: boolean
 
+    @Column( {default: null})
+    moderationComment: string
+
     @Column('decimal', {precision: 18, scale: 2})
     price: number;
 

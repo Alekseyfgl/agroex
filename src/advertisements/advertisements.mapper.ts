@@ -25,6 +25,7 @@ export const advertisementForGetBySlug = (advert: AdvertisementsEntity): AdvertR
         country: advert.country,
         location: advert.location,
         isModerated: advert.isModerated,
+        moderationComment: advert.moderationComment,
         price: advert.price,
         currency: advert.currency,
         img: advert.img,

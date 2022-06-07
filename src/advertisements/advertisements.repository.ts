@@ -12,6 +12,7 @@ import {HttpException, HttpStatus} from "@nestjs/common";
 import {DB_RELATIONS_ADVERTISEMENTS_AND_USER, MessageError, ORDER} from "../constans/constans";
 import {AdvertsResponseInterface, QueryInterface} from "./interface/advertResponseInterface";
 import {createSlug} from "../helper/helper";
+import {PromiseOptional} from "../interfacesAndTypes/optional.interface";
 import {take} from "rxjs/operators";
 import {UserBetEntity} from "../bet/user-bet.entity";
 
@@ -51,18 +52,17 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
     }
 
 
-    async findAll(currentUserId: number, query: QueryInterface): Promise<AdvertsResponseInterface> {
-
+    async findAll(currentUserId: number, query: QueryInterface, isModerated: boolean): Promise<AdvertsResponseInterface> {
         const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> = getRepository(AdvertisementsEntity)
             .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER.TABLE)
             .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT, DB_RELATIONS_ADVERTISEMENTS_AND_USER.USER)
             .leftJoinAndSelect('advertisements.userBets', 'userBets')
+            .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER.ISMODERATED, {isModerated: isModerated});
 
-
-            .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_COLUMN_BY_CREATE_AT, ORDER.DESC)
-            .addOrderBy('userBets.created_at', 'DESC')
+            .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_COLUMN_BY_CREATE_AT, `${isModerated? ORDER.DESC : ORDER.ASC}`)
+            .addOrderBy('userBets.created_at', 'DESC')        
         const advertisementCount: number = await queryBuilder.getCount()//тотал по нашей таблице
-
+        // console.log(query)
 
         //create limit
         if (query.limit) {
@@ -76,5 +76,15 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
 
         const advertisements: AdvertisementsEntity[] = await queryBuilder.getMany()
         return {advertisements, advertisementCount}
+    }
+
+    async updateModeratedData(updateAdvertDto): PromiseOptional<HttpStatus> {
+        const advertisement: AdvertisementsEntity = await this.findBySlug(updateAdvertDto.slug);
+        advertisement.isModerated=updateAdvertDto.isModerated;
+        advertisement.moderationComment=updateAdvertDto.moderationComment;
+        //Object.assign(advertisement, updateAdvertDto) // есть ли у модератора права изменять все данные?
+
+        await this.repository.save(advertisement);
+        return HttpStatus.OK;
     }
 }
