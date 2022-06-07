@@ -15,7 +15,7 @@ export class BetRepository extends AbstractRepository<UserBetEntity> {
         Object.assign(betData, {
             user_id: user.id,
             advertisement_id: advert.id,
-            betValue: +betObj.bet
+            betValue: +betObj.betValue
         })
 
 

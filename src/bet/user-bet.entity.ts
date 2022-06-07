@@ -22,7 +22,7 @@ export class UserBetEntity {
     expireBet: Date
 
 
-    @Column()
+    @Column('decimal', {precision: 18, scale: 2})
     betValue: number;
 
     @Column({default: true})
