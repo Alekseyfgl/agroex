@@ -17,13 +17,11 @@ export class BetService {
 
 
     async createBet(@Body() bet: CreateBetDto, @User() currentUser: UserEntity, @Param() slug: string) {
-        const currentSlug = Object.values(slug)[0]
+        const currentSlug: string = Object.values(slug)[0]
         const advert : AdvertisementsEntity  = await this.advertisementsService.getAdvertisementBySlug(currentSlug);
         const user : UserEntity = await this.userService.getUserById(currentUser);
 
         return await this.betRepository.createBet(advert, user, bet)
-
-
     }
 
 }
