@@ -1,4 +1,9 @@
-import {AbstractRepository, EntityRepository, getRepository} from "typeorm";
+import {
+    AbstractRepository,
+    EntityRepository,
+    getRepository,
+    SelectQueryBuilder
+} from "typeorm";
 import {AdvertisementsEntity} from "./advertisements.entity";
 import {UserEntity} from "../user/user.entity";
 import {CreateAdvertisementDto} from "./dto/createAdvertisement.dto";
@@ -8,6 +13,8 @@ import {DB_RELATIONS_ADVERTISEMENTS_AND_USER, MessageError, ORDER} from "../cons
 import {AdvertsResponseInterface, QueryInterface} from "./interface/advertResponseInterface";
 import {createSlug} from "../helper/helper";
 import {PromiseOptional} from "../interfacesAndTypes/optional.interface";
+import {take} from "rxjs/operators";
+import {UserBetEntity} from "../bet/user-bet.entity";
 
 
 @EntityRepository(AdvertisementsEntity)
@@ -27,8 +34,9 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
 
 
     async findBySlug(slug: string): Promise<AdvertisementsEntity> {
-        // console.log('slug=====>>>>>', slug)
-        const advertisements: AdvertisementsEntity = await this.repository.findOne({slug})
+        const advertisements: AdvertisementsEntity = await this.repository.findOne({
+            where: {slug: slug},
+        })
 
 
         if (!advertisements) {
@@ -43,15 +51,19 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
         return advertisements
     }
 
+
     async findAll(currentUserId: number, query: QueryInterface, isModerated: boolean): Promise<AdvertsResponseInterface> {
-        const queryBuilder = getRepository(AdvertisementsEntity)
+        const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> = getRepository(AdvertisementsEntity)
             .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER.TABLE)
             .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT, DB_RELATIONS_ADVERTISEMENTS_AND_USER.USER)
+            .leftJoinAndSelect('advertisements.userBets', 'userBets')
             .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER.ISMODERATED, {isModerated: isModerated});
 
-        queryBuilder.orderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_COLUMN_BY_CREATE_AT, `${isModerated? ORDER.DESC : ORDER.ASC}`)
-        const advertisementCount = await queryBuilder.getCount()//тотал по нашей таблице
+            .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_COLUMN_BY_CREATE_AT, `${isModerated? ORDER.DESC : ORDER.ASC}`)
+            .addOrderBy('userBets.created_at', 'DESC')        
+        const advertisementCount: number = await queryBuilder.getCount()//тотал по нашей таблице
         // console.log(query)
+
         //create limit
         if (query.limit) {
             queryBuilder.limit(query.limit)
@@ -63,7 +75,6 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
         }
 
         const advertisements: AdvertisementsEntity[] = await queryBuilder.getMany()
-
         return {advertisements, advertisementCount}
     }
 

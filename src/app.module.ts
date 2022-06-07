@@ -12,6 +12,7 @@ import { AuthMiddleware } from './auth/middlewares/auth.middleware';
 import { AdvertisementsModule } from './advertisements/advertisements.module';
 import {CloudinaryModule} from "./cloudinary/cloudinary.module";
 import {CloudinaryProvider} from './cloudinary/cloudinary.provider';
+import { BetModule } from './bet/bet.module';
 
 @Module({
   imports: [
@@ -23,6 +24,7 @@ import {CloudinaryProvider} from './cloudinary/cloudinary.provider';
     AuthModule,
     AdvertisementsModule,
     CloudinaryModule,
+    BetModule,
   ],
   controllers: [AppController],
   providers: [AppService, CloudinaryProvider],

@@ -38,7 +38,9 @@ export const enum DB_RELATIONS_ADVERTISEMENTS_AND_USER {
     USER = 'author',
     ISMODERATED = 'advertisements.isModerated = :isModerated',
     LEFT_JOIN_AND_SELECT = 'advertisements.author',
+    LEFT_JOIN_AND_SELECT_USERBETS = 'advertisements.userBets',
     SORT_COLUMN_BY_CREATE_AT = 'advertisements.createAt',
+    USERBETS = 'userBets'
 }
 
 export const enum HOST_URL {

@@ -10,6 +10,7 @@ import { FilesModule } from '../files/files.module';
     FilesModule
   ],
   controllers: [AdvertisementsController],
-  providers: [AdvertisementsService]
+  providers: [AdvertisementsService],
+  exports: [AdvertisementsModule, AdvertisementsService]
 })
 export class AdvertisementsModule {}

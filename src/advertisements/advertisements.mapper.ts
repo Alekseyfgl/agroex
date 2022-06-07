@@ -6,7 +6,6 @@ import {
 } from "./interface/advertResponseInterface";
 
 
-
 export const advertisementForResponse = (advert: AdvertisementsEntity): AdvertResponseInterfaceForCreate => ({
     advertisement: {
         status: 'success',
@@ -16,8 +15,7 @@ export const advertisementForResponse = (advert: AdvertisementsEntity): AdvertRe
 })
 
 
-
-export const advertisementForGetBySlug = (advert: AdvertisementsEntity) : AdvertResponseInterface => ({
+export const advertisementForGetBySlug = (advert: AdvertisementsEntity): AdvertResponseInterface => ({
     advertisement: {
         id: advert.id,
         title: advert.title,
@@ -29,7 +27,7 @@ export const advertisementForGetBySlug = (advert: AdvertisementsEntity) : Advert
         isModerated: advert.isModerated,
         moderationComment: advert.moderationComment,
         price: advert.price,
-        currency : advert.currency,
+        currency: advert.currency,
         img: advert.img,
         quantity: advert.quantity,
         unit: advert.unit,
@@ -49,5 +47,21 @@ export const advertisementForGetBySlug = (advert: AdvertisementsEntity) : Advert
 
 export const advertisementsResponseAll = (advertAll: AdvertsResponseInterface): AdvertsResponseInterface => {
     advertAll.advertisements.forEach(advertisement => delete advertisement.author.password)
+
+    // const arrAdvert = advertAll.advertisements
+    // for (let i = 0; i < arrAdvert.length; i++) {
+    //     const userBets = arrAdvert[i].userBets;
+    //
+    //     if (userBets.length > 0) {
+    //         for (let i = 0; i < userBets.length; i++) {
+    //             // console.log(userBets[i].isActive)
+    //             if(!userBets[i].isActive) {
+    //                 console.log('-----userBets-----',userBets.length )
+    //                 delete userBets[i]
+    //             }
+    //
+    //         }
+    //     }
+    // }
     return advertAll
 }
