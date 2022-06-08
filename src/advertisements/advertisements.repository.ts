@@ -53,14 +53,18 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
     async findAll(currentUserId: number, query: QueryInterface, isModerated: boolean): Promise<AdvertsResponseInterface> {
         const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> = getRepository(AdvertisementsEntity)
             .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER.TABLE)
-            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT, DB_RELATIONS_ADVERTISEMENTS_AND_USER.USER)
+            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER.USER)
 
-            .leftJoinAndSelect('advertisements.userBets', 'userBets', 'userBets.isActive = :isActive', {isActive: true})
+            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT_USERBETS,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER.USERBETS,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER.USERBETS_IS_ACTIVE, {isActive: true})
 
-            .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER.ISMODERATED, {isModerated: isModerated})
+            .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER.ISMODERATED,
+                {isModerated: isModerated})
 
             .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_COLUMN_BY_CREATE_AT, `${isModerated ? ORDER.DESC : ORDER.ASC}`)
-            .addOrderBy('userBets.created_at', 'DESC');
+            .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_BETS_BY_CREATE_AT, ORDER.DESC);
 
 
         const advertisementCount: number = await queryBuilder.getCount()//тотал по нашей таблице
