@@ -21,7 +21,7 @@ export class AdvertisementsEntity {
     @Column("varchar", {length: 100})
     country: string;
 
-    @Column()
+    @Column("varchar", {length: 300})
     location: string;
 
     @Column({unique: true})
@@ -55,10 +55,10 @@ export class AdvertisementsEntity {
     @Column("varchar", {length: 5})
     unit: string;
 
-    @CreateDateColumn()
+    @CreateDateColumn({ type: 'timestamptz' })
     createAt: Date
 
-    @UpdateDateColumn()
+    @UpdateDateColumn({ type: 'timestamptz' })
     updatedAt: Date
 
 

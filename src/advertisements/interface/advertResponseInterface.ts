@@ -1,5 +1,5 @@
 import {AdvertisementsEntity} from "../advertisements.entity";
-import {UserBetEntity} from "../../bet/user-bet.entity";
+
 
 
 export interface AdvertResponseInterface {
@@ -29,7 +29,6 @@ export interface AdvertResponseInterface {
             banned: boolean,
             banReason: string
         }
-        // userBets: UserBetEntity[]
     }
 }
 

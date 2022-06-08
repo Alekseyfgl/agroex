@@ -1,4 +1,4 @@
-import {HttpStatus, Injectable} from '@nestjs/common';
+import { Injectable} from '@nestjs/common';
 import {AdvertisementsRepository} from "./advertisements.repository";
 import {UserEntity} from "../user/user.entity";
 import {CreateAdvertisementDto} from "./dto/createAdvertisement.dto";
@@ -9,7 +9,6 @@ import {
 } from "./advertisements.mapper";
 import {AdvertisementsEntity} from "./advertisements.entity";
 import {AdvertsResponseInterface, QueryInterface} from "./interface/advertResponseInterface";
-import {PromiseOptional} from "../interfacesAndTypes/optional.interface";
 
 
 @Injectable()

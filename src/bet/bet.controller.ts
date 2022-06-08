@@ -14,7 +14,7 @@ export class BetController {
     @Post(':slug/bet')
     @UseGuards(AuthGuard)
     @UsePipes(new ValidationPipe())
-    async createBet(@Body() createBetDto: CreateBetDto, @User() currentUser: UserEntity,@Param() slug: string) {
-        return this.betService.createBet(createBetDto, currentUser, slug)
+    async createBet(@Body() createBetDto: CreateBetDto, @User() currentUser: UserEntity,@Param() slug: string): Promise<void> {
+         await this.betService.createBet(createBetDto, currentUser, slug)
     }
 }

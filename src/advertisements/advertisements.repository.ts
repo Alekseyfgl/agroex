@@ -12,9 +12,7 @@ import {HttpException, HttpStatus} from "@nestjs/common";
 import {DB_RELATIONS_ADVERTISEMENTS_AND_USER, MessageError, ORDER} from "../constans/constans";
 import {AdvertsResponseInterface, QueryInterface} from "./interface/advertResponseInterface";
 import {createSlug} from "../helper/helper";
-import {PromiseOptional} from "../interfacesAndTypes/optional.interface";
-import {take} from "rxjs/operators";
-import {UserBetEntity} from "../bet/user-bet.entity";
+
 
 
 @EntityRepository(AdvertisementsEntity)
@@ -26,7 +24,7 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
 
         Object.assign(advertisement, createAdvertDto)
 
-        advertisement.slug = createSlug(createAdvertDto.title)
+        advertisement.slug  = createSlug(createAdvertDto.title)
         advertisement.author = currentUser
 
         return await this.repository.save(advertisement)
@@ -65,17 +63,7 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
             .addOrderBy('userBets.created_at', 'DESC');
 
 
-//         const rawData = await this.repository.query(`SELECT * FROM advertisements AS adv
-// LEFT JOIN users AS u ON u.id=adv."authorId"
-// LEFT JOIN "userBets" AS ub ON adv.id=ub.advertisement_id
-// AND "isActive"=true
-// ORDER BY adv."createAt" DESC, ub.created_at DESC`)
-//
-//         console.log(rawData)
-
-
         const advertisementCount: number = await queryBuilder.getCount()//тотал по нашей таблице
-        // console.log(query)
 
         //create limit
         if (query.limit) {
@@ -102,15 +90,5 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
                 moderationComment: updateAdvertDto.moderationComment
             })
         }
-
-
-
-
-        //advertisement.isModerated=updateAdvertDto.isModerated;
-        //advertisement.moderationComment=updateAdvertDto.moderationComment;
-
-        //Object.assign(advertisement, updateAdvertDto) // есть ли у модератора права изменять все данные?
-
-        //await this.repository.save(advertisement);
     }
 }
