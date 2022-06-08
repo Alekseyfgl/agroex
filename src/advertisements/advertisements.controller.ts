@@ -25,7 +25,7 @@ import {FilesService} from "../files/files.service";
 import {fileMimetypeFilter} from "../files/filters/file-mimetype-filter";
 import { ParseFile } from '../files/pipes/parse-file.pipe';
 import {UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
-import {BOOLEAN, MAX_IMAGE_SIZE, ROLES_ID} from "../constans/constans";
+import {MAX_IMAGE_SIZE, ROLES_ID} from "../constans/constans";
 import {Roles} from "../roles/decorators/roles-auth.decorator";
 import {RolesGuard} from "../auth/guards/roles.guard";
 import {PromiseOptional} from "../interfacesAndTypes/optional.interface";
@@ -67,20 +67,20 @@ export class AdvertisementsController {
 
     @Get()
     async findAllActiveAdvertisements(@User('id') currentUserId: number, @Query() query: QueryInterface) : Promise<AdvertsResponseInterface> {
-        return await this.advertisementsService.findAll(currentUserId, query, BOOLEAN.TRUE) // возвращаем только рекламы прошедшие модерацию (isModerated=true)
+        return await this.advertisementsService.findAll(currentUserId, query, true) // возвращаем только рекламы прошедшие модерацию (isModerated=true)
     }
     // решил оставить эти гет запросы в таком виде, так как иметь разные ендпоинты удобнее для запросов на модерацию из админки
     @Get('/moderation/get')
     @Roles(ROLES_ID.MODERATOR)
     @UseGuards(AuthGuard, RolesGuard)
     async findAllAdvertisementsForModeration(@User('id') currentUserId: number, @Query() query: QueryInterface) : Promise<AdvertsResponseInterface> {
-        return await this.advertisementsService.findAll(currentUserId, query, BOOLEAN.FALSE) // возвращаем только рекламы не прошедшие модерацию (isModerated=false)
+        return await this.advertisementsService.findAll(currentUserId, query, false) // возвращаем только рекламы не прошедшие модерацию (isModerated=false)
     }
 
     @Put('/moderation/set')
     @Roles(ROLES_ID.MODERATOR)
     @UseGuards(AuthGuard, RolesGuard)
-    async setAdData (@Body('advertisements') updateAdvertDto: AdvertsResponseInterface): PromiseOptional<HttpStatus> {
+    async setAdData (@Body('advertisements') updateAdvertDto: AdvertsResponseInterface): Promise<void> {
         return this.advertisementsService.setModeratedData(updateAdvertDto);
     }
 }

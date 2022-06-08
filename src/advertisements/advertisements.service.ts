@@ -33,7 +33,7 @@ export class AdvertisementsService {
         return advertisementsResponseAll(advert)
     }
 
-    async setModeratedData(updateAdvertDto): PromiseOptional<HttpStatus> {
+    async setModeratedData(updateAdvertDto): Promise<void> {
         return this.advertisementsRepository.updateModeratedData(updateAdvertDto)
     }
 

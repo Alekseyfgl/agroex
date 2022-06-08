@@ -53,8 +53,3 @@ export const enum FILES_ERRORS {
     FILE_TYPE_IS_NOT_MATCHING = 'File type is not matching',
     FILE_EXPECTED = 'File expected'
 }
-
-export const BOOLEAN = {
-    'TRUE': true,
-    'FALSE': false
-}

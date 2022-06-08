@@ -1,4 +1,4 @@
-import { HttpStatus, Injectable} from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import {UserRepository} from './user.repository';
 import {CreateUserDto} from '../auth/dto/createUser.dto';
 import {UserEntity} from './user.entity';
@@ -31,11 +31,11 @@ export class UserService {
     }
 
     async addRole(dto: AddRoleDto): Promise<AddRoleDto> {
-        const role = await this.roleService.getRoleByValue(dto.value);
+        const role = await this.roleService.getRoleByValue(dto.roleName);
         return await this.userRepository.addRole(dto, role)
     }
 
-    async addBan(dto: BanUserDto): Promise<HttpStatus>{
+    async addBan(dto: BanUserDto): Promise<void>{
         return this.userRepository.addBan(dto);
     }
 }
