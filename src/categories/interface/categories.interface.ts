@@ -1,3 +1,3 @@
-interface CategoriesInterface {
-    orderType: 'ASC'| 'DESC'
+export interface CategoriesInterface {
+  orderType: 'ASC' | 'DESC';
 }

@@ -24,7 +24,6 @@ export class AuthController {
   async registerUser(
     @Body('user') createUserDto: CreateUserDto,
   ): Promise<UserResponseInterface> {
-    // console.log('createUserDto', createUserDto); // {username: 'Masha',email: 'masha21@mail.com',password: '777',phone: '+375336429395'}
     const user: UserEntity = await this.authService.registerUser(createUserDto);
     return this.authService.buildUserResponseWithToken(user); // ответ для клиента после регистрации
   }
@@ -40,12 +39,8 @@ export class AuthController {
 
   @Get('user')
   @UseGuards(AuthGuard) // проверяем регистрац
-  async currentUser(
-    @User() user: UserEntity,
-    @User('id') currentUserId: number,
-  ): Promise<UserResponseInterface> {
+  async currentUser(@User() user: UserEntity): Promise<UserResponseInterface> {
     // здесь всегда получим пользоватля, т.к. могут заходить только зарегестрированные
-    // console.log('------ currentUserId--------', currentUserId)
     return this.authService.buildUserResponseWithToken(user);
   }
 }
