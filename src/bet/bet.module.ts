@@ -15,7 +15,7 @@ import {CronJobsModule} from "../cron-jobs/cron-jobs.module";
         forwardRef(()=>CronJobsModule)],
     controllers: [BetController],
     providers: [BetService],
-    exports: [BetModule, BetService]
+    exports: [BetService]
 })
 export class BetModule {
 }

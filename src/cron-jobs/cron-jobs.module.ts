@@ -8,6 +8,6 @@ import {BetModule} from "../bet/bet.module";
   imports: [TypeOrmModule.forFeature([CronJobsRepository]),
     forwardRef(()=>BetModule)],
   providers: [CronJobsService],
-  exports: [CronJobsModule, CronJobsService]
+  exports: [CronJobsService]
 })
 export class CronJobsModule {}
