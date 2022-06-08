@@ -64,13 +64,13 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
             .addOrderBy('userBets.created_at', 'DESC');
 
 
-        const rawData = await this.repository.query(`SELECT * FROM advertisements AS adv 
-LEFT JOIN users AS u ON u.id=adv."authorId"
-LEFT JOIN "userBets" AS ub ON adv.id=ub.advertisement_id
-AND "isActive"=true
-ORDER BY adv."createAt" DESC, ub.created_at DESC`)
-
-        console.log(rawData)
+//         const rawData = await this.repository.query(`SELECT * FROM advertisements AS adv
+// LEFT JOIN users AS u ON u.id=adv."authorId"
+// LEFT JOIN "userBets" AS ub ON adv.id=ub.advertisement_id
+// AND "isActive"=true
+// ORDER BY adv."createAt" DESC, ub.created_at DESC`)
+//
+//         console.log(rawData)
 
         const advertisementCount: number = await queryBuilder.getCount()//тотал по нашей таблице
         // console.log(query)
