@@ -26,9 +26,9 @@ export class BetRepository extends AbstractRepository<UserBetEntity> {
 
   private async changePreviousBet(advert_id: number): Promise<void> {
     const sql = `SELECT * FROM advertisements AS adv
-                        LEFT JOIN "userBets" AS ub ON adv.id=ub.advertisement_id where adv.id = ${advert_id}
-                        ORDER BY adv."createAt" DESC, ub.created_at DESC
-                        limit 1 offset 1`;
+                    LEFT JOIN "userBets" AS ub ON adv.id=ub.advertisement_id where adv.id = ${advert_id}
+                    ORDER BY adv."createAt" DESC, ub.created_at DESC
+                    limit 1 offset 1`;
 
     try {
       const penultimateBet: Optional<betAndAdvertInterface[]> =

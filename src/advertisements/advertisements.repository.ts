@@ -67,9 +67,9 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
         )
 
         .leftJoinAndSelect(
-          'advertisements.userBets',
-          'userBets',
-          'userBets.isActive = :isActive',
+          DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT_USERBETS,
+          DB_RELATIONS_ADVERTISEMENTS_AND_USER.USERBETS,
+          DB_RELATIONS_ADVERTISEMENTS_AND_USER.USERBETS_IS_ACTIVE,
           { isActive: true },
         )
 
@@ -81,7 +81,10 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
           DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_COLUMN_BY_CREATE_AT,
           `${isModerated ? ORDER.DESC : ORDER.ASC}`,
         )
-        .addOrderBy('userBets.created_at', 'DESC');
+        .addOrderBy(
+          DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_BETS_BY_CREATE_AT,
+          ORDER.DESC,
+        );
 
     const advertisementCount: number = await queryBuilder.getCount(); //тотал по нашей таблице
 
