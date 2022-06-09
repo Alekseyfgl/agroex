@@ -4,11 +4,8 @@ import {Cron, SchedulerRegistry, Timeout} from '@nestjs/schedule';
 import {Body, HttpException, HttpStatus, Logger} from "@nestjs/common";
 import {CreateBetDto} from "./dto/createBet.dto";
 import {UserEntity} from "../user/user.entity";
-import {AdvertisementsEntity} from "../advertisements/advertisements.entity";
 import {MessageError} from "../constans/constans";
 import {AdvertisementsEntity} from "../advertisements/advertisements.entity";
-import {UserEntity} from "../user/user.entity";
-import {CreateBetDto} from "./dto/createBet.dto";
 import {PromiseOptional} from "../interfacesAndTypes/optional.interface";
 
 
@@ -16,14 +13,16 @@ import {PromiseOptional} from "../interfacesAndTypes/optional.interface";
 export class BetRepository extends AbstractRepository<UserBetEntity> {
 
     
-    async createBet(advert: AdvertisementsEntity, user: UserEntity, betObj: CreateBetDto): Promise<void> {
+    async createBet(advert: AdvertisementsEntity, user: UserEntity, betObj: CreateBetDto): Promise<UserBetEntity> {
 
-        await this.repository.save({
+        const savedBet: UserBetEntity = await this.repository.save({
             user_id: user.id,
             advertisement_id: advert.id,
             betValue: +betObj.betValue
         })
         await this.changePreviousBet(advert.id)
+
+        return savedBet
     }
 
 
