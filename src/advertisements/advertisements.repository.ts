@@ -37,6 +37,7 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
     async findBySlug(slug: string): Promise<AdvertisementsEntity> {
         const advertisements: AdvertisementsEntity = await this.repository.findOne({
             where: {slug: slug},
+            relations: ['userBets']
         })
 
 

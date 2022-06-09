@@ -30,7 +30,8 @@ export interface AdvertResponseInterface {
             image: string,
             banned: boolean,
             banReason: string
-        }
+        },
+        userBets: UserBetEntity[]
     }
 }
 
