@@ -21,7 +21,6 @@ export class UserBetEntity {
     @CreateDateColumn({ type: 'timestamptz' })
     expireBet: Date
 
-
     @Column('decimal', {precision: 18, scale: 2})
     betValue: number;
 

@@ -6,12 +6,15 @@ import {AdvertisementsService} from "../advertisements/advertisements.service";
 import {UserService} from "../user/user.service";
 import {AdvertisementsEntity} from "../advertisements/advertisements.entity";
 import {MessageError} from "../constans/constans";
+import {CronJobsService} from "../cron-jobs/cron-jobs.service";
+import {UserBetEntity} from "./user-bet.entity";
 
 @Injectable()
 export class BetService {
     constructor(private readonly betRepository: BetRepository,
                 private readonly advertisementsService: AdvertisementsService,
-                private readonly userService: UserService) {
+                private readonly userService: UserService,
+                private readonly cronJobsService: CronJobsService) {
     }
 
 
@@ -42,11 +45,14 @@ export class BetService {
 
         if (!lastBet && priceSeller > currentBet) {
 
-            await this.betRepository.createBet(advert, user, bet);
-
+            const savedBet: UserBetEntity = await this.betRepository.createBet(advert, user, bet);
+            const expireBet: Date = savedBet.expireBet;
+            await this.cronJobsService.addCronJob(`checkBetIsActive-${currentSlug}-${user.id}-${savedBet.id}`, expireBet, savedBet.id, 'updateBet');
         } else if (lastBet < currentBet && priceSeller > currentBet) {
 
-            await this.betRepository.createBet(advert, user, bet);
+            const savedBet: UserBetEntity = await this.betRepository.createBet(advert, user, bet);
+            const expireBet: Date = savedBet.expireBet;
+            await this.cronJobsService.addCronJob(`checkBetIsActive-${currentSlug}-${user.id}-${savedBet.id}`, expireBet, savedBet.id, 'updateBet');
 
         } else {
             throw new HttpException(
@@ -58,4 +64,5 @@ export class BetService {
             );
         }
     }
+
 }

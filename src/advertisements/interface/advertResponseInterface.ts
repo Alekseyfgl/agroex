@@ -1,4 +1,5 @@
 import {AdvertisementsEntity} from "../advertisements.entity";
+import {UserBetEntity} from "../../bets/user-bet.entity";
 
 
 
@@ -20,6 +21,7 @@ export interface AdvertResponseInterface {
         unit: string,
         createAt: Date,
         updatedAt: Date,
+        expireAdvert: Date,
         author: {
             id: number,
             email: string,

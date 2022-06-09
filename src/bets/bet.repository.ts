@@ -1,5 +1,11 @@
 import {AbstractRepository, EntityRepository} from "typeorm";
 import {UserBetEntity} from "./user-bet.entity";
+import {Cron, SchedulerRegistry, Timeout} from '@nestjs/schedule';
+import {Body, HttpException, HttpStatus, Logger} from "@nestjs/common";
+import {CreateBetDto} from "./dto/createBet.dto";
+import {UserEntity} from "../user/user.entity";
+import {AdvertisementsEntity} from "../advertisements/advertisements.entity";
+import {MessageError} from "../constans/constans";
 import {AdvertisementsEntity} from "../advertisements/advertisements.entity";
 import {UserEntity} from "../user/user.entity";
 import {CreateBetDto} from "./dto/createBet.dto";
@@ -8,6 +14,8 @@ import {PromiseOptional} from "../interfacesAndTypes/optional.interface";
 
 @EntityRepository(UserBetEntity)
 export class BetRepository extends AbstractRepository<UserBetEntity> {
+
+    
     async createBet(advert: AdvertisementsEntity, user: UserEntity, betObj: CreateBetDto): Promise<void> {
 
         await this.repository.save({
@@ -48,6 +56,7 @@ export class BetRepository extends AbstractRepository<UserBetEntity> {
             console.log(e)
         }
     }
+
 }
 
 

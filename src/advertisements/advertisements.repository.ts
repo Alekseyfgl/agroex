@@ -12,6 +12,10 @@ import {HttpException, HttpStatus} from "@nestjs/common";
 import {DB_RELATIONS_ADVERTISEMENTS_AND_USER, MessageError, ORDER} from "../constans/constans";
 import {AdvertsResponseInterface, QueryInterface} from "./interface/advertResponseInterface";
 import {createSlug} from "../helper/helper";
+import {PromiseOptional} from "../interfacesAndTypes/optional.interface";
+import {take} from "rxjs/operators";
+import {UserBetEntity} from "../bets/user-bet.entity";
+
 
 
 @EntityRepository(AdvertisementsEntity)
@@ -89,7 +93,8 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
                 slug: updateAdvertDto.slug,
             }, {
                 isModerated: updateAdvertDto.isModerated,
-                moderationComment: updateAdvertDto.moderationComment
+                moderationComment: updateAdvertDto.moderationComment,
+                isActive: updateAdvertDto.isModerated
             })
         }
     }

@@ -79,7 +79,7 @@ export class AdvertisementsController {
     @Put('/moderation/set')
     @Roles(ROLES_ID.MODERATOR)
     @UseGuards(AuthGuard, RolesGuard)
-    async setAdData (@Body('advertisements') updateAdvertDto: AdvertsResponseInterface): Promise<void> {
+    async setAdvData (@Body('advertisements') updateAdvertDto: AdvertisementsEntity): Promise<void> {
         return this.advertisementsService.setModeratedData(updateAdvertDto);
     }
 }
