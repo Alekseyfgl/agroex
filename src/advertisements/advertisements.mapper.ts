@@ -4,7 +4,6 @@ import {
     AdvertResponseInterfaceForCreate,
     AdvertsResponseInterface
 } from "./interface/advertResponseInterface";
-import {UserBetEntity} from "../bets/user-bet.entity";
 
 
 export const advertisementForResponse = (advert: AdvertisementsEntity): AdvertResponseInterfaceForCreate => ({
