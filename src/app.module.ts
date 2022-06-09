@@ -16,6 +16,7 @@ import { BetModule } from './bets/bet.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CronJobsModule } from './cron-jobs/cron-jobs.module';
 
+
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),

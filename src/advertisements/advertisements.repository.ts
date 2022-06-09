@@ -17,6 +17,7 @@ import {take} from "rxjs/operators";
 import {UserBetEntity} from "../bets/user-bet.entity";
 
 
+
 @EntityRepository(AdvertisementsEntity)
 export class AdvertisementsRepository extends AbstractRepository<AdvertisementsEntity> {
 
@@ -55,28 +56,21 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
     async findAll(currentUserId: number, query: QueryInterface, isModerated: boolean): Promise<AdvertsResponseInterface> {
         const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> = getRepository(AdvertisementsEntity)
             .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER.TABLE)
-            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT, DB_RELATIONS_ADVERTISEMENTS_AND_USER.USER)
+            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER.USER)
 
-            .leftJoinAndSelect('advertisements.userBets', 'userBets', 'userBets.isActive = :isActive', {isActive: true})
+            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT_USERBETS,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER.USERBETS,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER.USERBETS_IS_ACTIVE, {isActive: true})
 
-            .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER.ISMODERATED, {isModerated: isModerated})
+            .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER.ISMODERATED,
+                {isModerated: isModerated})
 
             .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_COLUMN_BY_CREATE_AT, `${isModerated ? ORDER.DESC : ORDER.ASC}`)
-            .addOrderBy('userBets.created_at', 'DESC');
-
-
-//         const rawData = await this.repository.query(`SELECT * FROM advertisements AS adv
-// LEFT JOIN users AS u ON u.id=adv."authorId"
-// LEFT JOIN "userBets" AS ub ON adv.id=ub.advertisement_id
-// AND "isActive"=true
-// ORDER BY adv."createAt" DESC, ub.created_at DESC`)
-//
-//         console.log(rawData)
+            .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_BETS_BY_CREATE_AT, ORDER.DESC);
 
 
         const advertisementCount: number = await queryBuilder.getCount()//тотал по нашей таблице
-        // console.log(query)
-
         //create limit
         if (query.limit) {
             queryBuilder.limit(query.limit)
@@ -103,15 +97,5 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
                 isActive: updateAdvertDto.isModerated
             })
         }
-
-
-
-
-        //advertisement.isModerated=updateAdvertDto.isModerated;
-        //advertisement.moderationComment=updateAdvertDto.moderationComment;
-
-        //Object.assign(advertisement, updateAdvertDto) // есть ли у модератора права изменять все данные?
-
-        //await this.repository.save(advertisement);
     }
 }

@@ -6,6 +6,7 @@ import {User} from "../user/decorators/user.decarator";
 import {UserEntity} from "../user/user.entity";
 import {UserBetEntity} from "./user-bet.entity";
 
+
 @Controller()
 
 export class BetController {
@@ -15,7 +16,8 @@ export class BetController {
     @Post(':slug/bet')
     @UseGuards(AuthGuard)
     @UsePipes(new ValidationPipe())
-    async createBet(@Body() createBetDto: CreateBetDto, @User() currentUser: UserEntity,@Param() slug: string): Promise<UserBetEntity> {
-        return this.betService.createBet(createBetDto, currentUser, slug)
+    async createBet(@Body() createBetDto: CreateBetDto, @User() currentUser: UserEntity,@Param() slug: string): Promise<void> {
+         await this.betService.createBet(createBetDto, currentUser, slug)
+
     }
 }

@@ -13,6 +13,7 @@ import {PromiseOptional} from "../interfacesAndTypes/optional.interface";
 import {CronJobsService} from "../cron-jobs/cron-jobs.service";
 
 
+
 @Injectable()
 export class AdvertisementsService {
 

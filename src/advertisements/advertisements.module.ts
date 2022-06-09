@@ -14,5 +14,7 @@ import {CronJobsModule} from "../cron-jobs/cron-jobs.module";
   controllers: [AdvertisementsController],
   providers: [AdvertisementsService],
   exports: [AdvertisementsService]
+
 })
-export class AdvertisementsModule {}
+export class AdvertisementsModule {
+}

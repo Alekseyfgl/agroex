@@ -13,10 +13,10 @@ export class UserEntity {
   @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column("varchar", { length: 50})
   username: string;
 
-  @Column()
+  @Column("varchar", { length: 18} )
   phone: string;
 
   @Column() //так мы исключаем пароль по умолчанию

@@ -2,6 +2,7 @@ import {AdvertisementsEntity} from "../advertisements.entity";
 import {UserBetEntity} from "../../bets/user-bet.entity";
 
 
+
 export interface AdvertResponseInterface {
     advertisement: {
         id: number,
@@ -30,7 +31,6 @@ export interface AdvertResponseInterface {
             banned: boolean,
             banReason: string
         }
-        // userBets: UserBetEntity[]
     }
 }
 

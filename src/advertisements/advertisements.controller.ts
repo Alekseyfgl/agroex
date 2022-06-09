@@ -1,7 +1,7 @@
 import {
     Body,
     Controller,
-    Get, HttpStatus,
+    Get,
     Param,
     Post, Put, Query,
     UploadedFile,
@@ -28,8 +28,7 @@ import {UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
 import {MAX_IMAGE_SIZE, ROLES_ID} from "../constans/constans";
 import {Roles} from "../roles/decorators/roles-auth.decorator";
 import {RolesGuard} from "../auth/guards/roles.guard";
-import {PromiseOptional} from "../interfacesAndTypes/optional.interface";
-//import {FileElementResponse} from "../files/dto/file-response-element.response";
+
 
 
 @Controller('advertisements')

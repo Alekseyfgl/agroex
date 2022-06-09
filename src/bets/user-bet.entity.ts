@@ -1,4 +1,4 @@
-import {BeforeInsert, Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn} from "typeorm";
 import {UserEntity} from "../user/user.entity";
 import {AdvertisementsEntity} from "../advertisements/advertisements.entity";
 
@@ -9,18 +9,17 @@ export class UserBetEntity {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column()
+    @Column('int')
     user_id: number;
 
-    @Column()
+    @Column('int')
     advertisement_id: number;
 
-    @CreateDateColumn()
+    @CreateDateColumn({ type: 'timestamptz' })
     created_at: Date;
 
-    @CreateDateColumn({default: null})
+    @CreateDateColumn({ type: 'timestamptz' })
     expireBet: Date
-
 
     @Column('decimal', {precision: 18, scale: 2})
     betValue: number;
