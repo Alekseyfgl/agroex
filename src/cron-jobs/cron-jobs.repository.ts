@@ -1,10 +1,11 @@
-import {AbstractRepository, EntityRepository, MoreThan} from "typeorm";
+import {AbstractRepository, EntityRepository} from "typeorm";
 import {CronJobsEntity} from "./cron-jobs.entity";
+import {CronJobSaving} from "./types/cronjob.types";
 
 
 @EntityRepository(CronJobsEntity)
 export class CronJobsRepository extends AbstractRepository<CronJobsEntity> {
-    async saveCronJob(cronJobData: CronJobsEntity): Promise<void> {
+    async saveCronJob(cronJobData: CronJobSaving): Promise<void> {
         await this.repository.save(cronJobData)
     }
 
@@ -12,7 +13,7 @@ export class CronJobsRepository extends AbstractRepository<CronJobsEntity> {
         return this.repository.find();
     }
 
-    async findOne(name: string): Promise<CronJobsEntity[]> {
+    async findOne(name: CronJobsEntity["name"]): Promise<CronJobsEntity[]> {
         return this.repository.find({name: name})
     }
 }

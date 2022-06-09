@@ -15,7 +15,7 @@ export class CronJobsEntity {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
-    @Column("varchar")
+    @Column("varchar", {unique: true})
     name: string;
 
     @CreateDateColumn()

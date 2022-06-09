@@ -36,7 +36,7 @@ export class BetService {
     }
 
     async updateColumnIsActive(savedBetId: number): Promise<void> {
-        this.betRepository.updateColumnIsActive(savedBetId);
+        await this.betRepository.updateColumnIsActive(savedBetId);
     }
 
 }

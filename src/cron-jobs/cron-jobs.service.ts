@@ -5,6 +5,7 @@ import {SchedulerRegistry} from "@nestjs/schedule";
 import {BetRepository} from "../bet/bet.repository";
 import {BetService} from "../bet/bet.service";
 import {CronJobsEntity} from "./cron-jobs.entity";
+import {CronJobSaving} from "./types/cronjob.types";
 
 @Injectable()
 export class CronJobsService implements OnModuleInit {
@@ -37,12 +38,11 @@ export class CronJobsService implements OnModuleInit {
     }
 
     async saveCronJob(name: string, expireBet: Date, savedBetId: number): Promise<void> {
-        const cronJobData: CronJobsEntity = new CronJobsEntity;
-         Object.assign(cronJobData,{
+        const cronJobData: CronJobSaving= {
             name: name,
             date: (new Date(expireBet)),
             betId: savedBetId
-        })
+        }
 
         await this.cronJobsRepository.saveCronJob(cronJobData)
     }
@@ -56,7 +56,7 @@ export class CronJobsService implements OnModuleInit {
 
         this.schedulerRegistry.addCronJob(name, job);
 
-        const foundCronJob = await this.cronJobsRepository.findOne(name);
+        const foundCronJob: CronJobsEntity[] = await this.cronJobsRepository.findOne(name);
             if (foundCronJob.length === 0) {
                 // сохраняем новый CronJob в бд
                 await this.saveCronJob(name, expireBet, savedBetId)
