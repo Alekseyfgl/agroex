@@ -1,4 +1,4 @@
-import {AbstractRepository, EntityRepository} from "typeorm";
+import {AbstractRepository, EntityRepository, MoreThan} from "typeorm";
 import {CronJobsEntity} from "./cron-jobs.entity";
 import {CronJobSaving} from "./types/cronjob.types";
 

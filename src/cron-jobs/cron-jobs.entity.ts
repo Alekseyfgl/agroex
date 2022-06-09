@@ -15,12 +15,15 @@ export class CronJobsEntity {
     @PrimaryGeneratedColumn('increment')
     id: number;
 
-    @Column("varchar", {unique: true})
+    @Column("varchar")
     name: string;
+
+    @Column("varchar")
+    jobType: string;
 
     @CreateDateColumn()
     date: Date;
 
     @Column("integer")
-    betId: number;
+    targetId: number;
 }

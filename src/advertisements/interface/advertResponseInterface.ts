@@ -20,6 +20,7 @@ export interface AdvertResponseInterface {
         unit: string,
         createAt: Date,
         updatedAt: Date,
+        expireAdvert: Date,
         author: {
             id: number,
             email: string,

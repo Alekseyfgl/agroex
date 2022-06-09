@@ -14,7 +14,6 @@ import {UserBetEntity} from "./user-bet.entity";
 @Injectable()
 export class BetService {
     constructor(
-        @Inject(forwardRef(() => CronJobsService))
         private readonly cronJobsService: CronJobsService,
         private readonly userService: UserService,
         private readonly betRepository: BetRepository,
@@ -30,13 +29,13 @@ export class BetService {
         const savedBet: UserBetEntity  = await this.betRepository.createBet(advert, user, bet);
         const expireBet: Date = savedBet.expireBet;
 
-        await this.cronJobsService.addCronJob(`checkBetIsActive-${currentSlug}-${user.id}-${savedBet.id}`, expireBet, savedBet.id);
+        await this.cronJobsService.addCronJob(`checkBetIsActive-${currentSlug}-${user.id}-${savedBet.id}`, expireBet, savedBet.id, 'updateBet');
 
         return savedBet
     }
 
-    async updateColumnIsActive(savedBetId: number): Promise<void> {
-        await this.betRepository.updateColumnIsActive(savedBetId);
-    }
+    // async updateColumnIsActive(savedBetId: number): Promise<void> {
+    //     await this.betRepository.updateColumnIsActive(savedBetId);
+    // }
 
 }

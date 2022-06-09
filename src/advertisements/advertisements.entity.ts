@@ -37,6 +37,12 @@ export class AdvertisementsEntity {
     @Column({default: false})
     isModerated: boolean
 
+    @Column({default: false})
+    isActive: boolean
+
+    @CreateDateColumn({default: null})
+    expireAdvert: Date
+
     @Column( {default: null})
     moderationComment: string
 
