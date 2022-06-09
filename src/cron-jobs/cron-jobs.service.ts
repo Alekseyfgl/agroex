@@ -1,11 +1,9 @@
-import {forwardRef, Inject, Injectable, Logger, OnModuleInit} from '@nestjs/common';
+import {Injectable, Logger, OnModuleInit} from '@nestjs/common';
 import {CronJobsRepository} from "./cron-jobs.repository";
 import {CronJob} from "cron";
 import {SchedulerRegistry} from "@nestjs/schedule";
 import {BetRepository} from "../bet/bet.repository";
-import {BetService} from "../bet/bet.service";
 import {CronJobsEntity} from "./cron-jobs.entity";
-import {AdvertisementsService} from "../advertisements/advertisements.service";
 import {CronBetRepository} from "./cronBet.repository";
 import {CronAdvertisementRepository} from "./cron-advertisement-repository";
 import {cronJobName, CronJobSaving} from "./types/cronjob.types";

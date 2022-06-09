@@ -1,4 +1,4 @@
-import {forwardRef, Module} from '@nestjs/common';
+import {Module} from '@nestjs/common';
 import {BetService} from './bet.service';
 import {BetController} from './bet.controller';
 import {TypeOrmModule} from "@nestjs/typeorm";

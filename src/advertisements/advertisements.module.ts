@@ -1,4 +1,4 @@
-import {forwardRef, Module} from '@nestjs/common';
+import {Module} from '@nestjs/common';
 import { AdvertisementsService } from './advertisements.service';
 import { AdvertisementsController } from './advertisements.controller';
 import {TypeOrmModule} from "@nestjs/typeorm";

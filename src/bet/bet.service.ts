@@ -1,4 +1,4 @@
-import {Body, forwardRef, Inject, Injectable, Logger, Param} from '@nestjs/common';
+import {Injectable} from '@nestjs/common';
 import {CreateBetDto} from './dto/createBet.dto';
 import {User} from "../user/decorators/user.decarator";
 import {UserEntity} from "../user/user.entity";
@@ -7,7 +7,6 @@ import {AdvertisementsService} from "../advertisements/advertisements.service";
 import slugify from "slugify";
 import {UserService} from "../user/user.service";
 import {AdvertisementsEntity} from "../advertisements/advertisements.entity";
-import {SchedulerRegistry} from "@nestjs/schedule";
 import {CronJobsService} from "../cron-jobs/cron-jobs.service";
 import {UserBetEntity} from "./user-bet.entity";
 
