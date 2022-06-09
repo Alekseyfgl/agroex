@@ -9,7 +9,6 @@ import {
 } from "./advertisements.mapper";
 import {AdvertisementsEntity} from "./advertisements.entity";
 import {AdvertsResponseInterface, QueryInterface} from "./interface/advertResponseInterface";
-import {PromiseOptional} from "../interfacesAndTypes/optional.interface";
 import {CronJobsService} from "../cron-jobs/cron-jobs.service";
 
 

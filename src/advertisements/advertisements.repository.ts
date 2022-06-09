@@ -12,9 +12,6 @@ import {HttpException, HttpStatus} from "@nestjs/common";
 import {DB_RELATIONS_ADVERTISEMENTS_AND_USER, MessageError, ORDER} from "../constans/constans";
 import {AdvertsResponseInterface, QueryInterface} from "./interface/advertResponseInterface";
 import {createSlug} from "../helper/helper";
-import {PromiseOptional} from "../interfacesAndTypes/optional.interface";
-import {take} from "rxjs/operators";
-import {UserBetEntity} from "../bets/user-bet.entity";
 
 
 
@@ -37,10 +34,7 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
     async findBySlug(slug: string): Promise<AdvertisementsEntity> {
         const advertisements: AdvertisementsEntity = await this.repository.findOne({
 
-            where: {
-                slug: slug,
-                isActive: true
-            }
+            where: {slug: slug}
         })
 
         if (!advertisements) {
