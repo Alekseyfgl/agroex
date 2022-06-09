@@ -3,7 +3,7 @@ import { hash } from 'bcrypt';
 import { numToEncode } from '../constans/constans';
 import {UserRolesEntity} from "../roles/user-roles.entity";
 import {AdvertisementsEntity} from "../advertisements/advertisements.entity";
-import {UserBetEntity} from "../bet/user-bet.entity";
+import {UserBetEntity} from "../bets/user-bet.entity";
 
 @Entity({ name: 'users' })
 export class UserEntity {

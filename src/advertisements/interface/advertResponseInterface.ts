@@ -1,5 +1,5 @@
 import {AdvertisementsEntity} from "../advertisements.entity";
-import {UserBetEntity} from "../../bet/user-bet.entity";
+import {UserBetEntity} from "../../bets/user-bet.entity";
 
 
 export interface AdvertResponseInterface {

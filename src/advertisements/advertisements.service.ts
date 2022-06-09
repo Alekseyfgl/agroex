@@ -42,9 +42,7 @@ export class AdvertisementsService {
     }
 
     async setCronJobs(updateAdvertDto) {
-        console.log(updateAdvertDto.isModerated)
         if (updateAdvertDto.isModerated) {
-            console.log('advert ' +updateAdvertDto.slug + ' goes to cronJob service')
             await this.cronJobsService.addCronJob(`checkAdvertisementIsActive-${updateAdvertDto.slug}-${updateAdvertDto.id}-${updateAdvertDto.author.id}`, updateAdvertDto.expireAdvert, updateAdvertDto.id, 'updateAdvertisement');
         }
 

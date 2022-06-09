@@ -14,7 +14,7 @@ import {AdvertsResponseInterface, QueryInterface} from "./interface/advertRespon
 import {createSlug} from "../helper/helper";
 import {PromiseOptional} from "../interfacesAndTypes/optional.interface";
 import {take} from "rxjs/operators";
-import {UserBetEntity} from "../bet/user-bet.entity";
+import {UserBetEntity} from "../bets/user-bet.entity";
 
 
 @EntityRepository(AdvertisementsEntity)

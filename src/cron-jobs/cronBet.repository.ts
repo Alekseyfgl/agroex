@@ -1,4 +1,4 @@
-import { UserBetEntity } from "../bet/user-bet.entity";
+import { UserBetEntity } from "../bets/user-bet.entity";
 import {AbstractRepository, EntityRepository} from "typeorm";
 
 
