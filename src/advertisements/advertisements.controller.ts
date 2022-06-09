@@ -66,14 +66,14 @@ export class AdvertisementsController {
 
     @Get()
     async findAllActiveAdvertisements(@User('id') currentUserId: number, @Query() query: QueryInterface) : Promise<AdvertsResponseInterface> {
-        return await this.advertisementsService.findAll(currentUserId, query, true) // возвращаем только рекламы прошедшие модерацию (isModerated=true)
+        return await this.advertisementsService.findAll(currentUserId, query, true, true) // возвращаем только рекламы прошедшие модерацию (isModerated=true)
     }
     // решил оставить эти гет запросы в таком виде, так как иметь разные ендпоинты удобнее для запросов на модерацию из админки
     @Get('/moderation/get')
     @Roles(ROLES_ID.MODERATOR)
     @UseGuards(AuthGuard, RolesGuard)
     async findAllAdvertisementsForModeration(@User('id') currentUserId: number, @Query() query: QueryInterface) : Promise<AdvertsResponseInterface> {
-        return await this.advertisementsService.findAll(currentUserId, query, false) // возвращаем только рекламы не прошедшие модерацию (isModerated=false)
+        return await this.advertisementsService.findAll(currentUserId, query, false, false) // возвращаем только рекламы не прошедшие модерацию (isModerated=false)
     }
 
     @Put('/moderation/set')

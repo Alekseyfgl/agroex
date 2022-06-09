@@ -53,7 +53,7 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
     }
 
 
-    async findAll(currentUserId: number, query: QueryInterface, isModerated: boolean): Promise<AdvertsResponseInterface> {
+    async findAll(currentUserId: number, query: QueryInterface, isModerated: boolean, isActive: boolean): Promise<AdvertsResponseInterface> {
         const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> = getRepository(AdvertisementsEntity)
             .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER.TABLE)
             .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT,
@@ -64,7 +64,12 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
                 DB_RELATIONS_ADVERTISEMENTS_AND_USER.USERBETS_IS_ACTIVE, {isActive: true})
 
             .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER.ISMODERATED,
-                {isModerated: isModerated})
+                {
+                    isModerated: isModerated,
+                })
+            .andWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER.ISACTIVE, {
+                isActive: isActive
+            })
 
             .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_COLUMN_BY_CREATE_AT, `${isModerated ? ORDER.DESC : ORDER.ASC}`)
             .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_BETS_BY_CREATE_AT, ORDER.DESC);

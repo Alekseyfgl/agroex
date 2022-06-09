@@ -32,8 +32,8 @@ export class AdvertisementsService {
         return await this.advertisementsRepository.findBySlug(slug)
     }
 
-    async findAll(currentUserId: number, query: QueryInterface, isModerated: boolean): Promise<AdvertsResponseInterface> {
-        const advert: AdvertsResponseInterface = await this.advertisementsRepository.findAll(currentUserId, query, isModerated)
+    async findAll(currentUserId: number, query: QueryInterface, isModerated: boolean, isActive: boolean): Promise<AdvertsResponseInterface> {
+        const advert: AdvertsResponseInterface = await this.advertisementsRepository.findAll(currentUserId, query, isModerated, isActive)
         return advertisementsResponseAll(advert)
     }
 

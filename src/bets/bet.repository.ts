@@ -52,7 +52,6 @@ export class BetRepository extends AbstractRepository<UserBetEntity> {
                 await this.repository.update({id: penultimateBet[0].id}, {isActive: false})
             }
         } catch (e) {
-            console.log(e)
         }
     }
 

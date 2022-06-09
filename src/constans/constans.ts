@@ -27,7 +27,7 @@ export const enum MessageError {
     ADVERTISEMENT_NOT_FOUND = 'This advertisement was not found',
     ERROR_WHILE_SAVING_ON_CLOUDINARY = 'Error while saving on cloudinary',
     HIGHER_PRICE_THAN_SELLER = 'Your price is higher than the seller',
-    NEED_TO_REFRESH_THE_PAGE = 'Refresh the page, bets have already changed',
+    NEED_TO_REFRESH_THE_PAGE = 'Your bet failed, place a higher bet',
 }
 
 export const enum DB_RELATIONS {
@@ -39,6 +39,7 @@ export const enum DB_RELATIONS_ADVERTISEMENTS_AND_USER {
     TABLE = 'advertisements',
     USER = 'author',
     ISMODERATED = 'advertisements.isModerated = :isModerated',
+    ISACTIVE = 'advertisements.isActive = :isActive',
     LEFT_JOIN_AND_SELECT = 'advertisements.author',
     LEFT_JOIN_AND_SELECT_USERBETS = 'advertisements.userBets',
     SORT_COLUMN_BY_CREATE_AT = 'advertisements.createAt',
