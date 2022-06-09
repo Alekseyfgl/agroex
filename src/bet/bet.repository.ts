@@ -30,17 +30,12 @@ export class BetRepository extends AbstractRepository<UserBetEntity> {
 
     async updateColumnIsActive(betId: number): Promise<void> {
 
-        const bet: UserBetEntity = await this.repository.findOne({
-            where: {id: betId}
+        await this.repository.update({
+            id: betId,
+            isActive: true
+        },{
+            isActive: false
         })
-
-        if (bet.isActive) {
-            await this.repository.update({
-                id: betId
-            },{
-                isActive: false
-            })
-        }
 
     }
 
