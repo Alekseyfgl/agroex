@@ -56,8 +56,8 @@ export class CronJobsService implements OnModuleInit {
 
         this.schedulerRegistry.addCronJob(name, job);
 
-        const foundCronJob: CronJobsEntity[] = await this.cronJobsRepository.findOne(name);
-            if (foundCronJob.length === 0) {
+        const foundCronJob: CronJobsEntity = await this.cronJobsRepository.findOne(name);
+            if (foundCronJob) {
                 // сохраняем новый CronJob в бд
                 await this.saveCronJob(name, expireBet, savedBetId)
             }

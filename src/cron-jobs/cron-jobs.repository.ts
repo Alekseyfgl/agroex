@@ -13,8 +13,8 @@ export class CronJobsRepository extends AbstractRepository<CronJobsEntity> {
         return this.repository.find();
     }
 
-    async findOne(name: CronJobsEntity["name"]): Promise<CronJobsEntity[]> {
-        return this.repository.find({name: name})
+    async findOne(name: string): Promise<CronJobsEntity> {
+        return this.repository.findOne({name: name})
     }
 }
 
