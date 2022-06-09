@@ -1,4 +1,4 @@
-import {HttpStatus, Injectable} from '@nestjs/common';
+import {forwardRef, HttpStatus, Inject, Injectable} from '@nestjs/common';
 import {AdvertisementsRepository} from "./advertisements.repository";
 import {UserEntity} from "../user/user.entity";
 import {CreateAdvertisementDto} from "./dto/createAdvertisement.dto";
@@ -10,13 +10,16 @@ import {
 import {AdvertisementsEntity} from "./advertisements.entity";
 import {AdvertsResponseInterface, QueryInterface} from "./interface/advertResponseInterface";
 import {PromiseOptional} from "../interfacesAndTypes/optional.interface";
+import {CronJobsService} from "../cron-jobs/cron-jobs.service";
 
 
 @Injectable()
 export class AdvertisementsService {
 
-    constructor(private readonly advertisementsRepository: AdvertisementsRepository) {
-    }
+    constructor(
+        private readonly cronJobsService: CronJobsService,
+        private readonly advertisementsRepository: AdvertisementsRepository,
+    ) {}
 
 
     async createAdvertisement(currentUser: UserEntity, createAdvertDto: CreateAdvertisementDto): Promise<AdvertisementsEntity> {
@@ -34,7 +37,17 @@ export class AdvertisementsService {
     }
 
     async setModeratedData(updateAdvertDto: AdvertisementsEntity): Promise<void> {
+        await this.setCronJobs(updateAdvertDto);
         await this.advertisementsRepository.updateModeratedData(updateAdvertDto)
+    }
+
+    async setCronJobs(updateAdvertDto) {
+        console.log(updateAdvertDto.isModerated)
+        if (updateAdvertDto.isModerated) {
+            console.log('advert ' +updateAdvertDto.slug + ' goes to cronJob service')
+            await this.cronJobsService.addCronJob(`checkAdvertisementIsActive-${updateAdvertDto.slug}-${updateAdvertDto.id}-${updateAdvertDto.author.id}`, updateAdvertDto.expireAdvert, updateAdvertDto.id, 'updateAdvertisement');
+        }
+
     }
 
     public buildAdvertisementResponseForCreate(advertisement: AdvertisementsEntity): ReturnType<typeof advertisementForResponse> {

@@ -99,7 +99,8 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
                 slug: updateAdvertDto.slug,
             }, {
                 isModerated: updateAdvertDto.isModerated,
-                moderationComment: updateAdvertDto.moderationComment
+                moderationComment: updateAdvertDto.moderationComment,
+                isActive: updateAdvertDto.isModerated
             })
         }
 

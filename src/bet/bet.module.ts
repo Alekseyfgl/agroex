@@ -11,8 +11,11 @@ import {UserModule} from "../user/user.module";
 import {CronJobsModule} from "../cron-jobs/cron-jobs.module";
 
 @Module({
-    imports: [TypeOrmModule.forFeature([ UserEntity, UserBetEntity, AdvertisementsEntity, BetRepository]), AdvertisementsModule, UserModule,
-        forwardRef(()=>CronJobsModule)],
+    imports: [TypeOrmModule.forFeature([ UserEntity, UserBetEntity, AdvertisementsEntity, BetRepository]),
+        UserModule,
+        AdvertisementsModule,
+        CronJobsModule
+    ],
     controllers: [BetController],
     providers: [BetService],
     exports: [BetService]

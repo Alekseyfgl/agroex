@@ -34,6 +34,7 @@ export const advertisementForGetBySlug = (advert: AdvertisementsEntity): AdvertR
         unit: advert.unit,
         createAt: advert.createAt,
         updatedAt: advert.updatedAt,
+        expireAdvert: advert.expireAdvert,
         author: {
             id: advert.author.id,
             email: advert.author.email,

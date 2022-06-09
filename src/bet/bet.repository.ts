@@ -28,17 +28,6 @@ export class BetRepository extends AbstractRepository<UserBetEntity> {
         return await this.repository.save(betData)
     }
 
-    async updateColumnIsActive(betId: number): Promise<void> {
-
-        await this.repository.update({
-            id: betId,
-            isActive: true
-        },{
-            isActive: false
-        })
-
-    }
-
 
 }
 
