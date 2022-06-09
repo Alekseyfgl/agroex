@@ -26,6 +26,8 @@ export const enum MessageError {
     ACCESS_DENIED = 'Access denied',
     ADVERTISEMENT_NOT_FOUND = 'This advertisement was not found',
     ERROR_WHILE_SAVING_ON_CLOUDINARY = 'Error while saving on cloudinary',
+    HIGHER_PRICE_THAN_SELLER = 'Your price is higher than the seller',
+    NEED_TO_REFRESH_THE_PAGE = 'Refresh the page, bets have already changed',
 }
 
 export const enum DB_RELATIONS {
