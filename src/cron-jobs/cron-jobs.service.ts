@@ -18,7 +18,7 @@ export class CronJobsService implements OnModuleInit {
     private readonly logger: Logger = new Logger(BetRepository.name);
 
     async onModuleInit(): Promise<void> {
-        const savedCronJobs: CronJobsEntity[] = await this.findAll();
+        const savedCronJobs: CronJobsEntity[] = await this.cronJobsRepository.findAll();
 
         savedCronJobs.forEach((cronJob => {
             try {
@@ -45,10 +45,6 @@ export class CronJobsService implements OnModuleInit {
         })
 
         await this.cronJobsRepository.saveCronJob(cronJobData)
-    }
-
-    async findAll(): Promise<CronJobsEntity[]>  {
-        return this.cronJobsRepository.findAll()
     }
 
     async addCronJob(name: string, expireBet: Date, savedBetId: number): Promise<void> {
