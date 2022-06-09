@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 import {UserEntity} from "../user/user.entity";
 import {UserBetEntity} from "../bet/user-bet.entity";
+import {cronJobName} from "./types/cronjob.types";
 
 
 @Entity({name: 'cronJobs'})
@@ -19,7 +20,7 @@ export class CronJobsEntity {
     name: string;
 
     @Column("varchar")
-    jobType: string;
+    jobType: cronJobName;
 
     @CreateDateColumn()
     date: Date;

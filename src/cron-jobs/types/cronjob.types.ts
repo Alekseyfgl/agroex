@@ -2,5 +2,7 @@ export type CronJobSaving = {
     name: string;
     date: Date;
     targetId: number;
-    jobType: string
+    jobType: cronJobName
 };
+
+export type cronJobName = 'updateBet' | 'updateAdvertisement';

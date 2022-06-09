@@ -8,7 +8,7 @@ import {CronJobsEntity} from "./cron-jobs.entity";
 import {AdvertisementsService} from "../advertisements/advertisements.service";
 import {CronBetRepository} from "./cronBet.repository";
 import {CronAdvertisementRepository} from "./cron-advertisement-repository";
-import {CronJobSaving} from "./types/cronjob.types";
+import {cronJobName, CronJobSaving} from "./types/cronjob.types";
 
 @Injectable()
 export class CronJobsService implements OnModuleInit {
@@ -39,7 +39,7 @@ export class CronJobsService implements OnModuleInit {
         }))
     }
 
-    async saveCronJob(name: string, expireBet: Date, targetId: number, jobType: string): Promise<void> {
+    async saveCronJob(name: string, expireBet: Date, targetId: number, jobType: cronJobName): Promise<void> {
         const cronJobData: CronJobSaving= {
             name: name,
             date: (new Date(expireBet)),
@@ -50,7 +50,7 @@ export class CronJobsService implements OnModuleInit {
         await this.cronJobsRepository.saveCronJob(cronJobData)
     }
 
-    async addCronJob(name: string, expireBet: Date, targetId: number, jobType: string): Promise<void> {
+    async addCronJob(name: string, expireBet: Date, targetId: number, jobType: cronJobName): Promise<void> {
         // создаём CronJob
         const job: CronJob = new CronJob(new Date(expireBet), () => {
             this.createCronJob(jobType, targetId)
@@ -72,7 +72,7 @@ export class CronJobsService implements OnModuleInit {
         );
     }
 
-    async createCronJob(jobType: string, targetId: number) {
+    async createCronJob(jobType: cronJobName, targetId: number) {
         if (jobType === 'updateBet'){ // если бет - обновляем бет
             await this.betRepository.updateColumnIsActive(targetId)
         }
