@@ -12,7 +12,7 @@ import { AuthMiddleware } from './auth/middlewares/auth.middleware';
 import { AdvertisementsModule } from './advertisements/advertisements.module';
 import {CloudinaryModule} from "./cloudinary/cloudinary.module";
 import {CloudinaryProvider} from './cloudinary/cloudinary.provider';
-import { BetModule } from './bet/bet.module';
+import { BetModule } from './bets/bet.module';
 
 @Module({
   imports: [

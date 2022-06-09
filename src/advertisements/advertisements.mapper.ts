@@ -49,8 +49,6 @@ export const advertisementForGetBySlug = (advert: AdvertisementsEntity): AdvertR
 export const advertisementsResponseAll = (advertAll: AdvertsResponseInterface): AdvertsResponseInterface => {
     advertAll.advertisements.forEach(advertisement => {
         delete advertisement.author.password
-        // const isActiveBet = advertisement.userBets.find(bet => bet.isActive === true);
-        // advertisement.userBets = [isActiveBet]
     })
 
     return advertAll

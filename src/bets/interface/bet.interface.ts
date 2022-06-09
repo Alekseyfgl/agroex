@@ -25,3 +25,5 @@ interface betAndAdvertInterface {
     isActive: boolean,
     advertisement_id: number,
 }
+
+

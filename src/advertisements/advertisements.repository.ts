@@ -14,7 +14,6 @@ import {AdvertsResponseInterface, QueryInterface} from "./interface/advertRespon
 import {createSlug} from "../helper/helper";
 
 
-
 @EntityRepository(AdvertisementsEntity)
 export class AdvertisementsRepository extends AbstractRepository<AdvertisementsEntity> {
 
@@ -24,7 +23,7 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
 
         Object.assign(advertisement, createAdvertDto)
 
-        advertisement.slug  = createSlug(createAdvertDto.title)
+        advertisement.slug = createSlug(createAdvertDto.title)
         advertisement.author = currentUser
 
         return await this.repository.save(advertisement)
@@ -68,7 +67,6 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
 
 
         const advertisementCount: number = await queryBuilder.getCount()//тотал по нашей таблице
-
         //create limit
         if (query.limit) {
             queryBuilder.limit(query.limit)

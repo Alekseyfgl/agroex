@@ -12,7 +12,7 @@ export class CategoriesController {
   @ApiOperation({ summary: 'Get categories of products' })
   @ApiResponse({ status: 200, type: [CategoriesEntity] })
   @Get()
-  async findAll(@Query() order: CategoriesInterface): Promise<CategoriesEntity[]> {
+  async findAll(@Query() order: OrderInterface): Promise<CategoriesEntity[]> {
 
     return await this.categoriesService.findAllSortCategories(order);
   }
