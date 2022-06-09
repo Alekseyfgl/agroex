@@ -33,8 +33,8 @@ export class AdvertisementsService {
         return advertisementsResponseAll(advert)
     }
 
-    async setModeratedData(updateAdvertDto): Promise<void> {
-        return this.advertisementsRepository.updateModeratedData(updateAdvertDto)
+    async setModeratedData(updateAdvertDto: AdvertisementsEntity): Promise<void> {
+        await this.advertisementsRepository.updateModeratedData(updateAdvertDto)
     }
 
     public buildAdvertisementResponseForCreate(advertisement: AdvertisementsEntity): ReturnType<typeof advertisementForResponse> {
