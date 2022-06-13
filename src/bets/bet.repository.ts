@@ -26,7 +26,7 @@ export class BetRepository extends AbstractRepository<UserBetEntity> {
     }
 
 
-    async getAdvertisementWithLastBet(advert_id: number): PromiseOptional<betAndAdvertInterface[]> {
+    async getAdvertisementWithLastBet(advert_id: number): PromiseOptional<BetAndAdvertInterface[]> {
 
         const sql: string = `SELECT * FROM advertisements AS adv
                         LEFT JOIN "userBets" AS ub ON adv.id=ub.advertisement_id where adv.id = ${advert_id}
@@ -46,7 +46,7 @@ export class BetRepository extends AbstractRepository<UserBetEntity> {
                         limit 1 offset 1`
 
         try {
-            const penultimateBet: betAndAdvertInterface[] = await this.repository.query(sql)
+            const penultimateBet: BetAndAdvertInterface[] = await this.repository.query(sql)
 
             if (penultimateBet[0].isActive && penultimateBet.length) {
                 await this.repository.update({id: penultimateBet[0].id}, {isActive: false})

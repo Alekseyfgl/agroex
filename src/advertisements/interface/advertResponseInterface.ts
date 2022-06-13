@@ -14,7 +14,7 @@ export interface AdvertResponseInterface {
         location: string,
         isModerated: boolean,
         isActive: boolean,
-        moderationComment: string,
+        moderationComment: string | null,
         price: number,
         currency: string,
         img: string,

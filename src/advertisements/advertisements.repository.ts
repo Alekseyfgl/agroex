@@ -7,9 +7,7 @@ import {
 import {AdvertisementsEntity} from "./advertisements.entity";
 import {UserEntity} from "../user/user.entity";
 import {CreateAdvertisementDto} from "./dto/createAdvertisement.dto";
-
-import {HttpException, HttpStatus} from "@nestjs/common";
-import {DB_RELATIONS_ADVERTISEMENTS_AND_USER, MessageError, ORDER} from "../constans/constans";
+import {DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS, ORDER} from "../constans/constans";
 import {AdvertsResponseInterface, QueryInterface} from "./interface/advertResponseInterface";
 import {createSlug} from "../helper/helper";
 
@@ -30,51 +28,55 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
     }
 
 
-    async findBySlug(slug: string): Promise<any> {
+    async findBySlug(slug: string): Promise<AdvertisementsEntity> {
 
         const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> = getRepository(AdvertisementsEntity)
-            .createQueryBuilder('advertisements')
-            .leftJoinAndSelect('advertisements.author', 'author')
-            .leftJoinAndSelect('advertisements.userBets', "userBets",
-                'userBets.isActive = :isActive', {isActive: true})
+            .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.TABLE)
 
-            .where('advertisements.isModerated = :isModerated',
-                {
-                    isModerated: true,
-                })
-            .andWhere('advertisements.isActive = :isActive', {
-                isActive: true
-            })
-            .andWhere('advertisements.slug = :slug', {
+            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.LEFT_JOIN_AND_SELECT,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.USER
+            )
+
+            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.LEFT_JOIN_AND_SELECT_USERBETS,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.USERBETS,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.USERBETS_IS_ACTIVE,
+                {isActive: true})
+
+            .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISMODERATED,
+                {isModerated: true,})
+
+            .andWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISACTIVE,
+                {isActive: true})
+
+            .andWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ADVERT_SLUG, {
                 slug: slug
             })
 
-        const advertisements: AdvertisementsEntity[] = await queryBuilder.getMany()
-
-        return advertisements[0]
+        return await queryBuilder.getOne()
     }
 
 
     async findAll(currentUserId: number, query: QueryInterface, isModerated: boolean, isActive: boolean): Promise<AdvertsResponseInterface> {
+        console.log(query)
         const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> = getRepository(AdvertisementsEntity)
-            .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER.TABLE)
-            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT,
-                DB_RELATIONS_ADVERTISEMENTS_AND_USER.USER)
+            .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.TABLE)
+            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.LEFT_JOIN_AND_SELECT,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.USER)
 
-            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT_USERBETS,
-                DB_RELATIONS_ADVERTISEMENTS_AND_USER.USERBETS,
-                DB_RELATIONS_ADVERTISEMENTS_AND_USER.USERBETS_IS_ACTIVE, {isActive: true})
+            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.LEFT_JOIN_AND_SELECT_USERBETS,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.USERBETS,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.USERBETS_IS_ACTIVE, {isActive: true})
 
-            .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER.ISMODERATED,
+            .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISMODERATED,
                 {
                     isModerated: isModerated,
                 })
-            .andWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER.ISACTIVE, {
+            .andWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISACTIVE, {
                 isActive: isActive
             })
 
-            .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_COLUMN_BY_CREATE_AT, `${isModerated ? ORDER.DESC : ORDER.ASC}`)
-            .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_BETS_BY_CREATE_AT, ORDER.DESC);
+            .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.SORT_COLUMN_BY_CREATE_AT, `${isModerated ? ORDER.DESC : ORDER.ASC}`)
+            .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.SORT_BETS_BY_CREATE_AT, ORDER.DESC);
 
 
         const advertisementCount: number = await queryBuilder.getCount()//тотал по нашей таблице
