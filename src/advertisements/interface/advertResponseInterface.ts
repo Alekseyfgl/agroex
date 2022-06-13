@@ -14,9 +14,9 @@ export interface AdvertResponseInterface {
         location: string,
         isModerated: boolean,
         isActive: boolean,
-        moderationComment:string,
+        moderationComment: string,
         price: number,
-        currency : string,
+        currency: string,
         img: string,
         quantity: number,
         unit: string,
@@ -32,6 +32,7 @@ export interface AdvertResponseInterface {
             banned: boolean,
             banReason: string
         },
+        userBets: UserBetEntity[]
     }
 }
 

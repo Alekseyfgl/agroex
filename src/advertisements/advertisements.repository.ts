@@ -14,7 +14,6 @@ import {AdvertsResponseInterface, QueryInterface} from "./interface/advertRespon
 import {createSlug} from "../helper/helper";
 
 
-
 @EntityRepository(AdvertisementsEntity)
 export class AdvertisementsRepository extends AbstractRepository<AdvertisementsEntity> {
 
@@ -31,22 +30,28 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
     }
 
 
-    async findBySlug(slug: string): Promise<AdvertisementsEntity> {
-        const advertisements: AdvertisementsEntity = await this.repository.findOne({
+    async findBySlug(slug: string): Promise<any> {
 
-            where: {slug: slug}
-        })
+        const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> = getRepository(AdvertisementsEntity)
+            .createQueryBuilder('advertisements')
+            .leftJoinAndSelect('advertisements.author', 'author')
+            .leftJoinAndSelect('advertisements.userBets', "userBets",
+                'userBets.isActive = :isActive', {isActive: true})
 
-        if (!advertisements) {
-            throw new HttpException(
+            .where('advertisements.isModerated = :isModerated',
                 {
-                    status: HttpStatus.NOT_FOUND,
-                    message: [MessageError.ADVERTISEMENT_NOT_FOUND],
-                },
-                HttpStatus.NOT_FOUND,
-            );
-        }
-        return advertisements
+                    isModerated: true,
+                })
+            .andWhere('advertisements.isActive = :isActive', {
+                isActive: true
+            })
+            .andWhere('advertisements.slug = :slug', {
+                slug: slug
+            })
+
+        const advertisements: AdvertisementsEntity[] = await queryBuilder.getMany()
+
+        return advertisements[0]
     }
 
 
