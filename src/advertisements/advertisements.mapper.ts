@@ -6,7 +6,6 @@ import {
 } from "./interface/advertResponseInterface";
 
 
-
 export const advertisementForResponse = (advert: AdvertisementsEntity): AdvertResponseInterfaceForCreate => ({
     advertisement: {
         status: 'success',
@@ -16,8 +15,7 @@ export const advertisementForResponse = (advert: AdvertisementsEntity): AdvertRe
 })
 
 
-
-export const advertisementForGetBySlug = (advert: AdvertisementsEntity) : AdvertResponseInterface => ({
+export const advertisementForGetBySlug = (advert: AdvertisementsEntity): AdvertResponseInterface => ({
     advertisement: {
         id: advert.id,
         title: advert.title,
@@ -27,13 +25,16 @@ export const advertisementForGetBySlug = (advert: AdvertisementsEntity) : Advert
         country: advert.country,
         location: advert.location,
         isModerated: advert.isModerated,
+        isActive: advert.isActive,
+        moderationComment: advert.moderationComment,
         price: advert.price,
-        currency : advert.currency,
+        currency: advert.currency,
         img: advert.img,
         quantity: advert.quantity,
         unit: advert.unit,
         createAt: advert.createAt,
         updatedAt: advert.updatedAt,
+        expireAdvert: advert.expireAdvert,
         author: {
             id: advert.author.id,
             email: advert.author.email,
@@ -47,6 +48,9 @@ export const advertisementForGetBySlug = (advert: AdvertisementsEntity) : Advert
 })
 
 export const advertisementsResponseAll = (advertAll: AdvertsResponseInterface): AdvertsResponseInterface => {
-    advertAll.advertisements.forEach(advertisement => delete advertisement.author.password)
+    advertAll.advertisements.forEach(advertisement => {
+        delete advertisement.author.password
+    })
+
     return advertAll
 }

@@ -7,7 +7,7 @@ import { RolesModule } from "../roles/roles.module";
 
 @Module({
   imports: [TypeOrmModule.forFeature([UserRepository]),
-    RolesModule
+    RolesModule,
   ],
   providers: [UserService],
   controllers: [UserController],

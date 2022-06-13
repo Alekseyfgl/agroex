@@ -14,26 +14,17 @@
     ],
     "baseUrl": "./",
     "paths": {
-      "*": [
-        "packages/*/src"
-      ]
+      "*": ["packages/*/src"]
     },
     "experimentalDecorators": true,
     "allowJs": true,
     "allowSyntheticDefaultImports": true,
     "removeComments": true,
     "pretty": true,
-
-
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "allowUnreachableCode": true,
-//     "noImplicitAny" : true,
-//     "noUnusedParameters": true,
-
-
-
+    "allowUnreachableCode": false,
     "forceConsistentCasingInFileNames": true,
     "newLine": "CRLF",
     "alwaysStrict": true,

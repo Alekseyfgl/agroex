@@ -3,6 +3,7 @@ import { hash } from 'bcrypt';
 import { numToEncode } from '../constans/constans';
 import {UserRolesEntity} from "../roles/user-roles.entity";
 import {AdvertisementsEntity} from "../advertisements/advertisements.entity";
+import {UserBetEntity} from "../bets/user-bet.entity";
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -12,10 +13,10 @@ export class UserEntity {
   @Column({ unique: true })
   email: string;
 
-  @Column()
+  @Column("varchar", { length: 50})
   username: string;
 
-  @Column()
+  @Column("varchar", { length: 18} )
   phone: string;
 
   @Column() //так мы исключаем пароль по умолчанию
@@ -38,6 +39,8 @@ export class UserEntity {
   @JoinColumn({ referencedColumnName: 'user_id' })
   userRoles!: UserRolesEntity[];
 
+
+
   @BeforeInsert()
   async hashPassword() {
     this.password = await hash(this.password, numToEncode);
@@ -46,4 +49,13 @@ export class UserEntity {
   @OneToMany(()=> AdvertisementsEntity,(advertisement) => advertisement.author)
   advertisements: AdvertisementsEntity[]
 
+
+
+  @OneToMany(() => UserBetEntity, (userBetEntity) => userBetEntity.user, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn({ referencedColumnName: 'user_id' })
+  userBets!: UserBetEntity[];
 }

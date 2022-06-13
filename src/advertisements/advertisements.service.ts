@@ -9,13 +9,17 @@ import {
 } from "./advertisements.mapper";
 import {AdvertisementsEntity} from "./advertisements.entity";
 import {AdvertsResponseInterface, QueryInterface} from "./interface/advertResponseInterface";
+import {CronJobsService} from "../cron-jobs/cron-jobs.service";
+
 
 
 @Injectable()
 export class AdvertisementsService {
 
-    constructor(private readonly advertisementsRepository: AdvertisementsRepository) {
-    }
+    constructor(
+        private readonly cronJobsService: CronJobsService,
+        private readonly advertisementsRepository: AdvertisementsRepository,
+    ) {}
 
 
     async createAdvertisement(currentUser: UserEntity, createAdvertDto: CreateAdvertisementDto): Promise<AdvertisementsEntity> {
@@ -27,9 +31,21 @@ export class AdvertisementsService {
         return await this.advertisementsRepository.findBySlug(slug)
     }
 
-    async findAll(currentUserId: number, query: QueryInterface): Promise<AdvertsResponseInterface> {
-        const advert: AdvertsResponseInterface = await this.advertisementsRepository.findAll(currentUserId, query)
+    async findAll(currentUserId: number, query: QueryInterface, isModerated: boolean, isActive: boolean): Promise<AdvertsResponseInterface> {
+        const advert: AdvertsResponseInterface = await this.advertisementsRepository.findAll(currentUserId, query, isModerated, isActive)
         return advertisementsResponseAll(advert)
+    }
+
+    async setModeratedData(updateAdvertDto: AdvertisementsEntity): Promise<void> {
+        await this.setCronJobs(updateAdvertDto);
+        await this.advertisementsRepository.updateModeratedData(updateAdvertDto)
+    }
+
+    async setCronJobs(updateAdvertDto) {
+        if (updateAdvertDto.isModerated) {
+            await this.cronJobsService.addCronJob(`checkAdvertisementIsActive-${updateAdvertDto.slug}-${updateAdvertDto.id}-${updateAdvertDto.author.id}`, updateAdvertDto.expireAdvert, updateAdvertDto.id, 'updateAdvertisement');
+        }
+
     }
 
     public buildAdvertisementResponseForCreate(advertisement: AdvertisementsEntity): ReturnType<typeof advertisementForResponse> {

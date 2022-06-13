@@ -1,4 +1,6 @@
 import {AdvertisementsEntity} from "../advertisements.entity";
+import {UserBetEntity} from "../../bets/user-bet.entity";
+
 
 
 export interface AdvertResponseInterface {
@@ -11,6 +13,8 @@ export interface AdvertResponseInterface {
         country: string,
         location: string,
         isModerated: boolean,
+        isActive: boolean,
+        moderationComment:string,
         price: number,
         currency : string,
         img: string,
@@ -18,6 +22,7 @@ export interface AdvertResponseInterface {
         unit: string,
         createAt: Date,
         updatedAt: Date,
+        expireAdvert: Date,
         author: {
             id: number,
             email: string,
@@ -26,7 +31,7 @@ export interface AdvertResponseInterface {
             image: string,
             banned: boolean,
             banReason: string
-        }
+        },
     }
 }
 

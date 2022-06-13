@@ -28,7 +28,7 @@ export class UserRepository extends AbstractRepository<UserEntity> {
         }
 
         const newUser: UserEntity = new UserEntity();
-        Object.assign(newUser, createUserDto, {userRoles: [{ role_id: +ROLES_ID.USER }]});
+        Object.assign(newUser, createUserDto, {userRoles: [{role_id: +ROLES_ID.USER}]});
         // Listeners currently only work when attempting to save proper Entity class instances (not plain objects)
         return await this.repository.save(newUser);
     }
@@ -38,7 +38,7 @@ export class UserRepository extends AbstractRepository<UserEntity> {
             where: {
                 email: email,
             },
-            relations: [DB_RELATIONS.USER_ROLES , DB_RELATIONS.ROLES],
+            relations: [DB_RELATIONS.USER_ROLES, DB_RELATIONS.ROLES],
         });
     }
 
@@ -75,7 +75,7 @@ export class UserRepository extends AbstractRepository<UserEntity> {
         return user
     }
 
-    async checkIsBanned(loginUserDto: LoginUserDto): Promise<boolean>{
+    async checkIsBanned(loginUserDto: LoginUserDto): Promise<boolean> {
         const user: UserEntity = await this.getUserByEmail(loginUserDto.email);
         if (user.banned) {
             throw new HttpException(
@@ -91,11 +91,13 @@ export class UserRepository extends AbstractRepository<UserEntity> {
 
     async findUserById(id: number): Promise<UserEntity> {
         const user: UserEntity = await this.repository.findOne({
-            where: { id: id },
-            relations: [DB_RELATIONS.USER_ROLES , DB_RELATIONS.ROLES],
+            where: {id: id},
+            //      userRoles- назв таблицы               userRoles.role
+            //      userBets- назв таблицы             userBets
+            relations: ['userBets', DB_RELATIONS.USER_ROLES, DB_RELATIONS.ROLES],
         });
 
-        if(!user) {
+        if (!user) {
             throw new HttpException(
                 {
                     status: HttpStatus.UNPROCESSABLE_ENTITY,
@@ -130,7 +132,7 @@ export class UserRepository extends AbstractRepository<UserEntity> {
             HttpStatus.NOT_FOUND);
     }
 
-    async addBan(dto: BanUserDto): Promise<HttpStatus> {
+    async addBan(dto: BanUserDto): Promise<void> {
         const user: UserEntity = await this.findUserById(dto.userId);
         if (!user) {
             throw new HttpException(
@@ -143,8 +145,6 @@ export class UserRepository extends AbstractRepository<UserEntity> {
         user.banned = true;
         user.banReason = dto.banReason;
         await this.repository.save(user);
-
-        return HttpStatus.OK;
     }
 
 }
