@@ -14,6 +14,7 @@ import {AdvertsResponseInterface, QueryInterface} from "./interface/advertRespon
 import {createSlug} from "../helper/helper";
 
 
+
 @EntityRepository(AdvertisementsEntity)
 export class AdvertisementsRepository extends AbstractRepository<AdvertisementsEntity> {
 
