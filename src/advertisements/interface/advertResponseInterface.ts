@@ -1,5 +1,6 @@
 import {AdvertisementsEntity} from "../advertisements.entity";
 import {UserBetEntity} from "../../bets/user-bet.entity";
+import {Optional} from "../../interfacesAndTypes/optional.interface";
 
 
 
@@ -14,7 +15,7 @@ export interface AdvertResponseInterface {
         location: string,
         isModerated: boolean,
         isActive: boolean,
-        moderationComment: string | null,
+        moderationComment: Optional<string>
         price: number,
         currency: string,
         img: string,

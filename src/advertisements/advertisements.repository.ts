@@ -24,7 +24,7 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
         advertisement.slug = createSlug(createAdvertDto.title)
         advertisement.author = currentUser
 
-        return await this.repository.save(advertisement)
+        return this.repository.save(advertisement)
     }
 
 
@@ -52,12 +52,11 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
                 slug: slug
             })
 
-        return await queryBuilder.getOne()
+        return queryBuilder.getOne()
     }
 
 
     async findAll(currentUserId: number, query: QueryInterface, isModerated: boolean, isActive: boolean): Promise<AdvertsResponseInterface> {
-        console.log(query)
         const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> = getRepository(AdvertisementsEntity)
             .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.TABLE)
             .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.LEFT_JOIN_AND_SELECT,
