@@ -1,6 +1,5 @@
 
-
-interface betAndAdvertInterface {
+interface BetAndAdvertInterface {
     id: number,
     img: string
     createAt: Date,

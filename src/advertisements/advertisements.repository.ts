@@ -7,12 +7,9 @@ import {
 import {AdvertisementsEntity} from "./advertisements.entity";
 import {UserEntity} from "../user/user.entity";
 import {CreateAdvertisementDto} from "./dto/createAdvertisement.dto";
-
-import {HttpException, HttpStatus} from "@nestjs/common";
-import {DB_RELATIONS_ADVERTISEMENTS_AND_USER, MessageError, ORDER} from "../constans/constans";
+import {DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS, ORDER} from "../constans/constans";
 import {AdvertsResponseInterface, QueryInterface} from "./interface/advertResponseInterface";
 import {createSlug} from "../helper/helper";
-
 
 
 @EntityRepository(AdvertisementsEntity)
@@ -27,49 +24,58 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
         advertisement.slug = createSlug(createAdvertDto.title)
         advertisement.author = currentUser
 
-        return await this.repository.save(advertisement)
+        return this.repository.save(advertisement)
     }
 
 
     async findBySlug(slug: string): Promise<AdvertisementsEntity> {
-        const advertisements: AdvertisementsEntity = await this.repository.findOne({
 
-            where: {slug: slug}
-        })
+        const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> = getRepository(AdvertisementsEntity)
+            .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.TABLE)
 
-        if (!advertisements) {
-            throw new HttpException(
-                {
-                    status: HttpStatus.NOT_FOUND,
-                    message: [MessageError.ADVERTISEMENT_NOT_FOUND],
-                },
-                HttpStatus.NOT_FOUND,
-            );
-        }
-        return advertisements
+            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.LEFT_JOIN_AND_SELECT,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.USER
+            )
+
+            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.LEFT_JOIN_AND_SELECT_USERBETS,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.USERBETS,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.USERBETS_IS_ACTIVE,
+                {isActive: true})
+
+            .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISMODERATED,
+                {isModerated: true,})
+
+            .andWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISACTIVE,
+                {isActive: true})
+
+            .andWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ADVERT_SLUG, {
+                slug: slug
+            })
+
+        return queryBuilder.getOne()
     }
 
 
     async findAll(currentUserId: number, query: QueryInterface, isModerated: boolean, isActive: boolean): Promise<AdvertsResponseInterface> {
         const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> = getRepository(AdvertisementsEntity)
-            .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER.TABLE)
-            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT,
-                DB_RELATIONS_ADVERTISEMENTS_AND_USER.USER)
+            .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.TABLE)
+            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.LEFT_JOIN_AND_SELECT,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.USER)
 
-            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER.LEFT_JOIN_AND_SELECT_USERBETS,
-                DB_RELATIONS_ADVERTISEMENTS_AND_USER.USERBETS,
-                DB_RELATIONS_ADVERTISEMENTS_AND_USER.USERBETS_IS_ACTIVE, {isActive: true})
+            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.LEFT_JOIN_AND_SELECT_USERBETS,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.USERBETS,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.USERBETS_IS_ACTIVE, {isActive: true})
 
-            .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER.ISMODERATED,
+            .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISMODERATED,
                 {
                     isModerated: isModerated,
                 })
-            .andWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER.ISACTIVE, {
+            .andWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISACTIVE, {
                 isActive: isActive
             })
 
-            .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_COLUMN_BY_CREATE_AT, `${isModerated ? ORDER.DESC : ORDER.ASC}`)
-            .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_BETS_BY_CREATE_AT, ORDER.DESC);
+            .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.SORT_COLUMN_BY_CREATE_AT, `${isModerated ? ORDER.DESC : ORDER.ASC}`)
+            .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.SORT_BETS_BY_CREATE_AT, ORDER.DESC);
 
         if (query.authorId) {
             queryBuilder.andWhere(

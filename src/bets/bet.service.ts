@@ -24,11 +24,11 @@ export class BetService {
         const user: UserEntity = await this.userService.getUserById(currentUser);
 
 
-        const AdvertisementWithLastBet: betAndAdvertInterface[] = await this.betRepository.getAdvertisementWithLastBet(advert.id);
+        const advertisementWithLastBet: BetAndAdvertInterface[] = await this.betRepository.getAdvertisementWithLastBet(advert.id);
 
 
         const priceSeller: number = +advert.price;
-        const lastBet: number = +AdvertisementWithLastBet[0].betValue;
+        const lastBet: number = +advertisementWithLastBet[0].betValue;
         const currentBet: number = bet.betValue;
 
 

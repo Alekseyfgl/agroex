@@ -43,7 +43,8 @@ export const advertisementForGetBySlug = (advert: AdvertisementsEntity): AdvertR
             image: advert.author.image,
             banned: advert.author.banned,
             banReason: advert.author.banReason
-        }
+        },
+        userBets: advert.userBets // UserBets : [{id,user_id,advertisement_id, created_at,expireBet,betValue,isActive},{...}]
     }
 })
 

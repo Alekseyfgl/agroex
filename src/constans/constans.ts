@@ -35,7 +35,7 @@ export const enum DB_RELATIONS {
     ROLES = 'userRoles.role',
 }
 
-export const enum DB_RELATIONS_ADVERTISEMENTS_AND_USER {
+export const enum DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS {
     TABLE = 'advertisements',
     USER = 'author',
     ISMODERATED = 'advertisements.isModerated = :isModerated',
@@ -46,6 +46,7 @@ export const enum DB_RELATIONS_ADVERTISEMENTS_AND_USER {
     USERBETS = 'userBets',
     USERBETS_IS_ACTIVE = 'userBets.isActive = :isActive',
     SORT_BETS_BY_CREATE_AT = 'userBets.created_at',
+    ADVERT_SLUG = 'advertisements.slug = :slug'
 }
 
 export const enum HOST_URL {
