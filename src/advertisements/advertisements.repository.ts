@@ -14,7 +14,6 @@ import {AdvertsResponseInterface, QueryInterface} from "./interface/advertRespon
 import {createSlug} from "../helper/helper";
 
 
-
 @EntityRepository(AdvertisementsEntity)
 export class AdvertisementsRepository extends AbstractRepository<AdvertisementsEntity> {
 
@@ -71,6 +70,14 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
             .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_COLUMN_BY_CREATE_AT, `${isModerated ? ORDER.DESC : ORDER.ASC}`)
             .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER.SORT_BETS_BY_CREATE_AT, ORDER.DESC);
 
+        if (query.authorId) {
+            queryBuilder.andWhere(
+                'advertisements.authorId = :authorId',
+                {
+                    authorId: query.authorId
+                }
+            )
+        }
 
         const advertisementCount: number = await queryBuilder.getCount()//тотал по нашей таблице
         //create limit
