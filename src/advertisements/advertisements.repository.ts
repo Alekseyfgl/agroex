@@ -7,9 +7,11 @@ import {
 import {AdvertisementsEntity} from "./advertisements.entity";
 import {UserEntity} from "../user/user.entity";
 import {CreateAdvertisementDto} from "./dto/createAdvertisement.dto";
-import {DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS, ORDER} from "../constans/constans";
+import {DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS, MessageError, ORDER} from "../constans/constans";
 import {AdvertsResponseInterface, QueryInterface} from "./interface/advertResponseInterface";
 import {createSlug} from "../helper/helper";
+import {HttpException, HttpStatus} from "@nestjs/common";
+import {Optional} from "../interfacesAndTypes/optional.interface";
 
 
 @EntityRepository(AdvertisementsEntity)
@@ -52,7 +54,19 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
                 slug: slug
             })
 
-        return queryBuilder.getOne()
+        const advertisement: Optional<AdvertisementsEntity> = await queryBuilder.getOne()
+
+        if (!advertisement) {
+            throw new HttpException(
+                {
+                    status: HttpStatus.NOT_FOUND,
+                    message: [MessageError.ADVERTISEMENT_NOT_FOUND],
+                },
+                HttpStatus.NOT_FOUND,
+            );
+        }
+
+        return advertisement
     }
 
 
