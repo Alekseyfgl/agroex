@@ -49,6 +49,7 @@ export interface AdvertsResponseInterface {
 }
 
 export interface QueryInterface {
+    authorId: number;
     limit: number,
     offset: number
 }
