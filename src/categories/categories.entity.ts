@@ -8,7 +8,7 @@ export class CategoriesEntity {
   id: number;
 
   @ApiProperty({ example: 'title' })
-  @Column("varchar", {length: 100})
+  @Column('varchar', { length: 100 })
   title: string;
 
   @ApiProperty({ example: 'img' })

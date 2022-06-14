@@ -1,3 +1,3 @@
-interface OrderInterface {
-    orderType: 'ASC'| 'DESC'
+export interface OrderInterface {
+  orderType: 'ASC' | 'DESC';
 }
