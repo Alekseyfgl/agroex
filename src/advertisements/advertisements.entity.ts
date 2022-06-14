@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 import {UserEntity} from "../user/user.entity";
 import {UserBetEntity} from "../bets/user-bet.entity";
+import {ModerationStatus} from "./interface/interfacesAndTypes";
 
 
 @Entity({name: 'advertisements'})
@@ -42,6 +43,9 @@ export class AdvertisementsEntity {
 
     @CreateDateColumn({default: null})
     expireAdvert: Date
+
+    @Column( {default: 'unmoderated'})
+    moderationStatus: ModerationStatus
 
     @Column( {default: null})
     moderationComment: string

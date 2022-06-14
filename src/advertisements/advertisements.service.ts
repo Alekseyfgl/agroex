@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common';
+import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
 import {AdvertisementsRepository} from "./advertisements.repository";
 import {UserEntity} from "../user/user.entity";
 import {CreateAdvertisementDto} from "./dto/createAdvertisement.dto";
@@ -10,6 +10,8 @@ import {
 import {AdvertisementsEntity} from "./advertisements.entity";
 import {AdvertsResponseInterface, QueryInterface} from "./interface/advertResponseInterface";
 import {CronJobsService} from "../cron-jobs/cron-jobs.service";
+import {MessageError} from "../constans/constans";
+import {PromiseOptional} from "../interfacesAndTypes/optional.interface";
 
 
 
@@ -27,26 +29,62 @@ export class AdvertisementsService {
     }
 
 
-    async getAdvertisementBySlug(slug: string): Promise<AdvertisementsEntity> {
-        return await this.advertisementsRepository.findBySlug(slug)
+    async getAdvertisementBySlug(slug: string, isActive?, isModerated?): Promise<AdvertisementsEntity> {
+        return await this.advertisementsRepository.findBySlug(slug, isActive, isModerated)
     }
 
-    async findAll(currentUserId: number, query: QueryInterface, isModerated: boolean, isActive: boolean): Promise<AdvertsResponseInterface> {
-        const advert: AdvertsResponseInterface = await this.advertisementsRepository.findAll(currentUserId, query, isModerated, isActive)
+    async findAll(currentUserId: number, query: QueryInterface, isActive?: boolean, isModerated?: boolean): Promise<AdvertsResponseInterface> {
+        const advert: AdvertsResponseInterface = await this.advertisementsRepository.findAll(currentUserId, query, isActive, isModerated)
         return advertisementsResponseAll(advert)
     }
 
-    async setModeratedData(updateAdvertDto: AdvertisementsEntity): Promise<void> {
-        await this.setCronJobs(updateAdvertDto);
-        await this.advertisementsRepository.updateModeratedData(updateAdvertDto)
-    }
+    async setModeratedData(updateAdvertDto: AdvertisementsEntity): PromiseOptional<void> {
+        const existAdData = await this.advertisementsRepository.findBySlug(updateAdvertDto.slug)
 
-    async setCronJobs(updateAdvertDto) {
-        if (updateAdvertDto.isModerated) {
-            await this.cronJobsService.addCronJob(`checkAdvertisementIsActive-${updateAdvertDto.slug}-${updateAdvertDto.id}-${updateAdvertDto.author.id}`, updateAdvertDto.expireAdvert, updateAdvertDto.id, 'updateAdvertisement');
+        if (existAdData.isModerated) {
+            throw new HttpException(
+                {
+                    status: HttpStatus.BAD_REQUEST,
+                    message: [MessageError.ADVERTISEMENT_IS_ALREADY_MODERATED],
+                },
+                HttpStatus.BAD_REQUEST,
+            );
+        } else await this.advertisementsRepository.updateModeratedData(updateAdvertDto)
+
+        const savedAdData: AdvertisementsEntity = await this.advertisementsRepository.findBySlug(updateAdvertDto.slug)
+
+        if (savedAdData.isActive) {
+            await this.setCronJobs(savedAdData);
         }
+    }
+
+    async setCronJobs(updateAdvertDto): PromiseOptional<void> {
+        await this.cronJobsService.addCronJob(`checkAdvertisementIsActive-${updateAdvertDto.slug}-${updateAdvertDto.id}-${updateAdvertDto.author.id}`, updateAdvertDto.expireAdvert, updateAdvertDto.id, 'updateAdvertisement');
+    }
+
+    async setUpdatedAd(currentUser, updateAdvertDto): PromiseOptional<void> {
+        const existAdData: AdvertisementsEntity = await this.advertisementsRepository.findBySlug(updateAdvertDto.slug)
+
+        if (existAdData.author.id !== currentUser.id) {
+            throw new HttpException(
+                {
+                    status: HttpStatus.FORBIDDEN,
+                    message: [MessageError.ACCESS_DENIED],
+                },
+                HttpStatus.FORBIDDEN,
+            );
+        } else if (existAdData.isActive){
+            throw new HttpException(
+                {
+                    status: HttpStatus.BAD_REQUEST,
+                    message: [MessageError.ADVERTISEMENT_CAN_NOT_BE_CHANGED],
+                },
+                HttpStatus.BAD_REQUEST,
+            );
+        } else await this.advertisementsRepository.updateAdData(currentUser, updateAdvertDto)
 
     }
+
 
     public buildAdvertisementResponseForCreate(advertisement: AdvertisementsEntity): ReturnType<typeof advertisementForResponse> {
         return advertisementForResponse(advertisement)

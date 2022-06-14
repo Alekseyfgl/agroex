@@ -44,15 +44,9 @@ export class BetService {
 
 
         if (!lastBet && priceSeller > currentBet) {
-
-            const savedBet: UserBetEntity = await this.betRepository.createBet(advert, user, bet);
-            const expireBet: Date = savedBet.expireBet;
-            await this.cronJobsService.addCronJob(`checkBetIsActive-${currentSlug}-${user.id}-${savedBet.id}`, expireBet, savedBet.id, 'updateBet');
+            await this.betRepository.createBet(advert, user, bet);
         } else if (lastBet < currentBet && priceSeller > currentBet) {
-
-            const savedBet: UserBetEntity = await this.betRepository.createBet(advert, user, bet);
-            const expireBet: Date = savedBet.expireBet;
-            await this.cronJobsService.addCronJob(`checkBetIsActive-${currentSlug}-${user.id}-${savedBet.id}`, expireBet, savedBet.id, 'updateBet');
+            await this.betRepository.createBet(advert, user, bet);
 
         } else {
             throw new HttpException(

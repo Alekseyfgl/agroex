@@ -19,7 +19,6 @@ interface BetAndAdvertInterface {
     moderationComment: string | null,
     user_id: number,
     created_at: Date,
-    expireBet: Date,
     betValue: Date,
     isActive: boolean,
     advertisement_id: number,
