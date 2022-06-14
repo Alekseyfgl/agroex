@@ -1,4 +1,4 @@
-import {Injectable} from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 import { CategoriesEntity } from './categories.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -10,7 +10,9 @@ export class CategoriesService {
     private readonly categoriesRepository: Repository<CategoriesEntity>,
   ) {}
 
-  async findAllSortCategories(order: OrderInterface ): Promise<CategoriesEntity[]> {
+  async findAllSortCategories(
+    order: OrderInterface,
+  ): Promise<CategoriesEntity[]> {
     return await this.categoriesRepository.find({
       order: {
         title: order.orderType,
