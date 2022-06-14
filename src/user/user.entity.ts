@@ -17,7 +17,7 @@ export class UserEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column({ unique: true })
+  @Column('varchar', { unique: true })
   email: string;
 
   @Column('varchar', { length: 50 })
@@ -26,16 +26,16 @@ export class UserEntity {
   @Column('varchar', { length: 18 })
   phone: string;
 
-  @Column() //так мы исключаем пароль по умолчанию
+  @Column('varchar')
   password: string;
 
-  @Column({ default: null })
+  @Column('varchar', { default: null })
   image?: string;
 
-  @Column({ default: false })
+  @Column('boolean', { default: false })
   banned: boolean;
 
-  @Column({ default: null })
+  @Column('varchar', { default: null, length: 200 })
   banReason: string;
 
   @OneToMany(() => UserRolesEntity, (userRolesEntity) => userRolesEntity.user, {

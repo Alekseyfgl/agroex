@@ -25,26 +25,26 @@ export class AdvertisementsEntity {
   @Column('varchar', { length: 300 })
   location: string;
 
-  @Column({ unique: true })
+  @Column('varchar', { unique: true })
   slug: string;
 
-  @Column({ default: null })
+  @Column('varchar', { length: 100 })
   category: string;
 
-  @Column({ default: null })
-  subCategory: string;
+  @Column('varchar', { default: null, length: 100 })
+  subCategory: string | null;
 
-  @Column({ default: false })
+  @Column('boolean', { default: false })
   isModerated: boolean;
 
-  @Column({ default: false })
+  @Column('boolean', { default: false })
   isActive: boolean;
 
-  @CreateDateColumn({ default: null })
+  @CreateDateColumn({ type: 'timestamptz' })
   expireAdvert: Date;
 
-  @Column({ default: null })
-  moderationComment: string;
+  @Column('varchar', { default: null })
+  moderationComment: string | null;
 
   @Column('decimal', { precision: 18, scale: 2 })
   price: number;
@@ -52,7 +52,7 @@ export class AdvertisementsEntity {
   @Column('varchar', { length: 3 })
   currency: string;
 
-  @Column()
+  @Column('varchar')
   img: string;
 
   @Column('decimal', { precision: 18, scale: 2 })

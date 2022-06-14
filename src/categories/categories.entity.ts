@@ -4,7 +4,7 @@ import { ApiProperty } from '@nestjs/swagger';
 @Entity({ name: 'categories' })
 export class CategoriesEntity {
   @ApiProperty({ example: 'id' })
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @ApiProperty({ example: 'title' })
@@ -12,6 +12,6 @@ export class CategoriesEntity {
   title: string;
 
   @ApiProperty({ example: 'img' })
-  @Column()
+  @Column('varchar')
   img: string;
 }
