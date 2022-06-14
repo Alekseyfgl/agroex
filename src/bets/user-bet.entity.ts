@@ -24,7 +24,7 @@ export class UserBetEntity {
     @Column('decimal', {precision: 18, scale: 2})
     betValue: number;
 
-    @Column({default: true})
+    @Column('boolean',{default: true})
     isActive: boolean
 
 

@@ -13,15 +13,15 @@ import { roleName } from "./types/types";
 @Entity({ name: 'roles' })
 export class RolesEntity {
   @ApiProperty({ example: '1', description: 'Уникальный идентификатор' })
-  @PrimaryGeneratedColumn()
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
   @ApiProperty({ example: 'admin', description: 'Уникальное значение роли ' })
-  @Column({ unique: true })
+  @Column('varchar',{ unique: true })
   roleName: roleName;
 
   @ApiProperty({ example: 'Администратор', description: 'Описание роли' })
-  @Column()
+  @Column('varchar', {length: 100})
   description: string;
 
   @OneToMany(() => UserRolesEntity,

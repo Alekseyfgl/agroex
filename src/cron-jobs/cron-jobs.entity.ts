@@ -22,7 +22,7 @@ export class CronJobsEntity {
     @Column("varchar")
     jobType: cronJobName;
 
-    @CreateDateColumn()
+    @CreateDateColumn({type: 'timestamptz'})
     date: Date;
 
     @Column("integer")
