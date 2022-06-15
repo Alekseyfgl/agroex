@@ -13,7 +13,9 @@ import {createSlug} from "../helper/helper";
 import {ModerationStatus} from "./interface/interfacesAndTypes";
 import { Optional } from "../interfacesAndTypes/optional.interface";
 import {HttpException, HttpStatus} from "@nestjs/common";
-
+import * as moment from 'moment';
+import * as _ from 'lodash';
+import { Dictionary } from "lodash";
 
 @EntityRepository(AdvertisementsEntity)
 export class AdvertisementsRepository extends AbstractRepository<AdvertisementsEntity> {
@@ -32,6 +34,7 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
 
 
     async findBySlug(slug: string, isActive?: boolean, isModerated?): Promise<AdvertisementsEntity> {
+        const filterOptions: Dictionary<any> = _.omitBy({isActive: isActive, isModerated: isModerated}, _.isNil)
 
         const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> = getRepository(AdvertisementsEntity)
             .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.TABLE)
@@ -50,15 +53,13 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
                 slug: slug
             })
 
-            if (typeof isModerated === "boolean") {
-                queryBuilder.andWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISMODERATED,
-                {isModerated: isModerated})
-            }
+        if (_.has(filterOptions, 'isActive')) {
+            queryBuilder.andWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISACTIVE, {isActive: filterOptions.isActive} )
+        }
 
-            if (typeof isActive === "boolean") {
-                queryBuilder.andWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISACTIVE,
-                    {isActive: isActive})
-            }
+        if (_.has(filterOptions, 'isModerated')) {
+            queryBuilder.andWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISMODERATED, {isModerated: filterOptions.isModerated} )
+        }
 
         const advertisement: Optional<AdvertisementsEntity> = await queryBuilder.getOne()
 
@@ -77,7 +78,8 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
 
 
     async findAll(currentUserId: number, query: QueryInterface, isActive?: boolean, isModerated?: boolean): Promise<AdvertsResponseInterface> {
-        console.log(isActive, isModerated)
+        const filterOptions: Dictionary<any> = _.omitBy({isActive: isActive, isModerated: isModerated}, _.isNil)
+
         const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> = getRepository(AdvertisementsEntity)
             .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.TABLE)
             .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.LEFT_JOIN_AND_SELECT,
@@ -90,6 +92,14 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
             .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.SORT_COLUMN_BY_CREATE_AT, `${isModerated ? ORDER.DESC : ORDER.ASC}`)
             .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.SORT_BETS_BY_CREATE_AT, ORDER.DESC);
 
+        if (_.has(filterOptions, 'isActive')) {
+            queryBuilder.andWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISACTIVE, {isActive: filterOptions.isActive} )
+        }
+
+        if (_.has(filterOptions, 'isModerated')) {
+            queryBuilder.andWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISMODERATED, {isModerated: filterOptions.isModerated})
+        }
+
         if (query.authorId) {
             queryBuilder.andWhere(
                 'advertisements.authorId = :authorId',
@@ -97,19 +107,6 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
                     authorId: query.authorId
                 }
             )
-        }
-
-        if (typeof isActive === "boolean") {
-            queryBuilder.andWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISACTIVE, {
-                isActive: isActive
-            })
-        }
-
-        if (typeof isModerated === "boolean") {
-            queryBuilder.andWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISMODERATED,
-                {
-                    isModerated: isModerated,
-                })
         }
 
         const advertisementCount: number = await queryBuilder.getCount()//тотал по нашей таблице
@@ -129,8 +126,7 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
 
 
     async updateModeratedData(updateAdvertDto: AdvertisementsEntity): Promise<void> {
-        let date: Date = new Date(Date.now())
-
+        
         await this.repository.update({
             slug: updateAdvertDto.slug,
         }, {
@@ -138,12 +134,12 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
             moderationStatus: updateAdvertDto.moderationStatus,
             moderationComment: updateAdvertDto.moderationComment,
             isActive: updateAdvertDto.moderationStatus === ModerationStatus.APPROVED ? true : false,
-            expireAdvert: updateAdvertDto.moderationStatus === ModerationStatus.APPROVED ? new Date(date.setDate(date.getDate()+3)) : null
+            expireAdvert: updateAdvertDto.moderationStatus === ModerationStatus.APPROVED ?  moment().add(3, 'days').format() : null //new Date(date.setDate(date.getDate()+3))
         })
 
     }
 
-    async updateAdData(currentUser, updateAdvertDto): Promise<void> {
+    async updateAdData(updateAdvertDto: AdvertisementsEntity): Promise<void> {
 
         await this.repository.update({
             slug: updateAdvertDto.slug,

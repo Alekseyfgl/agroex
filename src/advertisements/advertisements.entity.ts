@@ -44,7 +44,7 @@ export class AdvertisementsEntity {
     @CreateDateColumn({default: null})
     expireAdvert: Date
 
-    @Column( {default: 'unmoderated'})
+    @Column( {default: ModerationStatus.UNMODERATED})
     moderationStatus: ModerationStatus
 
     @Column( {default: null})

@@ -39,7 +39,7 @@ export class AdvertisementsService {
     }
 
     async setModeratedData(updateAdvertDto: AdvertisementsEntity): PromiseOptional<void> {
-        const existAdData = await this.advertisementsRepository.findBySlug(updateAdvertDto.slug)
+        const existAdData: AdvertisementsEntity = await this.advertisementsRepository.findBySlug(updateAdvertDto.slug)
 
         if (existAdData.isModerated) {
             throw new HttpException(
@@ -73,7 +73,9 @@ export class AdvertisementsService {
                 },
                 HttpStatus.FORBIDDEN,
             );
-        } else if (existAdData.isActive){
+        }
+
+        if (existAdData.isActive){
             throw new HttpException(
                 {
                     status: HttpStatus.BAD_REQUEST,
@@ -81,8 +83,9 @@ export class AdvertisementsService {
                 },
                 HttpStatus.BAD_REQUEST,
             );
-        } else await this.advertisementsRepository.updateAdData(currentUser, updateAdvertDto)
+        }
 
+        await this.advertisementsRepository.updateAdData(updateAdvertDto)
     }
 
 

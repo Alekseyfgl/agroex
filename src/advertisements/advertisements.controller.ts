@@ -52,7 +52,7 @@ export class AdvertisementsController {
         @User() currentUser: UserEntity,
         @Body() createAdvertDto: CreateAdvertisementDto): Promise<AdvertResponseInterfaceForCreate> {
 
-        const imgSavedData: UploadApiResponse | UploadApiErrorResponse = await this.filesService.getSavedImgData(file);
+        const imgSavedData: UploadApiResponse = await this.filesService.getSavedImgData(file);
         Object.assign(createAdvertDto, {img: imgSavedData.secure_url})
         const advertisement: AdvertisementsEntity = await this.advertisementsService.createAdvertisement(currentUser, createAdvertDto)
 
@@ -75,7 +75,7 @@ export class AdvertisementsController {
     @Get('/myAdvertisements/all')  // для получения всех объявлений юзера для личного кабинета (не смотрим на isActive)
     @UseGuards(AuthGuard)
     async findAllAdvertisements(@User('id') currentUserId: number, @Query() query: QueryInterface) : Promise<AdvertsResponseInterface> {
-        return await this.advertisementsService.findAll(currentUserId, query)
+        return this.advertisementsService.findAll(currentUserId, query)
     }
 
     @Get('/myAdvertisements/:slug') // для получения одного объявления юзера для личного кабинета (не смотрим на isActive)
@@ -91,7 +91,7 @@ export class AdvertisementsController {
     @Roles(ROLES_ID.MODERATOR)
     @UseGuards(AuthGuard, RolesGuard)
     async findAllAdvertisementsForModeration(@User('id') currentUserId: number, @Query() query: QueryInterface) : Promise<AdvertsResponseInterface> {
-        return await this.advertisementsService.findAll(currentUserId, query, false, false) // возвращаем только рекламы не прошедшие модерацию (isModerated=false)
+        return this.advertisementsService.findAll(currentUserId, query, false, false) // возвращаем только рекламы не прошедшие модерацию (isModerated=false)
     }
 
     @Get('/moderation/:slug')
@@ -119,7 +119,7 @@ export class AdvertisementsController {
                         @User() currentUser: UserEntity,
                         @Body() updateAdvertDto: UpdateAdDataDto): PromiseOptional<void> {
 
-        const imgSavedData: UploadApiResponse | UploadApiErrorResponse = await this.filesService.getSavedImgData(file);
+        const imgSavedData: UploadApiResponse = await this.filesService.getSavedImgData(file);
         Object.assign(updateAdvertDto, {img: imgSavedData.secure_url})
 
         return this.advertisementsService.setUpdatedAd(currentUser, updateAdvertDto);

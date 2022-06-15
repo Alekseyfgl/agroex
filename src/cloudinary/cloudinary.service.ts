@@ -8,7 +8,7 @@ import {MFile} from "../files/InterfacesAndTypes/mfile.class";
 export class CloudinaryService {
     async uploadImage(
         file: MFile,
-    ): Promise<UploadApiResponse | UploadApiErrorResponse> {
+    ): Promise<UploadApiResponse> {
 
         return new Promise((resolve, reject) => {
             const upload = v2.uploader.upload_stream((error, result) => {
