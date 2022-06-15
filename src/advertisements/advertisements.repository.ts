@@ -14,7 +14,7 @@ import {
 } from '../constans/constans';
 import { AdvertsResponseInterface } from './interface/advertResponseInterface';
 import { createSlug } from '../helper/helper';
-import { ModerationStatus } from './interface/interfacesAndTypes';
+import {Filterobj, ModerationStatus} from './interface/interfacesAndTypes';
 import { Optional } from '../interfacesAndTypes/optional.interface';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import * as moment from 'moment';
@@ -40,11 +40,10 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
 
   async findBySlug(
     slug: string,
-    isActive?: boolean,
-    isModerated?,
+    filterObj?: Filterobj
   ): Promise<AdvertisementsEntity> {
     const filterOptions: Dictionary<any> = _.omitBy(
-      { isActive: isActive, isModerated: isModerated },
+        filterObj,
       _.isNil,
     );
 
@@ -99,13 +98,11 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
   }
 
   async findAll(
-    currentUserId: number,
     query: QueryDto,
-    isActive?: boolean,
-    isModerated?: boolean,
+    filterObj?: Filterobj
   ): Promise<AdvertsResponseInterface> {
     const filterOptions: Dictionary<any> = _.omitBy(
-      { isActive: isActive, isModerated: isModerated },
+        filterObj,
       _.isNil,
     );
 
@@ -126,7 +123,7 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
 
         .addOrderBy(
           DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.SORT_COLUMN_BY_CREATE_AT,
-          `${isModerated ? ORDER.DESC : ORDER.ASC}`,
+          `${filterOptions.isModerated ? ORDER.DESC : ORDER.ASC}`,
         )
         .addOrderBy(
           DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.SORT_BETS_BY_CREATE_AT,
@@ -147,9 +144,9 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
       );
     }
 
-    if (query.authorId) {
+    if (_.has(filterOptions, 'authorId')) {
       queryBuilder.andWhere('advertisements.authorId = :authorId', {
-        authorId: query.authorId,
+        authorId: filterOptions.authorId,
       });
     }
 

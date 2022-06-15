@@ -10,9 +10,6 @@ export class ChangeEntity1655137112410 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "cronJobs" ALTER COLUMN "date" SET NOT NULL`,
     );
-    await queryRunner.query(
-      `ALTER TABLE "cronJobs" ALTER COLUMN "date" SET DEFAULT now()`,
-    );
 
     await queryRunner.query(
       `ALTER TABLE "roles" ALTER COLUMN "description" TYPE character varying(100)`,
@@ -36,16 +33,6 @@ export class ChangeEntity1655137112410 implements MigrationInterface {
     );
     await queryRunner.query(
       `ALTER TABLE "userBets" ALTER COLUMN "created_at" SET NOT NULL`,
-    );
-
-    await queryRunner.query(
-      `ALTER TABLE "userBets" ALTER COLUMN "expireBet" TYPE TIMESTAMP WITH TIME ZONE`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE "userBets" ALTER COLUMN "expireBet" SET DEFAULT now()`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE "userBets" ALTER COLUMN "expireBet" SET NOT NULL`,
     );
 
     await queryRunner.query(
@@ -99,10 +86,7 @@ export class ChangeEntity1655137112410 implements MigrationInterface {
       `ALTER TABLE "advertisements" ALTER COLUMN "expireAdvert" TYPE TIMESTAMP WITH TIME ZONE`,
     );
     await queryRunner.query(
-      `ALTER TABLE "advertisements" ALTER COLUMN "expireAdvert" SET DEFAULT now()`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE "advertisements" ALTER COLUMN "expireAdvert" SET NOT NULL`,
+      `ALTER TABLE "advertisements" ALTER COLUMN "expireAdvert" SET DEFAULT NULL`,
     );
 
     await queryRunner.query(
@@ -202,16 +186,6 @@ export class ChangeEntity1655137112410 implements MigrationInterface {
     );
 
     await queryRunner.query(
-      `ALTER TABLE "userBets" ALTER COLUMN "expireBet" TYPE TIMESTAMP`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE "userBets" ALTER COLUMN "expireBet" SET DEFAULT now() + interval '3 hour'`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE "userBets" ALTER COLUMN "expireBet" SET NOT NULL`,
-    );
-
-    await queryRunner.query(
       `ALTER TABLE "userBets" ALTER COLUMN "created_at" TYPE TIMESTAMP`,
     );
     await queryRunner.query(
@@ -233,9 +207,6 @@ export class ChangeEntity1655137112410 implements MigrationInterface {
     );
     await queryRunner.query(
       `ALTER TABLE "cronJobs" ALTER COLUMN "date" SET NOT NULL`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE "cronJobs" ALTER COLUMN "date" SET DEFAULT now()`,
     );
   }
 }

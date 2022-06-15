@@ -35,6 +35,16 @@ export class BetService {
     const lastBet: number = +advertisementWithLastBet[0].betValue;
     const currentBet: number = bet.betValue;
 
+    if (!advert.isActive) {
+      throw new HttpException(
+          {
+            status: HttpStatus.BAD_REQUEST,
+            message: [MessageError.ADVERTISEMENT_IS_NOT_ACTIVE],
+          },
+          HttpStatus.BAD_REQUEST,
+      );
+    }
+
     if (currentBet > priceSeller) {
       throw new HttpException(
         {

@@ -3,3 +3,9 @@ export enum ModerationStatus {
   APPROVED = 'approved',
   REJECTED = 'rejected',
 }
+
+export type Filterobj = {
+  isActive?: boolean,
+  isModerated?: boolean,
+  authorId?: number
+}
