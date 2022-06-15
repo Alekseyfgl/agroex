@@ -24,7 +24,7 @@ export class BetController {
   async createBet(
     @Body() createBetDto: CreateBetDto,
     @User() currentUser: UserEntity,
-    @Param() slug: string,
+    @Param('slug') slug: string,
   ): Promise<void> {
     await this.betService.createBet(createBetDto, currentUser, slug);
   }
