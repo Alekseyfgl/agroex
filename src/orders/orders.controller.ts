@@ -20,7 +20,7 @@ export class OrdersController {
 
     @Post(':slug')
     @UseGuards(AuthGuard)
-    async acceptBet(@Param('slug') slug: string,) {
+    async acceptBet(@Param('slug') slug: string): Promise<void> {
         await this.ordersService.acceptBet(slug)
     }
 

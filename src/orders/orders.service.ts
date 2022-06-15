@@ -4,6 +4,7 @@ import {AdvertisementsService} from "../advertisements/advertisements.service";
 import {AdvertisementsEntity} from "../advertisements/advertisements.entity";
 import {allApprovedAdsResponse} from "./orders.mapper";
 import {MessageError} from "../constans/constans";
+import {OrdersInterface} from "./interface/orders.interface";
 
 
 @Injectable()
@@ -13,22 +14,31 @@ export class OrdersService {
     }
 
     async getAllApprovedAds(currentUserId: number) {
-        const approvedAds = await this.ordersRepository.getAllApprovedAds(currentUserId)
+        const approvedAds: OrdersInterface[] = await this.ordersRepository.getAllApprovedAds(currentUserId)
         return allApprovedAdsResponse(approvedAds)
-
     }
 
-    async acceptBet(slug: string) {
+    async acceptBet(slug: string): Promise<void> {
         const advertBySlug: AdvertisementsEntity = await this.advertisementsService.getAdvertisementBySlug(slug)
-        // console.log('advertBySlug===>>>>', advertBySlug)
 
-        const isLastBet = advertBySlug.userBets.length
+        const isConfirmed: boolean = advertBySlug.isConfirmed
+        const isLastBet: number = advertBySlug.userBets.length
+
+        if (isConfirmed) {
+            throw new HttpException(
+                {
+                    status: HttpStatus.NOT_FOUND,
+                    message: ['Это реклама уже подтверждена']
+                },
+                HttpStatus.NOT_FOUND,
+            );
+        }
 
         if (!isLastBet) {
             throw new HttpException(
                 {
                     status: HttpStatus.NOT_FOUND,
-                    message: ['У этой рекламы нет ставок']
+                    message: ['У данной рекламы нет ставок']
                 },
                 HttpStatus.NOT_FOUND,
             );

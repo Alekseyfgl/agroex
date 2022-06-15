@@ -1,43 +1,27 @@
 import {AbstractRepository, EntityRepository} from "typeorm";
 import {OrdersEntity} from "./entities/orders.entity";
 import {AdvertisementsEntity} from "../advertisements/advertisements.entity";
-import {OrderSaving, OrdersInterface} from "./interface/orders.interface";
-import {HttpException, HttpStatus} from "@nestjs/common";
+import { OrdersInterface} from "./interface/orders.interface";
+
 
 
 @EntityRepository(OrdersEntity)
 export class OrdersRepository extends AbstractRepository<OrdersEntity> {
 
 
-    async acceptBet(advert: AdvertisementsEntity) {
+    async acceptBet(advert: AdvertisementsEntity): Promise<void> {
 
         const currentBetId: number = advert.userBets[0].id
 
-        // const
-        // const xxx: OrderSaving = {
-        //     bet_id: currentBetId
-        // }
-        //
-        // await this.repository.save(xxx)
-        //поправить
-        try {
-            await this.repository.query(`
+
+        await this.repository.query(`
             INSERT INTO orders (bet_id) VALUES (${currentBetId});
             UPDATE advertisements SET "isConfirmed"=true WHERE id = ${advert.id}`)
-        } catch (e) {
-            throw new HttpException(
-                {
-                    status: HttpStatus.NOT_FOUND,
-                    message: ['Это реклама уже подтверждена']
-                },
-                HttpStatus.NOT_FOUND,
-            );
-        }
 
     }
 
-    async getAllApprovedAds(currentUserId: number) {
-        const allApprovedAds: OrdersInterface[] = await this.repository.query(
+    async getAllApprovedAds(currentUserId: number): Promise<OrdersInterface[]> {
+        return this.repository.query(
             `SELECT adv.*,
                         u.email, u.username, u.phone, u.password, u.image, u.banned, u."banReason",
                         ub.user_id, ub.created_at, ub."expireBet", ub."betValue" , ub."isActive", ub.advertisement_id,
@@ -47,6 +31,5 @@ export class OrdersRepository extends AbstractRepository<OrdersEntity> {
                     LEFT JOIN "userBets" AS ub ON adv.id=ub.advertisement_id
                     INNER JOIN orders AS o ON ub.id = o.bet_id
                     WHERE adv."authorId" = ${currentUserId}`)
-        return allApprovedAds
     }
 }
