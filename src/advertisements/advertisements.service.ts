@@ -32,6 +32,7 @@ export class AdvertisementsService {
   }
 
   async getAdvertisementBySlug(slug: string): Promise<AdvertisementsEntity> {
+    console.log('-------getAdvertisementBySlug------')
     return await this.advertisementsRepository.findBySlug(slug);
   }
 

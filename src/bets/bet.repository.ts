@@ -15,6 +15,7 @@ export class BetRepository extends AbstractRepository<UserBetEntity> {
     user: UserEntity,
     betObj: CreateBetDto,
   ): Promise<UserBetEntity> {
+
     const savedBet: UserBetEntity = await this.repository.save({
       user_id: user.id,
       advertisement_id: advert.id,

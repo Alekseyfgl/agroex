@@ -37,6 +37,7 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
   }
 
   async findBySlug(slug: string): Promise<AdvertisementsEntity> {
+    console.log('-------findBySlug------')
     const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> =
       getRepository(AdvertisementsEntity)
         .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.TABLE)
