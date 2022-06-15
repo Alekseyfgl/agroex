@@ -18,12 +18,13 @@ export class OrdersService {
 
     }
 
-    async acceptBet(currentUser, slug: string) {
+    async acceptBet(slug: string) {
         const advertBySlug: AdvertisementsEntity = await this.advertisementsService.getAdvertisementBySlug(slug)
+        // console.log('advertBySlug===>>>>', advertBySlug)
 
-        if (advertBySlug.userBets[0].betValue) {
-            await this.ordersRepository.acceptBet(advertBySlug)
-        } else {
+        const isLastBet = advertBySlug.userBets.length
+
+        if (!isLastBet) {
             throw new HttpException(
                 {
                     status: HttpStatus.NOT_FOUND,
@@ -32,5 +33,6 @@ export class OrdersService {
                 HttpStatus.NOT_FOUND,
             );
         }
+        await this.ordersRepository.acceptBet(advertBySlug)
     }
 }

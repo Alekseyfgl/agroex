@@ -1,4 +1,5 @@
 import {Optional} from "../../interfacesAndTypes/optional.interface";
+import {cronJobName} from "../../cron-jobs/types/cronjob.types";
 
 export interface OrdersInterface {
     id: number,
@@ -36,5 +37,10 @@ export interface OrdersInterface {
     order_bet_id: number,
     dealStatus: string,
     bet_id: number
-    orderCreated:Date
+    orderCreated: Date
+}
+
+export interface OrderSaving {
+    bet_id: number;
+    // dealStatus: 'confirmed' | 'unconfirmed';
 }

@@ -1,7 +1,7 @@
 import {AbstractRepository, EntityRepository} from "typeorm";
 import {OrdersEntity} from "./entities/orders.entity";
 import {AdvertisementsEntity} from "../advertisements/advertisements.entity";
-import {OrdersInterface} from "./interface/orders.interface";
+import {OrderSaving, OrdersInterface} from "./interface/orders.interface";
 import {HttpException, HttpStatus} from "@nestjs/common";
 
 
@@ -11,7 +11,15 @@ export class OrdersRepository extends AbstractRepository<OrdersEntity> {
 
     async acceptBet(advert: AdvertisementsEntity) {
 
-        const currentBetId = advert.userBets[0].id
+        const currentBetId: number = advert.userBets[0].id
+
+        // const
+        // const xxx: OrderSaving = {
+        //     bet_id: currentBetId
+        // }
+        //
+        // await this.repository.save(xxx)
+        //поправить
         try {
             await this.repository.query(`
             INSERT INTO orders (bet_id) VALUES (${currentBetId});
@@ -39,7 +47,6 @@ export class OrdersRepository extends AbstractRepository<OrdersEntity> {
                     LEFT JOIN "userBets" AS ub ON adv.id=ub.advertisement_id
                     INNER JOIN orders AS o ON ub.id = o.bet_id
                     WHERE adv."authorId" = ${currentUserId}`)
-        // console.log(allApprovedAds)
         return allApprovedAds
     }
 }
