@@ -42,13 +42,7 @@ export class BetService {
             );
         }
 
-
-        if (!lastBet && priceSeller > currentBet) {
-            await this.betRepository.createBet(advert, user, bet);
-        } else if (lastBet < currentBet && priceSeller > currentBet) {
-            await this.betRepository.createBet(advert, user, bet);
-
-        } else {
+        if (lastBet && currentBet <= lastBet ) {
             throw new HttpException(
                 {
                     status: HttpStatus.CONFLICT,
@@ -57,6 +51,9 @@ export class BetService {
                 HttpStatus.CONFLICT,
             );
         }
+
+        await this.betRepository.createBet(advert, user, bet);
+
     }
 
 }

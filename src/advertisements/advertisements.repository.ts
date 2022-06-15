@@ -126,7 +126,7 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
 
 
     async updateModeratedData(updateAdvertDto: AdvertisementsEntity): Promise<void> {
-        
+
         await this.repository.update({
             slug: updateAdvertDto.slug,
         }, {
