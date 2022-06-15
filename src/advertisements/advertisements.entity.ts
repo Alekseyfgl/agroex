@@ -1,86 +1,88 @@
 import {
-    Column,
-    CreateDateColumn,
-    Entity, JoinColumn,
-    ManyToOne, OneToMany,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn
-} from "typeorm";
-import {UserEntity} from "../user/user.entity";
-import {UserBetEntity} from "../bets/user-bet.entity";
-import {ModerationStatus} from "./interface/interfacesAndTypes";
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { UserEntity } from '../user/user.entity';
+import { UserBetEntity } from '../bets/user-bet.entity';
+import { ModerationStatus } from './interface/interfacesAndTypes';
 
-
-@Entity({name: 'advertisements'})
+@Entity({ name: 'advertisements' })
 export class AdvertisementsEntity {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
-    @Column("varchar", {length: 200})
-    title: string;
+  @Column('varchar', { length: 200 })
+  title: string;
 
-    @Column("varchar", {length: 100})
-    country: string;
+  @Column('varchar', { length: 100 })
+  country: string;
 
-    @Column("varchar", {length: 300})
-    location: string;
+  @Column('varchar', { length: 300 })
+  location: string;
 
-    @Column({unique: true})
-    slug: string
+  @Column({ unique: true })
+  slug: string;
 
-    @Column({default: null})
-    category: string
+  @Column({ default: null })
+  category: string;
 
-    @Column({default: null})
-    subCategory: string
+  @Column({ default: null })
+  subCategory: string;
 
+  @Column({ default: false })
+  isModerated: boolean;
 
-    @Column({default: false})
-    isModerated: boolean
+  @Column({ default: false })
+  isActive: boolean;
 
-    @Column({default: false})
-    isActive: boolean
+  @CreateDateColumn({ default: null })
+  expireAdvert: Date;
 
-    @CreateDateColumn({default: null})
-    expireAdvert: Date
+  @Column({ default: ModerationStatus.UNMODERATED })
+  moderationStatus: ModerationStatus;
 
-    @Column( {default: ModerationStatus.UNMODERATED})
-    moderationStatus: ModerationStatus
+  @Column({ default: null })
+  moderationComment: string;
 
-    @Column( {default: null})
-    moderationComment: string
+  @Column('decimal', { precision: 18, scale: 2 })
+  price: number;
 
-    @Column('decimal', {precision: 18, scale: 2})
-    price: number;
+  @Column('varchar', { length: 3 })
+  currency: string;
 
-    @Column("varchar", {length: 3})
-    currency: string;
+  @Column()
+  img: string;
 
-    @Column()
-    img: string;
+  @Column('decimal', { precision: 18, scale: 2 })
+  quantity: number;
 
-    @Column('decimal', {precision: 18, scale: 2})
-    quantity: number;
+  @Column('varchar', { length: 5 })
+  unit: string;
 
-    @Column("varchar", {length: 5})
-    unit: string;
+  @CreateDateColumn({ type: 'timestamptz' })
+  createAt: Date;
 
-    @CreateDateColumn({ type: 'timestamptz' })
-    createAt: Date
+  @UpdateDateColumn({ type: 'timestamptz' })
+  updatedAt: Date;
 
-    @UpdateDateColumn({ type: 'timestamptz' })
-    updatedAt: Date
+  @ManyToOne(() => UserEntity, (user) => user.advertisements, { eager: true })
+  author: UserEntity;
 
-
-    @ManyToOne(() => UserEntity, user => user.advertisements, {eager: true})
-    author: UserEntity
-
-
-    @OneToMany(() => UserBetEntity, (userBetEntity) => userBetEntity.advertisement, {
-        cascade: true,
-        onDelete: 'CASCADE',
-        onUpdate: 'CASCADE',
-    })
-    @JoinColumn({referencedColumnName: 'advertisement_id'})
-    userBets!: UserBetEntity[];
+  @OneToMany(
+    () => UserBetEntity,
+    (userBetEntity) => userBetEntity.advertisement,
+    {
+      cascade: true,
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    },
+  )
+  @JoinColumn({ referencedColumnName: 'advertisement_id' })
+  userBets!: UserBetEntity[];
 }

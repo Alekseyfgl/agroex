@@ -16,7 +16,6 @@ export const userForResponse = (
     banned: user.banned,
     banReason: user.banReason,
     advertisements: user.advertisements,
-    userBets: user.userBets
+    userBets: user.userBets,
   },
 });
-

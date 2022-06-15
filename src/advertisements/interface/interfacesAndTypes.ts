@@ -1,5 +1,5 @@
-export enum ModerationStatus{
-    UNMODERATED = 'unmoderated',
-    APPROVED = 'approved',
-    REJECTED = 'rejected'
+export enum ModerationStatus {
+  UNMODERATED = 'unmoderated',
+  APPROVED = 'approved',
+  REJECTED = 'rejected',
 }

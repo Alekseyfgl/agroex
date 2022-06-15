@@ -7,8 +7,7 @@ import {
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
 import { UserRolesEntity } from './user-roles.entity';
-import { roleName } from "./types/types";
-
+import { roleName } from './types/types';
 
 @Entity({ name: 'roles' })
 export class RolesEntity {
@@ -24,8 +23,7 @@ export class RolesEntity {
   @Column()
   description: string;
 
-  @OneToMany(() => UserRolesEntity,
-      (userRolesEntity) => userRolesEntity.role, {
+  @OneToMany(() => UserRolesEntity, (userRolesEntity) => userRolesEntity.role, {
     cascade: true,
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE',
