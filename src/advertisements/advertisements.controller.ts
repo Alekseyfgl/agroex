@@ -22,7 +22,6 @@ import {
   AdvertResponseInterface,
   AdvertResponseInterfaceForCreate,
   AdvertsResponseInterface,
-  QueryInterface,
 } from './interface/advertResponseInterface';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FilesService } from '../files/files.service';
@@ -32,6 +31,10 @@ import { UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
 import { MAX_IMAGE_SIZE, ROLES_ID } from '../constans/constans';
 import { Roles } from '../roles/decorators/roles-auth.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
+import { SetModerationStatusDto } from './dto/setUpdatedAd.dto';
+import { UpdateAdDataDto } from './dto/updateAdData.dto';
+import { PromiseOptional } from '../interfacesAndTypes/optional.interface';
+import { QueryDto } from './dto/query.dto';
 
 @Controller('advertisements')
 export class AdvertisementsController {
@@ -54,7 +57,7 @@ export class AdvertisementsController {
     @User() currentUser: UserEntity,
     @Body() createAdvertDto: CreateAdvertisementDto,
   ): Promise<AdvertResponseInterfaceForCreate> {
-    const imgSavedData: UploadApiResponse | UploadApiErrorResponse =
+    const imgSavedData: UploadApiResponse =
       await this.filesService.getSavedImgData(file);
     Object.assign(createAdvertDto, { img: imgSavedData.secure_url });
     const advertisement: AdvertisementsEntity =
@@ -73,33 +76,52 @@ export class AdvertisementsController {
     @Param('slug') slug: string,
   ): Promise<AdvertResponseInterface> {
     const advertisement: AdvertisementsEntity =
-      await this.advertisementsService.getAdvertisementBySlug(slug);
+      await this.advertisementsService.getAdvertisementBySlug(slug, true);
     return this.advertisementsService.buildAdvertisementResponseForGetOne(
       advertisement,
     );
   }
 
   @Get()
+  @UsePipes(new ValidationPipe())
   async findAllActiveAdvertisements(
     @User('id') currentUserId: number,
-    @Query() query: QueryInterface,
+    @Query() query: QueryDto,
   ): Promise<AdvertsResponseInterface> {
-    return await this.advertisementsService.findAll(
-      currentUserId,
-      query,
-      true,
-      true,
-    ); // возвращаем только рекламы прошедшие модерацию (isModerated=true)
+    return await this.advertisementsService.findAll(currentUserId, query, true);
   }
-  // решил оставить эти гет запросы в таком виде, так как иметь разные ендпоинты удобнее для запросов на модерацию из админки
+
+  @Get('/myAdvertisements/all') // для получения всех объявлений юзера для личного кабинета (не смотрим на isActive)
+  @UseGuards(AuthGuard)
+  @UsePipes(new ValidationPipe())
+  async findAllAdvertisements(
+    @User('id') currentUserId: number,
+    @Query() query: QueryDto,
+  ): Promise<AdvertsResponseInterface> {
+    return this.advertisementsService.findAll(currentUserId, query);
+  }
+
+  @Get('/myAdvertisements/:slug') // для получения одного объявления юзера для личного кабинета (не смотрим на isActive)
+  @UseGuards(AuthGuard)
+  async getSingleMyAdvertisement(
+    @Param('slug') slug: string,
+  ): Promise<AdvertResponseInterface> {
+    const advertisement: AdvertisementsEntity =
+      await this.advertisementsService.getAdvertisementBySlug(slug);
+    return this.advertisementsService.buildAdvertisementResponseForGetOne(
+      advertisement,
+    );
+  }
+
   @Get('/moderation/get')
   @Roles(ROLES_ID.MODERATOR)
   @UseGuards(AuthGuard, RolesGuard)
+  @UsePipes(new ValidationPipe())
   async findAllAdvertisementsForModeration(
     @User('id') currentUserId: number,
-    @Query() query: QueryInterface,
+    @Query() query: QueryDto,
   ): Promise<AdvertsResponseInterface> {
-    return await this.advertisementsService.findAll(
+    return this.advertisementsService.findAll(
       currentUserId,
       query,
       false,
@@ -107,12 +129,23 @@ export class AdvertisementsController {
     ); // возвращаем только рекламы не прошедшие модерацию (isModerated=false)
   }
 
-  @Put('/moderation/set')
+  @Get('/moderation/:slug')
   @Roles(ROLES_ID.MODERATOR)
   @UseGuards(AuthGuard, RolesGuard)
-  async setAdvData(
-    @Body('advertisements') updateAdvertDto: AdvertisementsEntity,
-  ): Promise<void> {
-    return this.advertisementsService.setModeratedData(updateAdvertDto);
+  async getSingleAdvertisementForModeration(
+    @Param('slug') slug: string,
+  ): Promise<AdvertResponseInterface> {
+    const advertisement: AdvertisementsEntity =
+      await this.advertisementsService.getAdvertisementBySlug(
+        slug,
+        false,
+        false,
+      );
+    return this.advertisementsService.buildAdvertisementResponseForGetOne(
+      advertisement,
+    );
+  }
+
+
   }
 }

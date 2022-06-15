@@ -1,6 +1,7 @@
 import { AdvertisementsEntity } from '../advertisements.entity';
 import { UserBetEntity } from '../../bets/user-bet.entity';
 import { Optional } from '../../interfacesAndTypes/optional.interface';
+import { ModerationStatus } from './interfacesAndTypes';
 
 export interface AdvertResponseInterface {
   advertisement: {
@@ -13,6 +14,7 @@ export interface AdvertResponseInterface {
     location: string;
     isModerated: boolean;
     isActive: boolean;
+    moderationStatus: ModerationStatus;
     moderationComment: Optional<string>;
     price: number;
     currency: string;
@@ -46,10 +48,4 @@ export interface AdvertResponseInterfaceForCreate {
 export interface AdvertsResponseInterface {
   advertisements: AdvertisementsEntity[];
   advertisementCount: number;
-}
-
-export interface QueryInterface {
-  authorId: number;
-  limit: number;
-  offset: number;
 }

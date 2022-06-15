@@ -4,15 +4,14 @@ import { CronJob } from 'cron';
 import { SchedulerRegistry } from '@nestjs/schedule';
 import { BetRepository } from '../bets/bet.repository';
 import { CronJobsEntity } from './cron-jobs.entity';
-import { CronBetRepository } from './cronBet.repository';
 import { CronAdvertisementRepository } from './cron-advertisement-repository';
 import { cronJobName, CronJobSaving } from './types/cronjob.types';
+import { PromiseOptional } from '../interfacesAndTypes/optional.interface';
 
 @Injectable()
 export class CronJobsService implements OnModuleInit {
   constructor(
     private readonly cronJobsRepository: CronJobsRepository,
-    private readonly betRepository: CronBetRepository,
     private readonly advertisementRepository: CronAdvertisementRepository,
     private schedulerRegistry: SchedulerRegistry,
   ) {}
@@ -60,12 +59,12 @@ export class CronJobsService implements OnModuleInit {
 
   async addCronJob(
     name: string,
-    expireBet: Date,
+    expireDate: Date,
     targetId: number,
     jobType: cronJobName,
   ): Promise<void> {
     // создаём CronJob
-    const job: CronJob = new CronJob(new Date(expireBet), () => {
+    const job: CronJob = new CronJob(new Date(expireDate), () => {
       this.createCronJob(jobType, targetId);
       this.logger.warn(`time for job ${name} to run`);
     });
@@ -77,25 +76,24 @@ export class CronJobsService implements OnModuleInit {
     );
     if (!foundCronJob) {
       // сохраняем новый CronJob в бд
-      await this.saveCronJob(name, expireBet, targetId, jobType);
+      await this.saveCronJob(name, expireDate, targetId, jobType);
     }
 
     job.start();
 
     this.logger.warn(
-      `job ${name} added for update column at ${new Date(expireBet)}!`,
+      `job ${name} added for update column at ${new Date(expireDate)}!`,
     );
   }
 
-  async createCronJob(jobType: cronJobName, targetId: number) {
-    if (jobType === 'updateBet') {
-      // если бет - обновляем бет
-      await this.betRepository.updateColumnIsActive(targetId);
-    }
-
+  async createCronJob(
+    jobType: cronJobName,
+    targetId: number,
+  ): PromiseOptional<void> {
     if (jobType === 'updateAdvertisement') {
       // если adv - обновляем adv
       await this.advertisementRepository.updateColumnIsActive(targetId);
     }
+    // возможность для расширения модулю через добавление новых типов cron jobs
   }
 }

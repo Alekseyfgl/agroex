@@ -9,16 +9,18 @@ import { UserEntity } from '../user/user.entity';
 import { CreateAdvertisementDto } from './dto/createAdvertisement.dto';
 import {
   DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS,
-  MessageError,
   ORDER,
+  MessageError,
 } from '../constans/constans';
-import {
-  AdvertsResponseInterface,
-  QueryInterface,
-} from './interface/advertResponseInterface';
+import { AdvertsResponseInterface } from './interface/advertResponseInterface';
 import { createSlug } from '../helper/helper';
-import { HttpException, HttpStatus } from '@nestjs/common';
+import { ModerationStatus } from './interface/interfacesAndTypes';
 import { Optional } from '../interfacesAndTypes/optional.interface';
+import { HttpException, HttpStatus } from '@nestjs/common';
+import * as moment from 'moment';
+import * as _ from 'lodash';
+import { Dictionary } from 'lodash';
+import { QueryDto } from './dto/query.dto';
 
 @EntityRepository(AdvertisementsEntity)
 export class AdvertisementsRepository extends AbstractRepository<AdvertisementsEntity> {
@@ -36,7 +38,16 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
     return this.repository.save(advertisement);
   }
 
-  async findBySlug(slug: string): Promise<AdvertisementsEntity> {
+  async findBySlug(
+    slug: string,
+    isActive?: boolean,
+    isModerated?,
+  ): Promise<AdvertisementsEntity> {
+    const filterOptions: Dictionary<any> = _.omitBy(
+      { isActive: isActive, isModerated: isModerated },
+      _.isNil,
+    );
+
     const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> =
       getRepository(AdvertisementsEntity)
         .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.TABLE)
@@ -53,17 +64,23 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
           { isActive: true },
         )
 
-        .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISMODERATED, {
-          isModerated: true,
-        })
-
-        .andWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISACTIVE, {
-          isActive: true,
-        })
-
-        .andWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ADVERT_SLUG, {
+        .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ADVERT_SLUG, {
           slug: slug,
         });
+
+    if (_.has(filterOptions, 'isActive')) {
+      queryBuilder.andWhere(
+        DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISACTIVE,
+        { isActive: filterOptions.isActive },
+      );
+    }
+
+    if (_.has(filterOptions, 'isModerated')) {
+      queryBuilder.andWhere(
+        DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISMODERATED,
+        { isModerated: filterOptions.isModerated },
+      );
+    }
 
     const advertisement: Optional<AdvertisementsEntity> =
       await queryBuilder.getOne();
@@ -83,10 +100,15 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
 
   async findAll(
     currentUserId: number,
-    query: QueryInterface,
-    isModerated: boolean,
-    isActive: boolean,
+    query: QueryDto,
+    isActive?: boolean,
+    isModerated?: boolean,
   ): Promise<AdvertsResponseInterface> {
+    const filterOptions: Dictionary<any> = _.omitBy(
+      { isActive: isActive, isModerated: isModerated },
+      _.isNil,
+    );
+
     const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> =
       getRepository(AdvertisementsEntity)
         .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.TABLE)
@@ -102,13 +124,6 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
           { isActive: true },
         )
 
-        .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISMODERATED, {
-          isModerated: isModerated,
-        })
-        .andWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISACTIVE, {
-          isActive: isActive,
-        })
-
         .addOrderBy(
           DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.SORT_COLUMN_BY_CREATE_AT,
           `${isModerated ? ORDER.DESC : ORDER.ASC}`,
@@ -117,6 +132,20 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
           DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.SORT_BETS_BY_CREATE_AT,
           ORDER.DESC,
         );
+
+    if (_.has(filterOptions, 'isActive')) {
+      queryBuilder.andWhere(
+        DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISACTIVE,
+        { isActive: filterOptions.isActive },
+      );
+    }
+
+    if (_.has(filterOptions, 'isModerated')) {
+      queryBuilder.andWhere(
+        DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISMODERATED,
+        { isModerated: filterOptions.isModerated },
+      );
+    }
 
     if (query.authorId) {
       queryBuilder.andWhere('advertisements.authorId = :authorId', {
@@ -142,17 +171,45 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
   async updateModeratedData(
     updateAdvertDto: AdvertisementsEntity,
   ): Promise<void> {
-    if (await this.findBySlug(updateAdvertDto.slug)) {
-      await this.repository.update(
-        {
-          slug: updateAdvertDto.slug,
-        },
-        {
-          isModerated: updateAdvertDto.isModerated,
-          moderationComment: updateAdvertDto.moderationComment,
-          isActive: updateAdvertDto.isModerated,
-        },
-      );
-    }
+    await this.repository.update(
+      {
+        slug: updateAdvertDto.slug,
+      },
+      {
+        isModerated: true,
+        moderationStatus: updateAdvertDto.moderationStatus,
+        moderationComment: updateAdvertDto.moderationComment,
+        isActive:
+          updateAdvertDto.moderationStatus === ModerationStatus.APPROVED
+            ? true
+            : false,
+        expireAdvert:
+          updateAdvertDto.moderationStatus === ModerationStatus.APPROVED
+            ? moment().add(3, 'days').format()
+            : null, //new Date(date.setDate(date.getDate()+3))
+      },
+    );
+  }
+
+  async updateAdData(updateAdvertDto: AdvertisementsEntity): Promise<void> {
+    await this.repository.update(
+      {
+        slug: updateAdvertDto.slug,
+      },
+      {
+        title: updateAdvertDto.title,
+        country: updateAdvertDto.country,
+        location: updateAdvertDto.location,
+        category: updateAdvertDto.category,
+        subCategory: updateAdvertDto.subCategory,
+        price: updateAdvertDto.price,
+        currency: updateAdvertDto.currency,
+        img: updateAdvertDto.img,
+        quantity: updateAdvertDto.quantity,
+        unit: updateAdvertDto.unit,
+        moderationStatus: ModerationStatus.UNMODERATED,
+        isModerated: false,
+      },
+    );
   }
 }

@@ -28,6 +28,8 @@ export const enum MessageError {
   ERROR_WHILE_SAVING_ON_CLOUDINARY = 'Error while saving on cloudinary',
   HIGHER_PRICE_THAN_SELLER = 'Your price is higher than the seller',
   NEED_TO_REFRESH_THE_PAGE = 'Your bet failed, place a higher bet',
+  ADVERTISEMENT_IS_ALREADY_MODERATED = 'Advertisement is already been moderated',
+  ADVERTISEMENT_CAN_NOT_BE_CHANGED = 'Advertisement can not be changed',
 }
 
 export const enum DB_RELATIONS {

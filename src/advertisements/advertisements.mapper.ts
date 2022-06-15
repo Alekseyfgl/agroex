@@ -28,6 +28,7 @@ export const advertisementForGetBySlug = (
     location: advert.location,
     isModerated: advert.isModerated,
     isActive: advert.isActive,
+    moderationStatus: advert.moderationStatus,
     moderationComment: advert.moderationComment,
     price: advert.price,
     currency: advert.currency,

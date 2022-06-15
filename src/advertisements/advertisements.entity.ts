@@ -10,6 +10,7 @@ import {
 } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
 import { UserBetEntity } from '../bets/user-bet.entity';
+import { ModerationStatus } from './interface/interfacesAndTypes';
 
 @Entity({ name: 'advertisements' })
 export class AdvertisementsEntity {
@@ -42,6 +43,9 @@ export class AdvertisementsEntity {
 
   @CreateDateColumn({ type: 'timestamptz' })
   expireAdvert: Date;
+
+@Column({ default: ModerationStatus.UNMODERATED })
+  moderationStatus: ModerationStatus;
 
   @Column('varchar', { default: null })
   moderationComment: string | null;

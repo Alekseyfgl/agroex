@@ -2,7 +2,7 @@ import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
 import * as sharp from 'sharp';
 import { MFile } from './InterfacesAndTypes/mfile.class';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
-import { UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
+import { UploadApiResponse } from 'cloudinary';
 import { MessageError } from '../constans/constans';
 //import { path } from 'app-root-path';
 //import { FileElementResponse } from "./dto/file-response-element.response";
@@ -14,9 +14,7 @@ import { MessageError } from '../constans/constans';
 export class FilesService {
   constructor(private readonly cloudinaryService: CloudinaryService) {}
 
-  async saveFiles(
-    file: MFile,
-  ): Promise<UploadApiResponse | UploadApiErrorResponse> {
+  async saveFiles(file: MFile): Promise<UploadApiResponse> {
     //: Promise<FileElementResponse> {
     return await this.cloudinaryService.uploadImage(file).catch(() => {
       throw new BadRequestException({
