@@ -9,10 +9,9 @@ import { OrdersInterface} from "./interface/orders.interface";
 export class OrdersRepository extends AbstractRepository<OrdersEntity> {
 
 
-    async acceptBet(advert: AdvertisementsEntity): Promise<void> {
+    async confirmBet(advert: AdvertisementsEntity): Promise<void> {
 
         const currentBetId: number = advert.userBets[0].id
-
 
         await this.repository.query(`
             INSERT INTO orders (bet_id) VALUES (${currentBetId});

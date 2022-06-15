@@ -1,7 +1,7 @@
-import {OrdersInterface} from "./interface/orders.interface";
+import {ApprovedAdsResponseInterface, OrdersInterface} from "./interface/orders.interface";
 
 
-export const allApprovedAdsResponse = (ads: OrdersInterface[]) => {
+export const allApprovedAdsResponse = (ads: OrdersInterface[]): ApprovedAdsResponseInterface[] => {
     return ads.map(ad => {
         return {
             id: ad.id,

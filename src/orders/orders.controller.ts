@@ -1,10 +1,8 @@
-import {Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, UsePipes, ValidationPipe} from '@nestjs/common';
+import {Controller, Get, Post, Param,  UseGuards} from '@nestjs/common';
 import {OrdersService} from './orders.service';
 import {AuthGuard} from "../auth/guards/auth.guard";
 import {User} from "../user/decorators/user.decarator";
-import {UserEntity} from "../user/user.entity";
-
-// import {CreateOrderDto} from "./dto/createOrder.dto";
+import {ApprovedAdsResponseInterface} from "./interface/orders.interface";
 
 @Controller('orders')
 export class OrdersController {
@@ -14,14 +12,14 @@ export class OrdersController {
 
     @Get()
     @UseGuards(AuthGuard)
-    async findAll(@User('id') currentUserId: number) {
+    async findAll(@User('id') currentUserId: number): Promise<ApprovedAdsResponseInterface[]> {
         return await this.ordersService.getAllApprovedAds(currentUserId)
     }
 
     @Post(':slug')
     @UseGuards(AuthGuard)
-    async acceptBet(@Param('slug') slug: string): Promise<void> {
-        await this.ordersService.acceptBet(slug)
+    async confirmBet(@Param('slug') slug: string): Promise<void> {
+        await this.ordersService.confirmBet(slug)
     }
 
 }

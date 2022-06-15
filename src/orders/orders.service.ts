@@ -3,8 +3,7 @@ import {OrdersRepository} from "./orders.repository";
 import {AdvertisementsService} from "../advertisements/advertisements.service";
 import {AdvertisementsEntity} from "../advertisements/advertisements.entity";
 import {allApprovedAdsResponse} from "./orders.mapper";
-import {MessageError} from "../constans/constans";
-import {OrdersInterface} from "./interface/orders.interface";
+import {ApprovedAdsResponseInterface, OrdersInterface} from "./interface/orders.interface";
 
 
 @Injectable()
@@ -13,12 +12,12 @@ export class OrdersService {
                 private readonly advertisementsService: AdvertisementsService) {
     }
 
-    async getAllApprovedAds(currentUserId: number) {
+    async getAllApprovedAds(currentUserId: number): Promise<ApprovedAdsResponseInterface[]> {
         const approvedAds: OrdersInterface[] = await this.ordersRepository.getAllApprovedAds(currentUserId)
         return allApprovedAdsResponse(approvedAds)
     }
 
-    async acceptBet(slug: string): Promise<void> {
+    async confirmBet(slug: string): Promise<void> {
         const advertBySlug: AdvertisementsEntity = await this.advertisementsService.getAdvertisementBySlug(slug)
 
         const isConfirmed: boolean = advertBySlug.isConfirmed
@@ -43,6 +42,6 @@ export class OrdersService {
                 HttpStatus.NOT_FOUND,
             );
         }
-        await this.ordersRepository.acceptBet(advertBySlug)
+        await this.ordersRepository.confirmBet(advertBySlug)
     }
 }
