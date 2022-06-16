@@ -28,12 +28,22 @@ export class OrdersService {
     return allApprovedAdsResponse(approvedAds);
   }
 
-  async confirmBet(slug: string): Promise<void> {
+  async confirmBet(currentUser: UserEntity, slug: string): Promise<void> {
     const advertBySlug: AdvertisementsEntity =
       await this.advertisementsService.getAdvertisementBySlug(slug);
 
     const isConfirmed: boolean = advertBySlug.isConfirmed;
     const isLastBet: number = advertBySlug.userBets.length;
+
+    if (currentUser.id !== advertBySlug.author.id) {
+      throw new HttpException(
+          {
+            status: HttpStatus.FORBIDDEN,
+            message: [MessageError.ACCESS_DENIED],
+          },
+          HttpStatus.FORBIDDEN,
+      );
+    }
 
     if (isConfirmed) {
       throw new HttpException(
