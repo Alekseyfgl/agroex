@@ -10,7 +10,7 @@ export class OrdersRepository extends AbstractRepository<OrdersEntity> {
 
     await this.repository.query(`
             INSERT INTO orders (bet_id) VALUES (${currentBetId});
-            UPDATE advertisements SET "isConfirmed"=true WHERE id = ${advert.id}`);
+            UPDATE advertisements SET "isConfirmed"=true , "isActive"=false WHERE id = ${advert.id}`);
   }
 
   async getAllApprovedAds(
