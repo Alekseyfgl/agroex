@@ -91,7 +91,8 @@ export class AdvertisementsController {
       @Query() query: QueryDto,
   ): Promise<AdvertsResponseInterface> {
     return await this.advertisementsService.findAll(query, {
-      isActive: true
+      isActive: true,
+      isModerated: true
     });
   }
 
