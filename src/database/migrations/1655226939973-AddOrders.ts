@@ -14,13 +14,6 @@ export class AddOrders1655226939973 implements MigrationInterface {
     await queryRunner.query(
       `ALTER TABLE "orders" ADD CONSTRAINT "FK_44a7c9eea026f76eb237db2d683" FOREIGN KEY ("bet_id") REFERENCES "userBets"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`,
     );
-
-    await queryRunner.query(
-      `ALTER TABLE "advertisements" ALTER COLUMN "expireAdvert" SET DEFAULT now() + interval '3 days'`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE "userBets" ALTER COLUMN "expireBet" SET DEFAULT now() + interval '3 hour'`,
-    );
   }
   public async down(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -32,11 +25,5 @@ export class AddOrders1655226939973 implements MigrationInterface {
     );
     await queryRunner.query(`DROP TABLE "orders"`);
 
-    await queryRunner.query(
-      `ALTER TABLE "advertisements" ALTER COLUMN "expireAdvert" SET DEFAULT now()`,
-    );
-    await queryRunner.query(
-      `ALTER TABLE "userBets" ALTER COLUMN "expireBet" SET DEFAULT now()`,
-    );
   }
 }
