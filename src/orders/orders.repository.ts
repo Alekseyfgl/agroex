@@ -25,7 +25,7 @@ export class OrdersRepository extends AbstractRepository<OrdersEntity> {
                     LEFT JOIN users AS u ON u.id=adv."authorId"
                     LEFT JOIN "userBets" AS ub ON adv.id=ub.advertisement_id
                     INNER JOIN orders AS o ON ub.id = o.bet_id
-                    WHERE adv."authorId" = ${currentUserId}`,
+                    WHERE adv."authorId" = ${currentUserId} OR ub.user_id = ${currentUserId}`,
     );
 
 
