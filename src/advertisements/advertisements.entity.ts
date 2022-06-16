@@ -41,6 +41,9 @@ export class AdvertisementsEntity {
   @Column('boolean', { default: false })
   isActive: boolean;
 
+  @Column('boolean', { default: false })
+  isConfirmed: boolean;
+
   @CreateDateColumn({ type: 'timestamptz' })
   expireAdvert: Date;
 

@@ -27,13 +27,15 @@ export class BetRepository extends AbstractRepository<UserBetEntity> {
 
   async getAdvertisementWithLastBet(
     advert_id: number,
-  ): PromiseOptional<BetAndAdvertInterface[]> {
+  ): PromiseOptional<BetAndAdvertInterface> {
     const sql = `SELECT * FROM advertisements AS adv
                         LEFT JOIN "userBets" AS ub ON adv.id=ub.advertisement_id where adv.id = ${advert_id}
                         ORDER BY adv."createAt" DESC, ub.created_at DESC
                         limit 1 offset 0`;
     try {
-      return await this.repository.query(sql);
+      const advertisement: BetAndAdvertInterface[] =
+        await this.repository.query(sql);
+      return advertisement[0];
     } catch (e) {
       return null;
     }

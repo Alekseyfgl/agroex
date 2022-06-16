@@ -15,6 +15,7 @@ import { CloudinaryProvider } from './cloudinary/cloudinary.provider';
 import { BetModule } from './bets/bet.module';
 import { ScheduleModule } from '@nestjs/schedule';
 import { CronJobsModule } from './cron-jobs/cron-jobs.module';
+import { OrdersModule } from './orders/orders.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { CronJobsModule } from './cron-jobs/cron-jobs.module';
     CloudinaryModule,
     BetModule,
     CronJobsModule,
+    OrdersModule,
   ],
   controllers: [AppController],
   providers: [AppService, CloudinaryProvider],

@@ -6,8 +6,7 @@ import { AdvertisementsService } from '../advertisements/advertisements.service'
 import { UserService } from '../user/user.service';
 import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
 import { MessageError } from '../constans/constans';
-import { CronJobsService } from '../cron-jobs/cron-jobs.service';
-import { UserBetEntity } from './user-bet.entity';
+import { Optional } from '../interfacesAndTypes/optional.interface';
 
 @Injectable()
 export class BetService {
@@ -15,7 +14,6 @@ export class BetService {
     private readonly betRepository: BetRepository,
     private readonly advertisementsService: AdvertisementsService,
     private readonly userService: UserService,
-    private readonly cronJobsService: CronJobsService,
   ) {}
 
   async createBet(
@@ -23,25 +21,37 @@ export class BetService {
     currentUser: UserEntity,
     slug: string,
   ): Promise<void> {
-    const currentSlug: string = Object.values(slug)[0];
     const advert: AdvertisementsEntity =
-      await this.advertisementsService.getAdvertisementBySlug(currentSlug);
+      await this.advertisementsService.getAdvertisementBySlug(slug);
     const user: UserEntity = await this.userService.getUserById(currentUser);
 
-    const advertisementWithLastBet: BetAndAdvertInterface[] =
+    const advertisementWithLastBet: BetAndAdvertInterface =
       await this.betRepository.getAdvertisementWithLastBet(advert.id);
 
     const priceSeller: number = +advert.price;
-    const lastBet: number = +advertisementWithLastBet[0].betValue;
+    const lastBet: number = +advertisementWithLastBet.betValue;
     const currentBet: number = bet.betValue;
+    const isActive: boolean = advert.isActive;
+    const isConfirmed: boolean = advert.isConfirmed;
 
-    if (!advert.isActive) {
+
+     if (!isActive) {
       throw new HttpException(
-          {
-            status: HttpStatus.BAD_REQUEST,
-            message: [MessageError.ADVERTISEMENT_IS_NOT_ACTIVE],
-          },
-          HttpStatus.BAD_REQUEST,
+        {
+          status: HttpStatus.BAD_REQUEST,
+          message: [MessageError.ADVERTISEMENT_IS_NOT_ACTIVE],
+        },
+        HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (isConfirmed) {
+      throw new HttpException(
+        {
+          status: HttpStatus.NOT_FOUND,
+          message: [MessageError.ADVERTISEMENT_ALREADY_CONFIRMED],
+        },
+        HttpStatus.NOT_FOUND,
       );
     }
 
@@ -64,7 +74,6 @@ export class BetService {
         HttpStatus.CONFLICT,
       );
     }
-
     await this.betRepository.createBet(advert, user, bet);
   }
 }

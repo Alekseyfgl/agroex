@@ -30,7 +30,9 @@ export const enum MessageError {
   NEED_TO_REFRESH_THE_PAGE = 'Your bet failed, place a higher bet',
   ADVERTISEMENT_IS_ALREADY_MODERATED = 'Advertisement is already been moderated',
   ADVERTISEMENT_CAN_NOT_BE_CHANGED = 'Advertisement can not be changed',
-  ADVERTISEMENT_IS_NOT_ACTIVE = 'Advertisement is not active'
+  ADVERTISEMENT_IS_NOT_ACTIVE = 'Advertisement is not active',
+  ADVERTISEMENT_ALREADY_CONFIRMED = 'Advertisement already confirmed',
+  ADVERTISEMENT_HAS_NOT_BETS = 'Advertisement has no bets',
 }
 
 export const enum DB_RELATIONS {

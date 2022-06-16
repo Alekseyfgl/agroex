@@ -4,10 +4,12 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
 import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
+import { OrdersEntity } from '../orders/entities/orders.entity';
 
 @Entity({ name: 'userBets' })
 export class UserBetEntity {
@@ -39,4 +41,8 @@ export class UserBetEntity {
   )
   @JoinColumn({ name: 'advertisement_id' })
   advertisement: AdvertisementsEntity;
+
+  // @OneToOne(() => OrdersEntity, (order) => order.bet) // specify inverse side as a second parameter
+  // @JoinColumn()
+  // order: OrdersEntity
 }
