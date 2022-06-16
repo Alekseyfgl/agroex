@@ -21,18 +21,18 @@ export class BetService {
     currentUser: UserEntity,
     slug: string,
   ): Promise<void> {
-    const advert: Optional<AdvertisementsEntity> =
+    const advert: AdvertisementsEntity =
       await this.advertisementsService.getAdvertisementBySlug(slug);
     const user: UserEntity = await this.userService.getUserById(currentUser);
 
-    const advertisementWithLastBet: BetAndAdvertInterface[] =
+    const advertisementWithLastBet: BetAndAdvertInterface =
       await this.betRepository.getAdvertisementWithLastBet(advert.id);
 
     const priceSeller: number = +advert.price;
-    const lastBet: Optional<number> = +advertisementWithLastBet[0].betValue;
+    const lastBet: number = +advertisementWithLastBet.betValue;
     const currentBet: number = bet.betValue;
-    const isActive: Optional<boolean> = advert.isActive;
-    const isConfirmed: Optional<boolean> = advert.isConfirmed;
+    const isActive: boolean = advert.isActive;
+    const isConfirmed: boolean = advert.isConfirmed;
 
     if (!isActive) {
       throw new HttpException(
