@@ -19,7 +19,7 @@ export class OrdersRepository extends AbstractRepository<OrdersEntity> {
     return this.repository.query(
       `SELECT adv.*,
                         u.email, u.username, u.phone, u.password, u.image, u.banned, u."banReason",
-                        ub.user_id, ub.created_at, ub."expireBet", ub."betValue" , ub."isActive", ub.advertisement_id,
+                        ub.user_id, ub.created_at, ub."betValue" , ub."isActive", ub.advertisement_id,
                         o.id AS order_bet_id, o."dealStatus", o.bet_id, o."orderCreated"
                     FROM advertisements AS adv
                     LEFT JOIN users AS u ON u.id=adv."authorId"
