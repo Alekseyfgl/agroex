@@ -15,9 +15,9 @@ export class OrdersRepository extends AbstractRepository<OrdersEntity> {
 
   async getAllApprovedAds(
     currentUserId: number,
-  ): Promise<ConfirmedOrdersInterface[]> {
+  ): Promise<any> {
     return this.repository.query(
-      `SELECT adv.*,
+      `SELECT adv."isActive" AS "isActiveAdv",  adv.*,
                         u.email, u.username, u.phone, u.password, u.image, u.banned, u."banReason",
                         ub.user_id, ub.created_at, ub."betValue" , ub."isActive", ub.advertisement_id,
                         o.id AS order_bet_id, o."dealStatus", o.bet_id, o."orderCreated"
@@ -27,5 +27,9 @@ export class OrdersRepository extends AbstractRepository<OrdersEntity> {
                     INNER JOIN orders AS o ON ub.id = o.bet_id
                     WHERE adv."authorId" = ${currentUserId}`,
     );
+
+
+
+
   }
 }

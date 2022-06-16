@@ -16,7 +16,7 @@ export const allApprovedAdsResponse = (
       country: ad.country,
       location: ad.location,
       isModerated: ad.isModerated,
-      isActive: ad.isActive,
+      isActive: ad.isActiveAdv,
       isConfirmed: ad.isConfirmed,
       moderationComment: ad.moderationComment,
       price: ad.price,

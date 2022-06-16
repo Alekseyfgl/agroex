@@ -24,6 +24,7 @@ export class OrdersService {
   ): Promise<ApprovedAdsResponseInterface[]> {
     const approvedAds: ConfirmedOrdersInterface[] =
       await this.ordersRepository.getAllApprovedAds(currentUserId);
+    // console.log('approvedAds=====>>>', approvedAds)
     return allApprovedAdsResponse(approvedAds);
   }
 

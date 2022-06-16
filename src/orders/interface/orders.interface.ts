@@ -18,7 +18,7 @@ export interface ConfirmedOrdersInterface {
   country: string;
   location: string;
   moderationComment: Optional<string>;
-  isActive: boolean;
+  isActiveAdv: boolean;
   expireAdvert: Date;
   isConfirmed: boolean;
   email: string;
@@ -49,6 +49,7 @@ export interface ApprovedAdsResponseInterface {
   location: string;
   isModerated: boolean;
   isActive: boolean;
+  // isActiveAdv: boolean;
   moderationComment: Optional<string>;
   price: string;
   currency: string;
