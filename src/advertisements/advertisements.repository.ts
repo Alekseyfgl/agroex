@@ -122,7 +122,7 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
         )
 
         .addOrderBy(
-          DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.SORT_COLUMN_BY_CREATE_AT,
+          DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.SORT_COLUMN_BY_UPDATED_AT,
           `${filterOptions.isModerated ? ORDER.DESC : ORDER.ASC}`,
         )
         .addOrderBy(
