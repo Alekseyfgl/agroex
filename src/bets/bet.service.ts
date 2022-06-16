@@ -45,7 +45,7 @@ export class BetService {
             throw new HttpException(
                 {
                     status: HttpStatus.NOT_FOUND,
-                    message: ['Это реклама уже подтверждена']
+                    message: [MessageError.ADVERTISEMENT_ALREADY_CONFIRMED]
                 },
                 HttpStatus.NOT_FOUND,
             );

@@ -6,6 +6,7 @@ import {allApprovedAdsResponse} from "./orders.mapper";
 import {ApprovedAdsResponseInterface, OrdersInterface} from "./interface/orders.interface";
 import {UserEntity} from "../user/user.entity";
 import {BetService} from "../bets/bet.service";
+import {MessageError} from "../constans/constans";
 
 
 @Injectable()
@@ -31,7 +32,7 @@ export class OrdersService {
             throw new HttpException(
                 {
                     status: HttpStatus.NOT_FOUND,
-                    message: ['Это реклама уже подтверждена']
+                    message: [MessageError.ADVERTISEMENT_ALREADY_CONFIRMED]
                 },
                 HttpStatus.NOT_FOUND,
             );
@@ -41,7 +42,7 @@ export class OrdersService {
             throw new HttpException(
                 {
                     status: HttpStatus.NOT_FOUND,
-                    message: ['У данной рекламы нет ставок']
+                    message: [MessageError.ADVERTISEMENT_HAS_NOT_BETS]
                 },
                 HttpStatus.NOT_FOUND,
             );
@@ -62,7 +63,7 @@ export class OrdersService {
             throw new HttpException(
                 {
                     status: HttpStatus.NOT_FOUND,
-                    message: ['Это реклама уже подтверждена']
+                    message: [MessageError.ADVERTISEMENT_ALREADY_CONFIRMED]
                 },
                 HttpStatus.NOT_FOUND,
             );
