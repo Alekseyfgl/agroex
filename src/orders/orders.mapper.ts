@@ -23,8 +23,8 @@ export const allApprovedAdsResponse = (
       img: ad.img,
       quantity: ad.quantity,
       unit: ad.unit,
-      createdAdvert: ad.createAt,
-      updatedAdvert: ad.updatedAt,
+      createAt: ad.createAt,
+      updatedAt: ad.updatedAt,
       expireAdvert: ad.expireAdvert,
       author: {
         id: ad.authorId,

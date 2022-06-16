@@ -55,8 +55,8 @@ export interface ApprovedAdsResponseInterface {
   img: Optional<string>;
   quantity: string;
   unit: string;
-  createdAdvert: Date;
-  updatedAdvert: Date;
+  createAt: Date;
+  updatedAt: Date;
   expireAdvert: Date;
   author: {
     id: number;
