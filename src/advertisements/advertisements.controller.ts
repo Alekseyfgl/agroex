@@ -3,6 +3,7 @@ import {
   Controller,
   Get,
   Param,
+  Patch,
   Post,
   Put,
   Query,
@@ -128,13 +129,15 @@ export class AdvertisementsController {
       }),
   )
   async updateAdData(
-      @UploadedFile(ParseFile) file: Express.Multer.File, // получаем 1 файл, который нам отправляют
+      @UploadedFile() file: Express.Multer.File, // получаем 1 файл, который нам отправляют
       @User() currentUser: UserEntity,
       @Body() updateAdvertDto: UpdateAdDataDto,
   ): PromiseOptional<void> {
-    const imgSavedData: UploadApiResponse =
-        await this.filesService.getSavedImgData(file);
-    Object.assign(updateAdvertDto, { img: imgSavedData.secure_url });
+    if (file) {
+      const imgSavedData: UploadApiResponse =
+          await this.filesService.getSavedImgData(file);
+      Object.assign(updateAdvertDto, { img: imgSavedData.secure_url });
+    }
 
     return this.advertisementsService.setUpdatedAd(
         currentUser,
@@ -160,7 +163,7 @@ export class AdvertisementsController {
   }
 
 
-  @Put('/moderation/set')
+  @Patch('/moderation/set')
   @Roles(ROLES_ID.MODERATOR)
   @UseGuards(AuthGuard, RolesGuard)
   @UsePipes(new ValidationPipe())

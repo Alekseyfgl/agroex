@@ -189,24 +189,14 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
   }
 
   async updateAdData(updateAdvertDto: AdvertisementsEntity): Promise<void> {
+    const updateObj =_.omit(updateAdvertDto, ['slug'])
+    updateObj.moderationStatus = ModerationStatus.UNMODERATED;
+    updateObj.isModerated = false;
     await this.repository.update(
       {
         slug: updateAdvertDto.slug,
       },
-      {
-        title: updateAdvertDto.title,
-        country: updateAdvertDto.country,
-        location: updateAdvertDto.location,
-        category: updateAdvertDto.category,
-        subCategory: updateAdvertDto.subCategory,
-        price: updateAdvertDto.price,
-        currency: updateAdvertDto.currency,
-        img: updateAdvertDto.img,
-        quantity: updateAdvertDto.quantity,
-        unit: updateAdvertDto.unit,
-        moderationStatus: ModerationStatus.UNMODERATED,
-        isModerated: false,
-      },
+        updateObj
     );
   }
 }
