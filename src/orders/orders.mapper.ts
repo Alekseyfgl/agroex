@@ -1,10 +1,10 @@
 import {
   ApprovedAdsResponseInterface,
-  OrdersInterface,
+  ConfirmedOrdersInterface,
 } from './interface/orders.interface';
 
 export const allApprovedAdsResponse = (
-  ads: OrdersInterface[],
+  ads: ConfirmedOrdersInterface[],
 ): ApprovedAdsResponseInterface[] => {
   return ads.map((ad) => {
     return {

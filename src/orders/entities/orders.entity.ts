@@ -3,18 +3,18 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserBetEntity } from '../../bets/user-bet.entity';
+import { DEAL_STATUS } from '../interface/orders.interface';
 
 @Entity({ name: 'orders' })
 export class OrdersEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column('varchar', { length: 20, default: 'confirmed' })
+  @Column('varchar', { length: 20, default: DEAL_STATUS.CONFIRMED })
   dealStatus: string;
 
   @CreateDateColumn({ type: 'timestamptz' })

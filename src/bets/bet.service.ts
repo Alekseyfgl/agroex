@@ -6,6 +6,7 @@ import { AdvertisementsService } from '../advertisements/advertisements.service'
 import { UserService } from '../user/user.service';
 import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
 import { MessageError } from '../constans/constans';
+import { Optional } from '../interfacesAndTypes/optional.interface';
 
 @Injectable()
 export class BetService {
@@ -20,7 +21,7 @@ export class BetService {
     currentUser: UserEntity,
     slug: string,
   ): Promise<void> {
-    const advert: AdvertisementsEntity =
+    const advert: Optional<AdvertisementsEntity> =
       await this.advertisementsService.getAdvertisementBySlug(slug);
     const user: UserEntity = await this.userService.getUserById(currentUser);
 
@@ -28,10 +29,12 @@ export class BetService {
       await this.betRepository.getAdvertisementWithLastBet(advert.id);
 
     const priceSeller: number = +advert.price;
-    const lastBet: number = +advertisementWithLastBet[0].betValue;
+    const lastBet: Optional<number> = +advertisementWithLastBet[0].betValue;
     const currentBet: number = bet.betValue;
+    const isActive: Optional<boolean> = advert.isActive;
+    const isConfirmed: Optional<boolean> = advert.isConfirmed;
 
-    if (!advert.isActive) {
+    if (!isActive) {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
@@ -41,7 +44,7 @@ export class BetService {
       );
     }
 
-    if (advert.isConfirmed) {
+    if (isConfirmed) {
       throw new HttpException(
         {
           status: HttpStatus.NOT_FOUND,

@@ -1,7 +1,7 @@
 import { AbstractRepository, EntityRepository } from 'typeorm';
 import { OrdersEntity } from './entities/orders.entity';
 import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
-import { OrdersInterface } from './interface/orders.interface';
+import { ConfirmedOrdersInterface } from './interface/orders.interface';
 
 @EntityRepository(OrdersEntity)
 export class OrdersRepository extends AbstractRepository<OrdersEntity> {
@@ -13,7 +13,9 @@ export class OrdersRepository extends AbstractRepository<OrdersEntity> {
             UPDATE advertisements SET "isConfirmed"=true WHERE id = ${advert.id}`);
   }
 
-  async getAllApprovedAds(currentUserId: number): Promise<OrdersInterface[]> {
+  async getAllApprovedAds(
+    currentUserId: number,
+  ): Promise<ConfirmedOrdersInterface[]> {
     return this.repository.query(
       `SELECT adv.*,
                         u.email, u.username, u.phone, u.password, u.image, u.banned, u."banReason",

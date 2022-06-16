@@ -1,8 +1,8 @@
 import { Optional } from '../../interfacesAndTypes/optional.interface';
 
-export interface OrdersInterface {
+export interface ConfirmedOrdersInterface {
   id: number;
-  img: string;
+  img: Optional<string>;
   createAt: Date;
   updatedAt: Date;
   authorId: number;
@@ -73,4 +73,9 @@ export interface ApprovedAdsResponseInterface {
     bet_id: number;
     dealStatus: string;
   };
+}
+
+export enum DEAL_STATUS {
+  CONFIRMED = 'confirmed',
+  UNCONFIRMED = 'unconfirmed',
 }

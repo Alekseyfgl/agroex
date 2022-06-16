@@ -5,7 +5,7 @@ import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
 import { allApprovedAdsResponse } from './orders.mapper';
 import {
   ApprovedAdsResponseInterface,
-  OrdersInterface,
+  ConfirmedOrdersInterface,
 } from './interface/orders.interface';
 import { UserEntity } from '../user/user.entity';
 import { BetService } from '../bets/bet.service';
@@ -22,7 +22,7 @@ export class OrdersService {
   async getAllApprovedAds(
     currentUserId: number,
   ): Promise<ApprovedAdsResponseInterface[]> {
-    const approvedAds: OrdersInterface[] =
+    const approvedAds: ConfirmedOrdersInterface[] =
       await this.ordersRepository.getAllApprovedAds(currentUserId);
     return allApprovedAdsResponse(approvedAds);
   }
