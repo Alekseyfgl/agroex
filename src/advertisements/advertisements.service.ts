@@ -96,7 +96,7 @@ export class AdvertisementsService {
       );
     }
 
-    if (existAdData.isActive) {
+    if (existAdData.isActive || existAdData.isConfirmed) {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,
