@@ -33,6 +33,8 @@ export class BetService {
     const currentBet: number = bet.betValue;
     const isActive: boolean = advert.isActive;
     const isConfirmed: boolean = advert.isConfirmed;
+    const currentUserId: number = user.id;
+    const authorAdvertisement: number = advert.author.id;
 
     if (!isActive) {
       throw new HttpException(
@@ -41,6 +43,16 @@ export class BetService {
           message: [MessageError.ADVERTISEMENT_IS_NOT_ACTIVE],
         },
         HttpStatus.BAD_REQUEST,
+      );
+    }
+
+    if (currentUserId === authorAdvertisement) {
+      throw new HttpException(
+        {
+          status: HttpStatus.FORBIDDEN,
+          message: [MessageError.ACCESS_DENIED],
+        },
+        HttpStatus.FORBIDDEN,
       );
     }
 
