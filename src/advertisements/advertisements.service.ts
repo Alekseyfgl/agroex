@@ -13,7 +13,7 @@ import { CronJobsService } from '../cron-jobs/cron-jobs.service';
 import { MessageError } from '../constans/constans';
 import { PromiseOptional } from '../interfacesAndTypes/optional.interface';
 import { QueryDto } from './dto/query.dto';
-import {Filterobj} from "./interface/interfacesAndTypes";
+import { Filterobj } from './interface/interfacesAndTypes';
 
 @Injectable()
 export class AdvertisementsService {
@@ -36,10 +36,7 @@ export class AdvertisementsService {
     slug: string,
     filterObj?: Filterobj,
   ): Promise<AdvertisementsEntity> {
-    return await this.advertisementsRepository.findBySlug(
-      slug,
-      filterObj,
-    );
+    return await this.advertisementsRepository.findBySlug(slug, filterObj);
   }
 
   async findAll(
@@ -47,10 +44,7 @@ export class AdvertisementsService {
     filterObj?: Filterobj,
   ): Promise<AdvertsResponseInterface> {
     const advert: AdvertsResponseInterface =
-      await this.advertisementsRepository.findAll(
-        query,
-        filterObj,
-      );
+      await this.advertisementsRepository.findAll(query, filterObj);
     return advertisementsResponseAll(advert);
   }
 

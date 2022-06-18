@@ -20,8 +20,8 @@ export class OrdersController {
   @Post('confirm/:slug')
   @UseGuards(AuthGuard)
   async confirmBet(
-      @User() currentUser: UserEntity,
-      @Param('slug') slug: string
+    @User() currentUser: UserEntity,
+    @Param('slug') slug: string,
   ): Promise<void> {
     await this.ordersService.confirmBet(currentUser, slug);
   }

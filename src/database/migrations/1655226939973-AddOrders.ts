@@ -24,6 +24,5 @@ export class AddOrders1655226939973 implements MigrationInterface {
       `ALTER TABLE "orders" DROP CONSTRAINT "FK_44a7c9eea026f76eb237db2d683"`,
     );
     await queryRunner.query(`DROP TABLE "orders"`);
-
   }
 }

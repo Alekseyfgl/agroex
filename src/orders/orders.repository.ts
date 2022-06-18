@@ -13,9 +13,7 @@ export class OrdersRepository extends AbstractRepository<OrdersEntity> {
             UPDATE advertisements SET "isConfirmed"=true , "isActive"=false WHERE id = ${advert.id}`);
   }
 
-  async getAllApprovedAds(
-    currentUserId: number,
-  ): Promise<any> {
+  async getAllApprovedAds(currentUserId: number): Promise<any> {
     return this.repository.query(
       `SELECT adv."isActive" AS "isActiveAdv",  adv.*,
                         u.email, u.username, u.phone, u.password, u.image, u.banned, u."banReason",
@@ -28,9 +26,5 @@ export class OrdersRepository extends AbstractRepository<OrdersEntity> {
                     WHERE adv."authorId" = ${currentUserId} OR ub.user_id = ${currentUserId}
                     ORDER BY adv."createAt" DESC`,
     );
-
-
-
-
   }
 }

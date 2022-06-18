@@ -5,7 +5,7 @@ export enum ModerationStatus {
 }
 
 export type Filterobj = {
-  isActive?: boolean,
-  isModerated?: boolean,
-  authorId?: number
-}
+  isActive?: boolean;
+  isModerated?: boolean;
+  authorId?: number;
+};

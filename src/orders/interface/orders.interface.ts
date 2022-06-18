@@ -1,45 +1,23 @@
 import { Optional } from '../../interfacesAndTypes/optional.interface';
+import { OrdersEntity } from '../entities/orders.entity';
+import { UserEntity } from '../../user/user.entity';
+import { AdvertisementsEntity } from '../../advertisements/advertisements.entity';
+import { UserBetEntity } from '../../bets/user-bet.entity';
 
-export interface ConfirmedOrdersInterface {
-  id: number;
-  img: Optional<string>;
-  createAt: Date;
-  updatedAt: Date;
-  authorId: number;
-  title: string;
-  price: string;
-  currency: string;
-  quantity: string;
-  unit: string;
-  slug: string;
-  category: string;
-  subCategory: Optional<string>;
-  isModerated: boolean;
-  country: string;
-  location: string;
-  moderationComment: Optional<string>;
-  isActiveAdv: boolean;
-  expireAdvert: Date;
-  isConfirmed: boolean;
-  email: string;
-  username: string;
-  phone: string;
-  password: string;
-  image: Optional<string>;
-  banned: boolean;
-  banReason: Optional<string>;
-  user_id: number;
-  created_at: Date;
-  expireBet: Date;
-  betValue: string;
-  advertisement_id: number;
-  order_bet_id: number;
-  dealStatus: string;
-  bet_id: number;
-  orderCreated: Date;
-}
+export type OrdersType = OrdersEntity & { bet_id: number };
 
-export interface ApprovedAdsResponseInterface {
+export type ConfirmedOrdersInterface = UserEntity &
+  OrdersType &
+  UserBetEntity &
+  AdvertisementsEntity & {
+    authorId: number;
+    price: string;
+    quantity: string;
+    isActiveAdv: boolean;
+    betValue: string;
+  };
+
+export type ApprovedAdsResponseInterface = {
   id: number;
   title: string;
   slug: string;
@@ -49,7 +27,6 @@ export interface ApprovedAdsResponseInterface {
   location: string;
   isModerated: boolean;
   isActive: boolean;
-  // isActiveAdv: boolean;
   moderationComment: Optional<string>;
   price: string;
   currency: string;
@@ -74,7 +51,7 @@ export interface ApprovedAdsResponseInterface {
     bet_id: number;
     dealStatus: string;
   };
-}
+};
 
 export enum DEAL_STATUS {
   CONFIRMED = 'confirmed',

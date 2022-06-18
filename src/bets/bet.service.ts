@@ -34,8 +34,7 @@ export class BetService {
     const isActive: boolean = advert.isActive;
     const isConfirmed: boolean = advert.isConfirmed;
 
-
-     if (!isActive) {
+    if (!isActive) {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,

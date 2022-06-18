@@ -1,6 +1,13 @@
-import {IsNotEmpty, IsNumber, IsOptional, Length, Max, Min} from 'class-validator';
+import {
+  IsNotEmpty,
+  IsNumber,
+  IsOptional,
+  Length,
+  Max,
+  Min,
+} from 'class-validator';
 import { CreateAdvertisementDto } from './createAdvertisement.dto';
-import {Transform} from "class-transformer";
+import { Transform } from 'class-transformer';
 
 export class UpdateAdDataDto {
   @IsNotEmpty()

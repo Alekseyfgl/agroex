@@ -40,59 +40,60 @@ import { QueryDto } from './dto/query.dto';
 @Controller('advertisements')
 export class AdvertisementsController {
   constructor(
-      private readonly advertisementsService: AdvertisementsService,
-      private readonly filesService: FilesService,
-  ) {
-  }
+    private readonly advertisementsService: AdvertisementsService,
+    private readonly filesService: FilesService,
+  ) {}
 
   @Post()
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
   @UseInterceptors(
-      FileInterceptor('files', {
-        fileFilter: fileMimetypeFilter('image'),
-        limits: {fileSize: MAX_IMAGE_SIZE},
-      }),
+    FileInterceptor('files', {
+      fileFilter: fileMimetypeFilter('image'),
+      limits: { fileSize: MAX_IMAGE_SIZE },
+    }),
   )
   async createAdvertisement(
-      @UploadedFile(ParseFile) file: Express.Multer.File, // получаем 1 файл, который нам отправляют
-      @User() currentUser: UserEntity,
-      @Body() createAdvertDto: CreateAdvertisementDto,
+    @UploadedFile(ParseFile) file: Express.Multer.File, // получаем 1 файл, который нам отправляют
+    @User() currentUser: UserEntity,
+    @Body() createAdvertDto: CreateAdvertisementDto,
   ): Promise<AdvertResponseInterfaceForCreate> {
     const imgSavedData: UploadApiResponse =
-        await this.filesService.getSavedImgData(file);
-    Object.assign(createAdvertDto, {img: imgSavedData.secure_url});
+      await this.filesService.getSavedImgData(file);
+    Object.assign(createAdvertDto, { img: imgSavedData.secure_url });
     const advertisement: AdvertisementsEntity =
-        await this.advertisementsService.createAdvertisement(
-            currentUser,
-            createAdvertDto,
-        );
+      await this.advertisementsService.createAdvertisement(
+        currentUser,
+        createAdvertDto,
+      );
 
     return this.advertisementsService.buildAdvertisementResponseForCreate(
-        advertisement,
+      advertisement,
     );
   }
 
   @Get('/:slug')
   async getSingleAdvertisement(
-      @Param('slug') slug: string,
+    @Param('slug') slug: string,
   ): Promise<AdvertResponseInterface> {
     const advertisement: AdvertisementsEntity =
-        await this.advertisementsService.getAdvertisementBySlug(slug, {isActive: true});
+      await this.advertisementsService.getAdvertisementBySlug(slug, {
+        isActive: true,
+      });
     return this.advertisementsService.buildAdvertisementResponseForGetOne(
-        advertisement,
+      advertisement,
     );
   }
 
   @Get()
   @UsePipes(new ValidationPipe())
   async findAllActiveAdvertisements(
-      @User('id') currentUserId: number,
-      @Query() query: QueryDto,
+    @User('id') currentUserId: number,
+    @Query() query: QueryDto,
   ): Promise<AdvertsResponseInterface> {
     return await this.advertisementsService.findAll(query, {
       isActive: true,
-      isModerated: true
+      isModerated: true,
     });
   }
 
@@ -100,8 +101,8 @@ export class AdvertisementsController {
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
   async findAllAdvertisements(
-      @User('id') currentUserId: number,
-      @Query() query: QueryDto,
+    @User('id') currentUserId: number,
+    @Query() query: QueryDto,
   ): Promise<AdvertsResponseInterface> {
     return this.advertisementsService.findAll(query, {
       authorId: currentUserId,
@@ -111,12 +112,12 @@ export class AdvertisementsController {
   @Get('/myAdvertisements/:slug') // для получения одного объявления юзера для личного кабинета (не смотрим на isActive)
   @UseGuards(AuthGuard)
   async getSingleMyAdvertisement(
-      @Param('slug') slug: string,
+    @Param('slug') slug: string,
   ): Promise<AdvertResponseInterface> {
     const advertisement: AdvertisementsEntity =
-        await this.advertisementsService.getAdvertisementBySlug(slug);
+      await this.advertisementsService.getAdvertisementBySlug(slug);
     return this.advertisementsService.buildAdvertisementResponseForGetOne(
-        advertisement,
+      advertisement,
     );
   }
 
@@ -124,25 +125,25 @@ export class AdvertisementsController {
   @UseGuards(AuthGuard, RolesGuard)
   @UsePipes(new ValidationPipe())
   @UseInterceptors(
-      FileInterceptor('files', {
-        fileFilter: fileMimetypeFilter('image'),
-        limits: { fileSize: MAX_IMAGE_SIZE },
-      }),
+    FileInterceptor('files', {
+      fileFilter: fileMimetypeFilter('image'),
+      limits: { fileSize: MAX_IMAGE_SIZE },
+    }),
   )
   async updateAdData(
-      @UploadedFile() file: Express.Multer.File, // получаем 1 файл, который нам отправляют
-      @User() currentUser: UserEntity,
-      @Body() updateAdvertDto: UpdateAdDataDto,
+    @UploadedFile() file: Express.Multer.File, // получаем 1 файл, который нам отправляют
+    @User() currentUser: UserEntity,
+    @Body() updateAdvertDto: UpdateAdDataDto,
   ): PromiseOptional<void> {
     if (file) {
       const imgSavedData: UploadApiResponse =
-          await this.filesService.getSavedImgData(file);
+        await this.filesService.getSavedImgData(file);
       Object.assign(updateAdvertDto, { img: imgSavedData.secure_url });
     }
 
     return this.advertisementsService.setUpdatedAd(
-        currentUser,
-        updateAdvertDto,
+      currentUser,
+      updateAdvertDto,
     );
   }
 
@@ -151,25 +152,21 @@ export class AdvertisementsController {
   @UseGuards(AuthGuard, RolesGuard)
   @UsePipes(new ValidationPipe())
   async findAllAdvertisementsForModeration(
-      @User('id') currentUserId: number,
-      @Query() query: QueryDto,
+    @User('id') currentUserId: number,
+    @Query() query: QueryDto,
   ): Promise<AdvertsResponseInterface> {
-    return this.advertisementsService.findAll(
-        query,
-        {
-          isActive: false,
-          isModerated: false
-        }
-    ); // возвращаем только рекламы не прошедшие модерацию (isModerated=false)
+    return this.advertisementsService.findAll(query, {
+      isActive: false,
+      isModerated: false,
+    }); // возвращаем только рекламы не прошедшие модерацию (isModerated=false)
   }
-
 
   @Patch('/moderation/set')
   @Roles(ROLES_ID.MODERATOR)
   @UseGuards(AuthGuard, RolesGuard)
   @UsePipes(new ValidationPipe())
   async setAdvData(
-      @Body('advertisements') updateAdvertDto: SetModerationStatusDto,
+    @Body('advertisements') updateAdvertDto: SetModerationStatusDto,
   ): Promise<void> {
     return this.advertisementsService.setModeratedData(updateAdvertDto);
   }
@@ -178,18 +175,15 @@ export class AdvertisementsController {
   @Roles(ROLES_ID.MODERATOR)
   @UseGuards(AuthGuard, RolesGuard)
   async getSingleAdvertisementForModeration(
-      @Param('slug') slug: string,
+    @Param('slug') slug: string,
   ): Promise<AdvertResponseInterface> {
     const advertisement: AdvertisementsEntity =
-        await this.advertisementsService.getAdvertisementBySlug(
-            slug,
-            {
-              isActive: false,
-              isModerated: false
-            },
-        );
+      await this.advertisementsService.getAdvertisementBySlug(slug, {
+        isActive: false,
+        isModerated: false,
+      });
     return this.advertisementsService.buildAdvertisementResponseForGetOne(
-        advertisement,
+      advertisement,
     );
   }
 }

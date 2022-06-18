@@ -37,11 +37,11 @@ export class OrdersService {
 
     if (currentUser.id !== advertBySlug.author.id) {
       throw new HttpException(
-          {
-            status: HttpStatus.FORBIDDEN,
-            message: [MessageError.ACCESS_DENIED],
-          },
-          HttpStatus.FORBIDDEN,
+        {
+          status: HttpStatus.FORBIDDEN,
+          message: [MessageError.ACCESS_DENIED],
+        },
+        HttpStatus.FORBIDDEN,
       );
     }
 

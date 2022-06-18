@@ -14,7 +14,7 @@ import {
 } from '../constans/constans';
 import { AdvertsResponseInterface } from './interface/advertResponseInterface';
 import { createSlug } from '../helper/helper';
-import {Filterobj, ModerationStatus} from './interface/interfacesAndTypes';
+import { Filterobj, ModerationStatus } from './interface/interfacesAndTypes';
 import { Optional } from '../interfacesAndTypes/optional.interface';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import * as moment from 'moment';
@@ -40,12 +40,9 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
 
   async findBySlug(
     slug: string,
-    filterObj?: Filterobj
+    filterObj?: Filterobj,
   ): Promise<AdvertisementsEntity> {
-    const filterOptions: Dictionary<any> = _.omitBy(
-        filterObj,
-      _.isNil,
-    );
+    const filterOptions: Dictionary<any> = _.omitBy(filterObj, _.isNil);
 
     const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> =
       getRepository(AdvertisementsEntity)
@@ -99,12 +96,9 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
 
   async findAll(
     query: QueryDto,
-    filterObj?: Filterobj
+    filterObj?: Filterobj,
   ): Promise<AdvertsResponseInterface> {
-    const filterOptions: Dictionary<any> = _.omitBy(
-        filterObj,
-      _.isNil,
-    );
+    const filterOptions: Dictionary<any> = _.omitBy(filterObj, _.isNil);
 
     const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> =
       getRepository(AdvertisementsEntity)
@@ -189,14 +183,14 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
   }
 
   async updateAdData(updateAdvertDto: AdvertisementsEntity): Promise<void> {
-    const updateObj =_.omit(updateAdvertDto, ['slug'])
+    const updateObj = _.omit(updateAdvertDto, ['slug']);
     updateObj.moderationStatus = ModerationStatus.UNMODERATED;
     updateObj.isModerated = false;
     await this.repository.update(
       {
         slug: updateAdvertDto.slug,
       },
-        updateObj
+      updateObj,
     );
   }
 }
