@@ -7,6 +7,10 @@ import { UserService } from '../user/user.service';
 import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
 import { MessageError } from '../constans/constans';
 import { Optional } from '../interfacesAndTypes/optional.interface';
+import {interval} from "rxjs";
+import {map} from "rxjs/operators";
+import {EventEmitter2, OnEvent} from "@nestjs/event-emitter";
+import {CreateBetEvent} from "../events/create-bet.event";
 
 @Injectable()
 export class BetService {
@@ -14,6 +18,7 @@ export class BetService {
     private readonly betRepository: BetRepository,
     private readonly advertisementsService: AdvertisementsService,
     private readonly userService: UserService,
+    private readonly eventEmitter: EventEmitter2,
   ) {}
 
   async createBet(
@@ -86,5 +91,22 @@ export class BetService {
       );
     }
     await this.betRepository.createBet(advert, user, bet);
+    this.eventEmitter.emit('create.bet', new CreateBetEvent(user, bet, advert));
   }
+
+@OnEvent('create.bet')
+  sendNofic() {
+        // let user = null
+      //
+      // this.eventEmitter.once('create.bet', (payload) => {
+      //     user = payload.user
+      //     console.log('ставку обновили', user.id)
+      //  return  interval(1000).pipe(map((num: number) => (`data: ${JSON.stringify(user)} \n\n`)));
+      // })
+
+   return interval(1000).pipe(map((num: number) => ({ data: JSON.stringify({mes: `user id`}) })));
+  }
+
+
+
 }
