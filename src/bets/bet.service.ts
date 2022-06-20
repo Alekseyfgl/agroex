@@ -6,12 +6,9 @@ import { AdvertisementsService } from '../advertisements/advertisements.service'
 import { UserService } from '../user/user.service';
 import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
 import { MessageError } from '../constans/constans';
-import { Optional } from '../interfacesAndTypes/optional.interface';
-import {fromEvent, interval} from "rxjs";
-import {map} from "rxjs/operators";
-import {EventEmitter2, OnEvent} from "@nestjs/event-emitter";
-import {CreateBetEvent} from "../events/create-bet.event";
-import {EventEmitter} from "events";
+import { fromEvent, Observable } from 'rxjs';
+import { EventEmitter } from 'events';
+import { BetAndAdvertInterface } from './interface/bet.interface';
 
 @Injectable()
 export class BetService {
@@ -19,10 +16,9 @@ export class BetService {
     private readonly betRepository: BetRepository,
     private readonly advertisementsService: AdvertisementsService,
     private readonly userService: UserService,
-    // private readonly eventEmitter: EventEmitter2,
-    private readonly emitter: EventEmitter
+    private readonly emitter: EventEmitter,
   ) {
-      this.emitter = new EventEmitter();
+    this.emitter = new EventEmitter();
   }
 
   async createBet(
@@ -95,31 +91,19 @@ export class BetService {
       );
     }
     await this.betRepository.createBet(advert, user, bet);
-    // this.eventEmitter.emit('create.bet', new CreateBetEvent(user, bet, advert));
+
+    await this.emit({
+      emitting: `Some user_id ${user.id} and time ${new Date()}`,
+    });
   }
 
+  subscribe(): Observable<MessageEvent> {
+    return fromEvent(this.emitter, 'eventName');
+  }
 
-    // @OnEvent('create.bet')
-  // sendNofic() {
-  //         return interval().pipe(map((num: number) => ({ data: JSON.stringify({app: `user id`}) })));
-  //
-  //       // let user = null
-  //     //
-  //     // this.eventEmitter.once('create.bet', (payload) => {
-  //     //     user = payload.user
-  //     //     console.log('ставку обновили', user.id)
-  //     //  return  interval(1000).pipe(map((num: number) => (`data: ${JSON.stringify(user)} \n\n`)));
-  //     // })
-  // }
-
-
-    subscribe() {
-        return fromEvent(this.emitter, 'eventName');
-    }
-
-    async emit(data) {
-        this.emitter.emit('eventName', {data});
-    }
-
-
+  async emit(data): Promise<any> {
+    // console.log('data=====>', data);
+    // console.log('data=====>', { data });
+    this.emitter.emit('eventName', { data });
+  }
 }

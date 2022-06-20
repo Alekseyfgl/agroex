@@ -1,4 +1,4 @@
-interface BetAndAdvertInterface {
+export interface BetAndAdvertInterface {
   id: number;
   img: string;
   createAt: Date;
@@ -21,4 +21,8 @@ interface BetAndAdvertInterface {
   betValue: Date;
   isActive: boolean;
   advertisement_id: number;
+}
+
+export interface MessageEvent {
+  data: string | object;
 }
