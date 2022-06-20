@@ -5,7 +5,7 @@ import {
   Param,
   UseGuards,
   UsePipes,
-  ValidationPipe, Sse, Get,
+  ValidationPipe, Sse, Get,Request
 } from '@nestjs/common';
 import { BetService } from './bet.service';
 import { CreateBetDto } from './dto/createBet.dto';
@@ -16,6 +16,7 @@ import { UserBetEntity } from './user-bet.entity';
 import {interval, Observable} from "rxjs";
 import internal from "stream";
 import {map} from "rxjs/operators";
+import {OnEvent} from "@nestjs/event-emitter";
 
 
 interface MessageEvent {
@@ -24,7 +25,8 @@ interface MessageEvent {
 
 @Controller()
 export class BetController {
-  constructor(private readonly betService: BetService) {}
+  constructor(private readonly betService: BetService,
+             ) {}
 
   @Post(':slug/bet')
   @UseGuards(AuthGuard)
@@ -38,12 +40,13 @@ export class BetController {
   }
 
   @Sse('event')
-   sendEvent(): Observable<MessageEvent> {
-    return  this.betService.sendNofic()
+  events(@Request() req,) {
+    return this.betService.subscribe();
   }
 
-  // @Get('ev')
-  // async foo(@User() currentUser: UserEntity) {
-  //
-  // }
+  @Post('emit')
+  async emit() {
+    await this.betService.emit({emitting: new Date().toISOString()});
+    return {ok: true};
+  }
 }

@@ -7,10 +7,11 @@ import { UserService } from '../user/user.service';
 import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
 import { MessageError } from '../constans/constans';
 import { Optional } from '../interfacesAndTypes/optional.interface';
-import {interval} from "rxjs";
+import {fromEvent, interval} from "rxjs";
 import {map} from "rxjs/operators";
 import {EventEmitter2, OnEvent} from "@nestjs/event-emitter";
 import {CreateBetEvent} from "../events/create-bet.event";
+import {EventEmitter} from "events";
 
 @Injectable()
 export class BetService {
@@ -18,8 +19,11 @@ export class BetService {
     private readonly betRepository: BetRepository,
     private readonly advertisementsService: AdvertisementsService,
     private readonly userService: UserService,
-    private readonly eventEmitter: EventEmitter2,
-  ) {}
+    // private readonly eventEmitter: EventEmitter2,
+    private readonly emitter: EventEmitter
+  ) {
+      this.emitter = new EventEmitter();
+  }
 
   async createBet(
     bet: CreateBetDto,
@@ -91,22 +95,31 @@ export class BetService {
       );
     }
     await this.betRepository.createBet(advert, user, bet);
-    this.eventEmitter.emit('create.bet', new CreateBetEvent(user, bet, advert));
+    // this.eventEmitter.emit('create.bet', new CreateBetEvent(user, bet, advert));
   }
 
-@OnEvent('create.bet')
-  sendNofic() {
-        // let user = null
-      //
-      // this.eventEmitter.once('create.bet', (payload) => {
-      //     user = payload.user
-      //     console.log('ставку обновили', user.id)
-      //  return  interval(1000).pipe(map((num: number) => (`data: ${JSON.stringify(user)} \n\n`)));
-      // })
 
-   return interval(1000).pipe(map((num: number) => ({ data: JSON.stringify({mes: `user id`}) })));
-  }
+    // @OnEvent('create.bet')
+  // sendNofic() {
+  //         return interval().pipe(map((num: number) => ({ data: JSON.stringify({app: `user id`}) })));
+  //
+  //       // let user = null
+  //     //
+  //     // this.eventEmitter.once('create.bet', (payload) => {
+  //     //     user = payload.user
+  //     //     console.log('ставку обновили', user.id)
+  //     //  return  interval(1000).pipe(map((num: number) => (`data: ${JSON.stringify(user)} \n\n`)));
+  //     // })
+  // }
 
+
+    subscribe() {
+        return fromEvent(this.emitter, 'eventName');
+    }
+
+    async emit(data) {
+        this.emitter.emit('eventName', {data});
+    }
 
 
 }
