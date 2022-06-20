@@ -7,6 +7,7 @@ import { UserEntity } from '../user/user.entity';
 import { MessageError } from '../constans/constans';
 import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
 import { PromiseOptional } from '../interfacesAndTypes/optional.interface';
+import {BetAndAdvertInterface} from "./interface/bet.interface";
 
 @EntityRepository(UserBetEntity)
 export class BetRepository extends AbstractRepository<UserBetEntity> {
