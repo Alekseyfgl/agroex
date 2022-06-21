@@ -64,3 +64,11 @@ export const enum FILES_ERRORS {
   FILE_TYPE_IS_NOT_MATCHING = 'File type is not matching',
   FILE_EXPECTED = 'File expected',
 }
+
+export const enum NOTIFICATIONS_TITLES {
+  TEST_TITLE = 'Hello everybody'
+}
+
+export const enum NOTIFICATIONS_MESSAGES {
+  TEST_MESSAGE = 'I am just testing agroex notifications'
+}

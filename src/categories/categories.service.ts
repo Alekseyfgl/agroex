@@ -3,6 +3,7 @@ import { CategoriesEntity } from './categories.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { OrderInterface } from './interface/orderInterface';
+import {NotificationsService} from "../notifications/notifications.service";
 
 @Injectable()
 export class CategoriesService {

@@ -4,6 +4,8 @@ import {
   AdvertResponseInterfaceForCreate,
   AdvertsResponseInterface,
 } from './interface/advertResponseInterface';
+import {fireBaseTokensEntity} from "../notifications/fireBaseTokens.entity";
+import {ISendFirebaseMessages} from "../notifications/notifications.service";
 
 export const advertisementForResponse = (
   advert: AdvertisementsEntity,

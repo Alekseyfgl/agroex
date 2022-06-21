@@ -10,14 +10,17 @@ import {
 import { AdvertisementsEntity } from './advertisements.entity';
 import { AdvertsResponseInterface } from './interface/advertResponseInterface';
 import { CronJobsService } from '../cron-jobs/cron-jobs.service';
-import { MessageError } from '../constans/constans';
+import {MessageError, NOTIFICATIONS_MESSAGES, NOTIFICATIONS_TITLES} from '../constans/constans';
 import { PromiseOptional } from '../interfacesAndTypes/optional.interface';
 import { QueryDto } from './dto/query.dto';
 import { Filterobj } from './interface/interfacesAndTypes';
+import {ISendFirebaseMessages, NotificationsService} from "../notifications/notifications.service";
+
 
 @Injectable()
 export class AdvertisementsService {
   constructor(
+    private readonly notificationsService: NotificationsService,
     private readonly cronJobsService: CronJobsService,
     private readonly advertisementsRepository: AdvertisementsRepository,
   ) {}
@@ -39,10 +42,15 @@ export class AdvertisementsService {
     return await this.advertisementsRepository.findBySlug(slug, filterObj);
   }
 
+
   async findAll(
     query: QueryDto,
     filterObj?: Filterobj,
   ): Promise<AdvertsResponseInterface> {
+    await this.notificationsService.sendNotifications([filterObj.authorId], NOTIFICATIONS_TITLES.TEST_TITLE, NOTIFICATIONS_MESSAGES.TEST_MESSAGE) //just for notifications testing
+    // const fireBaseResp = await this.notificationsService.sendMessage('dNvBNZJsa6lZTE_S10dDNo:APA91bFW3JNGniAH3LxL0BfFPt_MFQKgQZT8T6TJLUCbND0--H4syoEmEUhDU2I2N8Hb78yw6Vg9wz0QE4fX8Y3DYGNctZfxFNQz9DtvHUr3Z6wuAYBtyI32MrFcjBbS_xQcFHSFPQEc',
+    //   'hello, I am Denis from agroex')
+
     const advert: AdvertsResponseInterface =
       await this.advertisementsRepository.findAll(query, filterObj);
     return advertisementsResponseAll(advert);
