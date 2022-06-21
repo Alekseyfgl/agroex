@@ -3,6 +3,8 @@ import {
   AdvertResponseInterface,
   AdvertResponseInterfaceForCreate,
   AdvertsResponseInterface,
+  UserAdsAndWithBets,
+  UserAdsWithBetsResponse,
 } from './interface/advertResponseInterface';
 
 export const advertisementForResponse = (
@@ -57,6 +59,39 @@ export const advertisementsResponseAll = (
   advertAll.advertisements.forEach((advertisement) => {
     delete advertisement.author.password;
   });
-
   return advertAll;
+};
+
+export const userAdsWithActiveBets = (
+  ads: UserAdsAndWithBets[],
+): UserAdsWithBetsResponse[] => {
+  return ads.map(
+    (ad: UserAdsAndWithBets): UserAdsWithBetsResponse => ({
+      id: ad.id,
+      img: ad.img,
+      createAt: ad.createAt,
+      updatedAt: ad.updatedAt,
+      authorId: ad.authorId,
+      title: ad.title,
+      price: ad.price,
+      currency: ad.currency,
+      quantity: ad.quantity,
+      unit: ad.unit,
+      slug: ad.slug,
+      category: ad.category,
+      subCategory: ad.subCategory,
+      isModerated: ad.isModerated,
+      country: ad.country,
+      location: ad.location,
+      moderationComment: ad.moderationComment,
+      isActive: ad.isActive,
+      expireAdvert: ad.expireAdvert,
+      moderationStatus: ad.moderationStatus,
+      isConfirmed: ad.isConfirmed,
+      lastBetInfo: {
+        user_id_with_last_bet: ad.user_id_with_last_bet,
+        last_bet_value: ad.last_bet_value,
+      },
+    }),
+  );
 };

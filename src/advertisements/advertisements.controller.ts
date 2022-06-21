@@ -23,6 +23,7 @@ import {
   AdvertResponseInterface,
   AdvertResponseInterfaceForCreate,
   AdvertsResponseInterface,
+  UserAdsWithBetsResponse,
 } from './interface/advertResponseInterface';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { FilesService } from '../files/files.service';
@@ -107,6 +108,14 @@ export class AdvertisementsController {
     return this.advertisementsService.findAll(query, {
       authorId: currentUserId,
     });
+  }
+
+  @Get('/myBets/all')
+  @UseGuards(AuthGuard)
+  async findAllAdsWithBetByAuthor(
+    @User('id') currentUserId: number,
+  ): Promise<UserAdsWithBetsResponse[]> {
+    return this.advertisementsService.getAdsWithBetByAuthor(currentUserId);
   }
 
   @Get('/myAdvertisements/:slug') // для получения одного объявления юзера для личного кабинета (не смотрим на isActive)
