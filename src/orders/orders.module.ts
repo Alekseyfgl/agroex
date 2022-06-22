@@ -6,12 +6,14 @@ import { OrdersEntity } from './entities/orders.entity';
 import { OrdersRepository } from './orders.repository';
 import { BetModule } from '../bets/bet.module';
 import { AdvertisementsModule } from '../advertisements/advertisements.module';
+import {NotificationsModule} from "../notifications/notifications.module";
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([OrdersRepository]),
     BetModule,
     AdvertisementsModule,
+    NotificationsModule
   ],
   controllers: [OrdersController],
   providers: [OrdersService],

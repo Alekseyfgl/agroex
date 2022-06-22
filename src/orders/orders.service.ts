@@ -37,6 +37,7 @@ export class OrdersService {
 
     const isConfirmed: boolean = advertBySlug.isConfirmed;
     const isLastBet: number = advertBySlug.userBets.length;
+    const inactiveUsersBetsIds: number[] = await this.betService.getAllInactiveUserBets(advertBySlug.id)
 
     if (currentUser.id !== advertBySlug.author.id) {
       throw new HttpException(
@@ -70,6 +71,7 @@ export class OrdersService {
     await this.ordersRepository.confirmBet(advertBySlug);
     await this.notificationsService.sendNotifications([advertBySlug.userBets[0].user_id], `Your bet on LOT ${advertBySlug.title} was confirmed`, NOTIFICATIONS_MESSAGES.GO_TO_MY_ORDERS_PAGE) // Your bet on LOT XXX was confirmed
     await this.notificationsService.sendNotifications([currentUser.id], `You confirmed the deal with LOT ${advertBySlug.title}`, NOTIFICATIONS_MESSAGES.GO_TO_MY_ORDERS_PAGE) // You confirmed the deal with LOT XXX
+    await this.notificationsService.sendNotifications(inactiveUsersBetsIds, `The LOT ${advertBySlug.title} in which you participated has ended`, NOTIFICATIONS_MESSAGES.CHOOSE_ANOTHER_LOT) // The LOT XXX in which you participated has ended
   }
 
   async buyNow(currentUser: UserEntity, slug: string): Promise<void> {

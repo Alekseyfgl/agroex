@@ -59,4 +59,14 @@ export class BetRepository extends AbstractRepository<UserBetEntity> {
       }
     } catch (e) {}
   }
+
+  async findAllInactiveBets(advertId: number): Promise<UserBetEntity[]> {
+    return await this.repository.find({
+      select: ["user_id"],
+      where: {
+        advertisement_id: advertId,
+        isActive: false
+      },
+    })
+  }
 }
