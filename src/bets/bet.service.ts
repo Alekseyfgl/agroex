@@ -70,13 +70,13 @@ export class BetService {
       );
     }
 
-    if (isMaxBet) {
+    if (isMaxBet) { // === buy now logic
       await this.betRepository.createBet(advert, user, bet);
       if (userBettedPreviouslyId) {
-        await this.notificationsService.sendNotifications([userBettedPreviouslyId], `Your bet on LOT ${advert.title} was outbid`, `LOT ${advert.title} was bought at original price`) // Buyer who betted previously
+        await this.notificationsService.sendNotifications([userBettedPreviouslyId], `Your bet on LOT ${advert.title} was outbid`, `LOT ${advert.title} was bought at original price`) // Your bet on LOT XXX was outbid
       }
 
-      await this.notificationsService.sendNotifications([authorAdvertisementId], `Your LOT ${advert.title} is bought at original price.`, NOTIFICATIONS_MESSAGES.GO_TO_MY_BETTINGS_PAGE_NEW_BET) // For Seller
+      await this.notificationsService.sendNotifications([authorAdvertisementId], `Your LOT ${advert.title} is bought at original price.`, NOTIFICATIONS_MESSAGES.GO_TO_MY_BETTINGS_PAGE_NEW_BET) // Your LOT XXX is bought at original price.
 
       return;
     }

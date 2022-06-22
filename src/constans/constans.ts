@@ -75,5 +75,7 @@ export const enum NOTIFICATIONS_MESSAGES {
   GO_TO_MY_ADVERTISEMENTS_PAGE = 'Go to My advertisements page to see the new bet',
   GO_TO_MY_BETTINGS_PAGE_YOUR_BET = 'Go to My bettings page to see your bet',
   GO_TO_MY_ORDERS_PAGE = 'Go to My Orders page to see the deal',
-  CHOOSE_ANOTHER_LOT = 'Choose another LOT'
+  CHOOSE_ANOTHER_LOT = 'Choose another LOT',
+  GO_TO_MY_ADVERTISEMENTS_PAGE_CHANGE = 'Go to My advertisements page to change the LOT',
+  NOW_YOUR_LOT_IS_SHOWN = 'Now your LOT is shown on the main page'
 }
