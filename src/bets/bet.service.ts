@@ -4,8 +4,9 @@ import { BetRepository } from './bet.repository';
 import { AdvertisementsService } from '../advertisements/advertisements.service';
 import { UserService } from '../user/user.service';
 import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
-import { MessageError } from '../constans/constans';
 import { BetType } from '../orders/interface/orders.interface';
+import {MessageError, NOTIFICATIONS_MESSAGES, NOTIFICATIONS_TITLES} from '../constans/constans';
+import {NotificationsService} from "../notifications/notifications.service";
 
 @Injectable()
 export class BetService {
@@ -13,6 +14,7 @@ export class BetService {
     private readonly betRepository: BetRepository,
     private readonly advertisementsService: AdvertisementsService,
     private readonly userService: UserService,
+    private readonly notificationsService: NotificationsService
   ) {}
 
   async createBet(
@@ -91,5 +93,9 @@ export class BetService {
       );
     }
     await this.betRepository.createBet(advert, user, bet);
+
+    await this.notificationsService.sendNotifications([advertisementWithLastBet.user_id], `Your bet on LOT ${advert.title} was outbid`, 'Go to My bettings page to see the new bet') // Your bet on LOT XXX was outbid
+    await this.notificationsService.sendNotifications([authorAdvertisement], `A new bet was placed on your LOT ${advert.title}`, 'Go to My advertisements page to see the new bet') // A new bet was placed on your LOT XXX
+    await this.notificationsService.sendNotifications([currentUserId], `You betted on LOT ${advert.title}`, 'Go to My bettings page to see your bet') // You betted on LOT XXX
   }
 }

@@ -11,6 +11,7 @@ import {
 import { UserEntity } from '../user/user.entity';
 import { BetService } from '../bets/bet.service';
 import { MessageError } from '../constans/constans';
+import {NotificationsService} from "../notifications/notifications.service";
 
 @Injectable()
 export class OrdersService {
@@ -18,6 +19,7 @@ export class OrdersService {
     private readonly ordersRepository: OrdersRepository,
     private readonly advertisementsService: AdvertisementsService,
     private readonly betService: BetService,
+    private readonly notificationsService: NotificationsService
   ) {}
 
   async getAllApprovedAds(
@@ -66,6 +68,8 @@ export class OrdersService {
       );
     }
     await this.ordersRepository.confirmBet(advertBySlug);
+    await this.notificationsService.sendNotifications([advertBySlug.userBets[0].user_id], `Your bet on LOT ${advertBySlug.title} was confirmed`, 'Go to My Orders page to see the deal') // Your bet on LOT XXX was confirmed
+    await this.notificationsService.sendNotifications([currentUser.id], `You confirmed the deal with LOT ${advertBySlug.title}`, 'Go to My Orders page to see the deal') // You confirmed the deal with LOT XXX
   }
 
   async buyNow(currentUser: UserEntity, slug: string): Promise<void> {
@@ -92,5 +96,7 @@ export class OrdersService {
       );
     }
     await this.ordersRepository.confirmBet(updatedAdBySlug);
+
+    await this.notificationsService.sendNotifications([currentUser.id], `You bought LOT ${advertBySlug.title} at original price`, `Go to My Orders page to see the deal`) // For Buyer
   }
 }
