@@ -73,7 +73,7 @@ export class AdvertisementsController {
     );
   }
 
-  @Get('/:slug')
+  @Get('ad/:slug')
   async getSingleAdvertisement(
     @Param('slug') slug: string,
   ): Promise<AdvertResponseInterface> {
@@ -98,7 +98,7 @@ export class AdvertisementsController {
     });
   }
 
-  @Get('/myAdvertisements/all') // для получения всех объявлений юзера для личного кабинета (не смотрим на isActive)
+  @Get('/my-advertisements') // для получения всех объявлений юзера для личного кабинета (не смотрим на isActive)
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
   async findAllAdvertisements(
@@ -110,7 +110,7 @@ export class AdvertisementsController {
     });
   }
 
-  @Get('/myBets/all')
+  @Get('/my-bets')
   @UseGuards(AuthGuard)
   async findAllAdsWithBetByAuthor(
     @User('id') currentUserId: number,
@@ -118,7 +118,7 @@ export class AdvertisementsController {
     return this.advertisementsService.getAdsWithBetByAuthor(currentUserId);
   }
 
-  @Get('/myAdvertisements/:slug') // для получения одного объявления юзера для личного кабинета (не смотрим на isActive)
+  @Get('/my-advertisements/:slug') // для получения одного объявления юзера для личного кабинета (не смотрим на isActive)
   @UseGuards(AuthGuard)
   async getSingleMyAdvertisement(
     @Param('slug') slug: string,
