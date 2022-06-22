@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsNumber, Length, Max, Min } from 'class-validator';
+import {IsInt, IsNotEmpty, IsNumber, Length, Max, Min} from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class CreateAdvertisementDto {
@@ -15,8 +15,8 @@ export class CreateAdvertisementDto {
   category: string;
 
   @Transform(({ value }) => Number(value), { toClassOnly: true }) //преобразует в number
-  @IsNumber()
-  @Min(0)
+  @IsInt()
+  @Min(2)
   @Max(10000000000)
   readonly price: number;
 

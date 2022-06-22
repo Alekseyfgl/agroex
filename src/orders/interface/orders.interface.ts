@@ -57,3 +57,8 @@ export enum DEAL_STATUS {
   CONFIRMED = 'confirmed',
   UNCONFIRMED = 'unconfirmed',
 }
+
+export type BetType = {
+  status?: 'buy-now';
+  betValue: number;
+};
