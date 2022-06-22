@@ -17,7 +17,7 @@ export class NotificationsController {
     async updateToken(
         @User() currentUser: UserEntity,
         @Body() updateTokenDto : UpdateTokenDto
-    ): Promise<InsertResult> {
+    ): Promise<void> {
         return await this.notificationsService.updateToken(currentUser, updateTokenDto);
     }
 }

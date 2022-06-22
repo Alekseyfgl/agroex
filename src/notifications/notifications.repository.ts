@@ -8,7 +8,7 @@ import * as moment from "moment";
 
 @EntityRepository(FireBaseTokensEntity)
 export class NotificationsRepository extends AbstractRepository<FireBaseTokensEntity> {
-    async updateToken(user: UserEntity, updateTokenDto: UpdateTokenDto): Promise<InsertResult> {
+    async updateToken(user: UserEntity, updateTokenDto: UpdateTokenDto): Promise<void> {
         const dataToSave: FireBaseTokenSaving = {
             userId: user.id,
             deviceType: updateTokenDto.deviceType,
@@ -16,7 +16,7 @@ export class NotificationsRepository extends AbstractRepository<FireBaseTokensEn
             isAllowed: updateTokenDto.isAllowed
         }
 
-        return await this.repository.createQueryBuilder()
+        await this.repository.createQueryBuilder()
             .insert()
             .into("fireBaseTokens")
             .values(dataToSave)

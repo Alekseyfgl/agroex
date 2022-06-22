@@ -19,7 +19,7 @@ export interface ISendFirebaseMessages {
 @Injectable()
 export class NotificationsService {
     constructor(private readonly notificationsRepository: NotificationsRepository) {}
-    async updateToken(currentUser: UserEntity, updateTokenDto: UpdateTokenDto): Promise<InsertResult>  {
+    async updateToken(currentUser: UserEntity, updateTokenDto: UpdateTokenDto): Promise<void>  {
         return await this.notificationsRepository.updateToken(currentUser, updateTokenDto)
     }
 
