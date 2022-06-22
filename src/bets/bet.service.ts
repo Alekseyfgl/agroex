@@ -89,8 +89,8 @@ export class BetService {
     }
     await this.betRepository.createBet(advert, user, bet);
 
-    await this.notificationsService.sendNotifications([advertisementWithLastBet.user_id], 'New notification', `Your bet on LOT ${advert.title} was outbid`) // Your bet on LOT XXX was outbid
-    await this.notificationsService.sendNotifications([authorAdvertisement], 'New notification', `A new bet was placed on your LOT ${advert.title}`) // A new bet was placed on your LOT XXX
-    await this.notificationsService.sendNotifications([currentUserId], 'New notification', `You betted on LOT ${advert.title}`) // You betted on LOT XXX
+    await this.notificationsService.sendNotifications([advertisementWithLastBet.user_id], `Your bet on LOT ${advert.title} was outbid`, 'Go to My bettings page to see the new bet') // Your bet on LOT XXX was outbid
+    await this.notificationsService.sendNotifications([authorAdvertisement], `A new bet was placed on your LOT ${advert.title}`, 'Go to My advertisements page to see the new bet') // A new bet was placed on your LOT XXX
+    await this.notificationsService.sendNotifications([currentUserId], `You betted on LOT ${advert.title}`, 'Go to My bettings page to see your bet') // You betted on LOT XXX
   }
 }
