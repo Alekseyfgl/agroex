@@ -1,8 +1,8 @@
-import {fireBaseTokensEntity} from "./fireBaseTokens.entity";
+import {FireBaseTokensEntity} from "./fireBaseTokens.entity";
 import {ISendFirebaseMessages} from "./notifications.service";
 
 export const notificationsMessages = (
-    tokens: fireBaseTokensEntity,
+    tokens: FireBaseTokensEntity,
     message,
     title
 ): ISendFirebaseMessages => ({

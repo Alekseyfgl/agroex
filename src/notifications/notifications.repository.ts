@@ -1,40 +1,33 @@
-import {AbstractRepository, EntityRepository, In, UpdateResult} from 'typeorm';
-import {fireBaseTokensEntity} from "./fireBaseTokens.entity";
+import {AbstractRepository, EntityRepository, In, InsertResult, UpdateResult} from 'typeorm';
+import {FireBaseTokensEntity} from "./fireBaseTokens.entity";
 import {UserEntity} from "../user/user.entity";
 import {UpdateTokenDto} from "./dto/updateToken.dto";
-import {DeviceTypes} from "./interfacesAndTypes/interfacesAndTypes";
+import {DeviceTypes, FireBaseTokenSaving} from "./interfacesAndTypes/interfacesAndTypes";
+import {PromiseOptional} from "../interfacesAndTypes/optional.interface";
+import * as moment from "moment";
 
-@EntityRepository(fireBaseTokensEntity)
-export class NotificationsRepository extends AbstractRepository<fireBaseTokensEntity> {
-    async updateToken(user: UserEntity, updateTokenDto: UpdateTokenDto): Promise<fireBaseTokensEntity | UpdateResult> {
-        if (await this.findOne(user, updateTokenDto.deviceType)) {
-            return await this.repository.update({
-                userId: user.id,
-                deviceType: updateTokenDto.deviceType
-            }, {
-                token: updateTokenDto.token
-            })
-        }
-
-        return await this.repository.save({
+@EntityRepository(FireBaseTokensEntity)
+export class NotificationsRepository extends AbstractRepository<FireBaseTokensEntity> {
+    async updateToken(user: UserEntity, updateTokenDto: UpdateTokenDto): Promise<InsertResult> {
+        const dataToSave: FireBaseTokenSaving = {
             userId: user.id,
             deviceType: updateTokenDto.deviceType,
             token: updateTokenDto.token,
             isAllowed: updateTokenDto.isAllowed
-        })
+        }
+
+        return await this.repository.createQueryBuilder()
+            .insert()
+            .into("fireBaseTokens")
+            .values(dataToSave)
+            .onConflict(`("userId", "deviceType") DO UPDATE SET "token" = :token, "updatedAt" = :dateNow`)
+            .setParameter("token", updateTokenDto.token)
+            .setParameter("dateNow", moment().format())
+            .execute()
     }
 
-    async findOne(user: UserEntity, deviceType?: DeviceTypes): Promise<fireBaseTokensEntity> {
-        return await this.repository.findOne({
-            where: {
-                userId: user.id,
-                deviceType: deviceType
-            },
-        });
-    }
-
-    async findAllUserTokens(userIds: number[]): Promise<fireBaseTokensEntity[]> {
-        return await this.repository.find({
+    async findAllUserTokens(userIds: number[]): Promise<FireBaseTokensEntity[]> {
+        return this.repository.find({
             select: ["token"],
             where: {
                 userId: In([...userIds]), //предположим нужно одно сообщение на несколько юзеров

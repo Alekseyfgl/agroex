@@ -28,13 +28,13 @@ export class AuthMiddleware implements NestMiddleware {
     next();
   }
 
-  async validateToken(token: string): Promise<UserEntity> {
-      return new Promise((resolve, reject) => {
-        verify(token, process.env.JWT_SECRET, (error, decoded: UserEntity) => {
-          if (error) return reject(error);
+  validateToken(token: string): Promise<UserEntity> {
+    return new Promise((resolve, reject) => {
+      verify(token, process.env.JWT_SECRET, (error, decoded: UserEntity) => {
+        if (error) return reject(error);
 
-          resolve(decoded);
-        })
-      });
+        resolve(decoded);
+      })
+    });
   }
 }

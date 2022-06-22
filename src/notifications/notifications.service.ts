@@ -6,8 +6,8 @@ import { chunk } from 'lodash';
 import {NotificationsRepository} from "./notifications.repository";
 import {UpdateTokenDto} from "./dto/updateToken.dto";
 import {UserEntity} from "../user/user.entity";
-import {fireBaseTokensEntity} from "./fireBaseTokens.entity";
-import {UpdateResult} from "typeorm";
+import {FireBaseTokensEntity} from "./fireBaseTokens.entity";
+import {InsertResult, UpdateResult} from "typeorm";
 import {notificationsMessages} from "./notifications.mapper";
 
 export interface ISendFirebaseMessages {
@@ -19,16 +19,16 @@ export interface ISendFirebaseMessages {
 @Injectable()
 export class NotificationsService {
     constructor(private readonly notificationsRepository: NotificationsRepository) {}
-    async updateToken(currentUser: UserEntity, updateTokenDto: UpdateTokenDto): Promise<fireBaseTokensEntity | UpdateResult>  {
+    async updateToken(currentUser: UserEntity, updateTokenDto: UpdateTokenDto): Promise<InsertResult>  {
         return await this.notificationsRepository.updateToken(currentUser, updateTokenDto)
     }
 
-    async findTokens(userIds: number[]): Promise<fireBaseTokensEntity[]> {
+    async findTokens(userIds: number[]): Promise<FireBaseTokensEntity[]> {
         return this.notificationsRepository.findAllUserTokens(userIds)
     }
 
     async sendNotifications(userIds: number[], title: string, message:string): Promise<void> {
-        const tokens: fireBaseTokensEntity[] = await this.findTokens(userIds)
+        const tokens: FireBaseTokensEntity[] = await this.findTokens(userIds)
         const firebaseMessages: ISendFirebaseMessages[] = tokens.map(token => notificationsMessages(token, message, title))
         const fireBaseResp: BatchResponse = await this.sendAll(firebaseMessages)
         console.log(fireBaseResp)

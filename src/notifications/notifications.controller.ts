@@ -4,8 +4,8 @@ import {User} from "../user/decorators/user.decarator";
 import {UserEntity} from "../user/user.entity";
 import {NotificationsService} from "./notifications.service";
 import {UpdateTokenDto} from "./dto/updateToken.dto";
-import {fireBaseTokensEntity} from "./fireBaseTokens.entity";
-import {UpdateResult} from "typeorm";
+import {FireBaseTokensEntity} from "./fireBaseTokens.entity";
+import {InsertResult, UpdateResult} from "typeorm";
 
 @Controller('notifications')
 export class NotificationsController {
@@ -17,7 +17,7 @@ export class NotificationsController {
     async updateToken(
         @User() currentUser: UserEntity,
         @Body() updateTokenDto : UpdateTokenDto
-    ): Promise<fireBaseTokensEntity | UpdateResult>  {
+    ): Promise<InsertResult> {
         return await this.notificationsService.updateToken(currentUser, updateTokenDto);
     }
 }
