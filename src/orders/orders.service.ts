@@ -97,6 +97,6 @@ export class OrdersService {
     }
     await this.ordersRepository.confirmBet(updatedAdBySlug);
 
-    await this.notificationsService.sendNotifications([currentUser.id], `You bought LOT ${advertBySlug.title} at original price`, `Go to My Orders page to see the deal`) // For Buyer
+    await this.notificationsService.sendNotifications([currentUser.id], `You bought LOT ${advertBySlug.title} at original price`, NOTIFICATIONS_MESSAGES.GO_TO_MY_ORDERS_PAGE) // For Buyer
   }
 }
