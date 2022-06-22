@@ -6,9 +6,14 @@ import {
   advertisementForGetBySlug,
   advertisementForResponse,
   advertisementsResponseAll,
+  userAdsWithActiveBets,
 } from './advertisements.mapper';
 import { AdvertisementsEntity } from './advertisements.entity';
-import { AdvertsResponseInterface } from './interface/advertResponseInterface';
+import {
+  AdvertsResponseInterface,
+  UserAdsAndWithBets,
+  UserAdsWithBetsResponse,
+} from './interface/advertResponseInterface';
 import { CronJobsService } from '../cron-jobs/cron-jobs.service';
 import {MessageError, NOTIFICATIONS_MESSAGES, NOTIFICATIONS_TITLES} from '../constans/constans';
 import { PromiseOptional } from '../interfacesAndTypes/optional.interface';
@@ -54,6 +59,14 @@ export class AdvertisementsService {
     const advert: AdvertsResponseInterface =
       await this.advertisementsRepository.findAll(query, filterObj);
     return advertisementsResponseAll(advert);
+  }
+
+  async getAdsWithBetByAuthor(
+    currentUserId: number,
+  ): Promise<UserAdsWithBetsResponse[]> {
+    const ads: UserAdsAndWithBets[] =
+      await this.advertisementsRepository.findAdsWithBetByUser(currentUserId);
+    return userAdsWithActiveBets(ads);
   }
 
   async setModeratedData(

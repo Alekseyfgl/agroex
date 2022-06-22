@@ -1,5 +1,5 @@
 import { UserEntity } from '../user/user.entity';
-import { UserResponseInterface } from './interfacesAndTypes/userResponse.interface';
+import { UserResponseInterface } from '../user/interfacesAndTypes/userResponse.interface';
 
 export const userForResponse = (
   user: UserEntity,

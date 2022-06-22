@@ -12,7 +12,11 @@ import {
   ORDER,
   MessageError,
 } from '../constans/constans';
-import { AdvertsResponseInterface } from './interface/advertResponseInterface';
+import {
+  AdvertisementType,
+  AdvertsResponseInterface,
+  UserAdsAndWithBets,
+} from './interface/advertResponseInterface';
 import { createSlug } from '../helper/helper';
 import { Filterobj, ModerationStatus } from './interface/interfacesAndTypes';
 import { Optional } from '../interfacesAndTypes/optional.interface';
@@ -94,12 +98,25 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
     return advertisement;
   }
 
+  async findAdsWithBetByUser(
+    currentUserId: number,
+  ): Promise<UserAdsAndWithBets[]> {
+    return this.repository
+      .query(`SELECT DISTINCT adv.id, user_id_with_last_bet, last_bet_value, adv.*  FROM advertisements AS adv 
+                                                        LEFT JOIN "userBets" AS ub ON adv.id=ub.advertisement_id
+                                                        JOIN (SELECT adv.id, ub."betValue" AS last_bet_value, ub.user_id AS user_id_with_last_bet FROM advertisements AS adv 
+                                                        LEFT JOIN "userBets" AS ub ON adv.id=ub.advertisement_id
+                                                        WHERE ub."isActive"=true) AS activeAdv ON adv.id = activeAdv.id
+                                                        WHERE ub.user_id = ${currentUserId}
+                                                        ORDER BY adv."updatedAt" DESC`);
+  }
+
   async findAll(
     query: QueryDto,
     filterObj?: Filterobj,
   ): Promise<AdvertsResponseInterface> {
     const filterOptions: Dictionary<any> = _.omitBy(filterObj, _.isNil);
-
+    // console.log('filterOptions======>>>>>', filterOptions)
     const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> =
       getRepository(AdvertisementsEntity)
         .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.TABLE)
