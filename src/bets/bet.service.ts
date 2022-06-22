@@ -6,7 +6,6 @@ import { AdvertisementsService } from '../advertisements/advertisements.service'
 import { UserService } from '../user/user.service';
 import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
 import {MessageError, NOTIFICATIONS_MESSAGES, NOTIFICATIONS_TITLES} from '../constans/constans';
-import { Optional } from '../interfacesAndTypes/optional.interface';
 import {NotificationsService} from "../notifications/notifications.service";
 
 @Injectable()
