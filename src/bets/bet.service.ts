@@ -1,10 +1,10 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateBetDto } from './dto/createBet.dto';
 import { UserEntity } from '../user/user.entity';
 import { BetRepository } from './bet.repository';
 import { AdvertisementsService } from '../advertisements/advertisements.service';
 import { UserService } from '../user/user.service';
 import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
+import { BetType } from '../orders/interface/orders.interface';
 import {MessageError, NOTIFICATIONS_MESSAGES, NOTIFICATIONS_TITLES} from '../constans/constans';
 import {NotificationsService} from "../notifications/notifications.service";
 
@@ -18,7 +18,7 @@ export class BetService {
   ) {}
 
   async createBet(
-    bet: CreateBetDto,
+    bet: BetType,
     currentUser: UserEntity,
     slug: string,
   ): Promise<void> {
@@ -29,6 +29,7 @@ export class BetService {
     const advertisementWithLastBet: BetAndAdvertInterface =
       await this.betRepository.getAdvertisementWithLastBet(advert.id);
 
+    const isMaxBet: string = bet.status;
     const priceSeller: number = +advert.price;
     const lastBet: number = +advertisementWithLastBet.betValue;
     const currentBet: number = bet.betValue;
@@ -67,7 +68,12 @@ export class BetService {
       );
     }
 
-    if (currentBet > priceSeller) {
+    if (isMaxBet) {
+      await this.betRepository.createBet(advert, user, bet);
+      return;
+    }
+
+    if (currentBet >= priceSeller) {
       throw new HttpException(
         {
           status: HttpStatus.BAD_REQUEST,

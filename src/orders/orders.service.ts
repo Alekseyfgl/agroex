@@ -5,6 +5,7 @@ import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
 import { allApprovedAdsResponse } from './orders.mapper';
 import {
   ApprovedAdsResponseInterface,
+  BetType,
   ConfirmedOrdersInterface,
 } from './interface/orders.interface';
 import { UserEntity } from '../user/user.entity';
@@ -74,7 +75,11 @@ export class OrdersService {
   async buyNow(currentUser: UserEntity, slug: string): Promise<void> {
     const advertBySlug: AdvertisementsEntity =
       await this.advertisementsService.getAdvertisementBySlug(slug);
-    const maxBet = { betValue: advertBySlug.price };
+
+    const maxBet: BetType = {
+      status: 'buy-now',
+      betValue: advertBySlug.price,
+    };
 
     await this.betService.createBet(maxBet, currentUser, advertBySlug.slug);
 
