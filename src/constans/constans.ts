@@ -70,5 +70,9 @@ export const enum NOTIFICATIONS_TITLES {
 }
 
 export const enum NOTIFICATIONS_MESSAGES {
-  TEST_MESSAGE = 'I am just testing agroex notifications'
+  TEST_MESSAGE = 'I am just testing agroex notifications',
+  GO_TO_MY_BETTINGS_PAGE_NEW_BET = 'Go to My bettings page to see the new bet',
+  GO_TO_MY_ADVERTISEMENTS_PAGE = 'Go to My advertisements page to see the new bet',
+  GO_TO_MY_BETTINGS_PAGE_YOUR_BET = 'Go to My bettings page to see your bet',
+  GO_TO_MY_ORDERS_PAGE = 'Go to My Orders page to see the deal',
 }
