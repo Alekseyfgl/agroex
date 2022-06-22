@@ -52,10 +52,9 @@ export class AdvertisementsService {
     query: QueryDto,
     filterObj?: Filterobj,
   ): Promise<AdvertsResponseInterface> {
-    await this.notificationsService.sendNotifications([filterObj.authorId], NOTIFICATIONS_TITLES.TEST_TITLE, NOTIFICATIONS_MESSAGES.TEST_MESSAGE) //just for notifications testing
-    // const fireBaseResp = await this.notificationsService.sendMessage('dNvBNZJsa6lZTE_S10dDNo:APA91bFW3JNGniAH3LxL0BfFPt_MFQKgQZT8T6TJLUCbND0--H4syoEmEUhDU2I2N8Hb78yw6Vg9wz0QE4fX8Y3DYGNctZfxFNQz9DtvHUr3Z6wuAYBtyI32MrFcjBbS_xQcFHSFPQEc',
-    //   'hello, I am Denis from agroex')
-    // пока оставляем - не забыть удалить
+    if (filterObj.authorId) { // пока оставляем - не забыть удалить
+      await this.notificationsService.sendNotifications([filterObj.authorId], NOTIFICATIONS_TITLES.TEST_TITLE, NOTIFICATIONS_MESSAGES.TEST_MESSAGE) //just for notifications testing
+    }
 
     const advert: AdvertsResponseInterface =
       await this.advertisementsRepository.findAll(query, filterObj);
