@@ -116,7 +116,7 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
     filterObj?: Filterobj,
   ): Promise<AdvertsResponseInterface> {
     const filterOptions: Dictionary<any> = _.omitBy(filterObj, _.isNil);
-    // console.log('filterOptions======>>>>>', filterOptions)
+
     const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> =
       getRepository(AdvertisementsEntity)
         .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.TABLE)
@@ -159,6 +159,14 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
       queryBuilder.andWhere('advertisements.authorId = :authorId', {
         authorId: filterOptions.authorId,
       });
+    }
+
+
+    if(query.category) {
+      const currentCategory = query.category.split('-').join(' ');
+      queryBuilder.andWhere('LOWER(advertisements.category) =  LOWER(:category)', {
+        category: `${currentCategory}`
+      })
     }
 
     const advertisementCount: number = await queryBuilder.getCount(); //тотал по нашей таблице
