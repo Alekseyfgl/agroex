@@ -74,6 +74,7 @@ export class AdvertisementsController {
   }
 
   @Get('slug/:slug')
+
   async getSingleAdvertisement(
     @Param('slug') slug: string,
   ): Promise<AdvertResponseInterface> {
