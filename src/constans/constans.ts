@@ -65,10 +65,6 @@ export const enum FILES_ERRORS {
   FILE_EXPECTED = 'File expected',
 }
 
-export const enum NOTIFICATIONS_TEST_TITLES { //TODO remove after test
-  TEST_TITLE = 'Hello everybody'
-}
-
 export const enum NOTIFICATIONS_MESSAGES {
   TEST_MESSAGE = 'You are on the my ads page :)',
   GO_TO_MY_BETTINGS_PAGE_NEW_BET = 'Go to My bettings page to see the new bet',
