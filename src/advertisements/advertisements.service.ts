@@ -19,7 +19,6 @@ import {
   MessageError,
   NOTIFICATIONS_LINKTO, NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_APPROVED, NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_REJECTED,
   NOTIFICATIONS_MESSAGES,
-  NOTIFICATIONS_TEST_TITLES,
 } from '../constans/constans';
 import { PromiseOptional } from '../interfacesAndTypes/optional.interface';
 import { QueryDto } from './dto/query.dto';
@@ -57,10 +56,6 @@ export class AdvertisementsService {
     query: QueryDto,
     filterObj?: Filterobj,
   ): Promise<AdvertsResponseInterface> {
-    if (filterObj.authorId) { // TODO пока оставляем - не забыть удалить
-      await this.notificationsService.sendNotifications([filterObj.authorId], NOTIFICATIONS_TEST_TITLES.TEST_TITLE, NOTIFICATIONS_MESSAGES.TEST_MESSAGE, NOTIFICATIONS_LINKTO.MYACCAUNT) //just for notifications testing
-    }
-
     const advert: AdvertsResponseInterface =
       await this.advertisementsRepository.findAll(query, filterObj);
     return advertisementsResponseAll(advert);
