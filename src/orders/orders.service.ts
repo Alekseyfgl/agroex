@@ -70,7 +70,6 @@ export class OrdersService {
     }
     await this.ordersRepository.confirmBet(advertBySlug);
     await this.notificationsService.sendNotifications([advertBySlug.userBets[0].user_id], `Your bet on LOT ${advertBySlug.title} was confirmed`, NOTIFICATIONS_MESSAGES.GO_TO_MY_ORDERS_PAGE, NOTIFICATIONS_LINKTO.MYORDERS) // Your bet on LOT XXX was confirmed
-    await this.notificationsService.sendNotifications([currentUser.id], `You confirmed the deal with LOT ${advertBySlug.title}`, NOTIFICATIONS_MESSAGES.GO_TO_MY_ORDERS_PAGE, NOTIFICATIONS_LINKTO.MYORDERS) // You confirmed the deal with LOT XXX
     await this.notificationsService.sendNotifications(inactiveUsersBetsIds, `The LOT ${advertBySlug.title} in which you participated has ended`, NOTIFICATIONS_MESSAGES.CHOOSE_ANOTHER_LOT, NOTIFICATIONS_LINKTO.EMPTY) // The LOT XXX in which you participated has ended
   }
 
@@ -98,7 +97,5 @@ export class OrdersService {
       );
     }
     await this.ordersRepository.confirmBet(updatedAdBySlug);
-
-    await this.notificationsService.sendNotifications([currentUser.id], `You bought LOT ${advertBySlug.title} at original price`, NOTIFICATIONS_MESSAGES.GO_TO_MY_ORDERS_PAGE, NOTIFICATIONS_LINKTO.MYORDERS) // For Buyer
   }
 }

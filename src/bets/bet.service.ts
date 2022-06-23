@@ -106,7 +106,6 @@ export class BetService {
       await this.notificationsService.sendNotifications([advertisementWithLastBet.user_id], `Your bet on LOT ${advert.title} was outbid`, NOTIFICATIONS_MESSAGES.GO_TO_MY_BETTINGS_PAGE_NEW_BET, NOTIFICATIONS_LINKTO.BETTING) // Your bet on LOT XXX was outbid
     }
     await this.notificationsService.sendNotifications([authorAdvertisementId], `A new bet was placed on your LOT ${advert.title}`, NOTIFICATIONS_MESSAGES.GO_TO_MY_ADVERTISEMENTS_PAGE, NOTIFICATIONS_LINKTO.MY_ADVERTISEMENTS) // A new bet was placed on your LOT XXX
-    await this.notificationsService.sendNotifications([currentUserId], `You betted on LOT ${advert.title}`, NOTIFICATIONS_MESSAGES.GO_TO_MY_BETTINGS_PAGE_YOUR_BET, NOTIFICATIONS_LINKTO.BETTING) // You betted on LOT XXX
   }
 
   async getAllInactiveUserBets(advertId: number): Promise<number[]> {
