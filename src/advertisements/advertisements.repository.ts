@@ -107,7 +107,7 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
                                                         JOIN (SELECT adv.id, ub."betValue" AS last_bet_value, ub.user_id AS user_id_with_last_bet FROM advertisements AS adv 
                                                         LEFT JOIN "userBets" AS ub ON adv.id=ub.advertisement_id
                                                         WHERE ub."isActive"=true) AS activeAdv ON adv.id = activeAdv.id
-                                                        WHERE ub.user_id = ${currentUserId}
+                                                        WHERE ub.user_id = ${currentUserId} AND adv."isActive"=true
                                                         ORDER BY adv."updatedAt" DESC`);
   }
 
