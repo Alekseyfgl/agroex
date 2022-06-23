@@ -1,4 +1,4 @@
-interface BetAndAdvertInterface {
+export interface BetAndAdvertInterface {
   id: number;
   img: string;
   createAt: Date;

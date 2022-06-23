@@ -78,7 +78,7 @@ export class OrdersService {
       await this.advertisementsService.getAdvertisementBySlug(slug);
 
     const maxBet: BetType = {
-      status: 'buy-now',
+      isMaxBet: true,
       betValue: advertBySlug.price,
     };
 

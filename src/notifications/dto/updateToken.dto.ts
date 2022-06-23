@@ -1,5 +1,5 @@
 import {DeviceTypes} from "../interfacesAndTypes/interfacesAndTypes";
-import {IsEnum, IsNotEmpty, IsNumber, IsString} from "class-validator";
+import {IsEnum, IsNotEmpty, IsString} from "class-validator";
 import {Transform} from "class-transformer";
 
 export class UpdateTokenDto {
@@ -12,7 +12,7 @@ export class UpdateTokenDto {
     @IsNotEmpty()
     token: string
 
-    @Transform(({ value }) => Number(value), { toClassOnly: true })
+    @Transform(({ value }) => Boolean(value), { toClassOnly: true })
     @IsNotEmpty()
     isAllowed: boolean
 }

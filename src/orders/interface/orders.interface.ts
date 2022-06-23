@@ -59,6 +59,10 @@ export enum DEAL_STATUS {
 }
 
 export type BetType = {
-  status?: 'buy-now';
+  isMaxBet?: boolean;
   betValue: number;
 };
+
+export type UserIdInBetsType = {
+  user_id: number
+}

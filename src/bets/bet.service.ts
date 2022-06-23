@@ -4,10 +4,10 @@ import { BetRepository } from './bet.repository';
 import { AdvertisementsService } from '../advertisements/advertisements.service';
 import { UserService } from '../user/user.service';
 import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
-import { BetType } from '../orders/interface/orders.interface';
+import {BetType, UserIdInBetsType} from '../orders/interface/orders.interface';
 import {MessageError, NOTIFICATIONS_LINKTO, NOTIFICATIONS_MESSAGES, NOTIFICATIONS_TITLES} from '../constans/constans';
 import {NotificationsService} from "../notifications/notifications.service";
-import {UserBetEntity} from "./user-bet.entity";
+import {BetAndAdvertInterface} from "./interface/bet.interface";
 
 @Injectable()
 export class BetService {
@@ -30,7 +30,7 @@ export class BetService {
     const advertisementWithLastBet: BetAndAdvertInterface =
       await this.betRepository.getAdvertisementWithLastBet(advert.id);
 
-    const isMaxBet: string = bet.status;
+    const isMaxBet: boolean = bet.isMaxBet;
     const priceSeller: number = +advert.price;
     const lastBet: number = +advertisementWithLastBet.betValue;
     const currentBet: number = bet.betValue;
@@ -109,7 +109,7 @@ export class BetService {
   }
 
   async getAllInactiveUserBets(advertId: number): Promise<number[]> {
-    const foundUserIds: UserBetEntity[] = await this.betRepository.findAllInactiveBets(advertId)
+    const foundUserIds: UserIdInBetsType[] = await this.betRepository.findAllInactiveBets(advertId)
     return foundUserIds.map(userId => userId.user_id)
   }
 }
