@@ -5,10 +5,12 @@ export const notificationsMessages = (
     tokens: FireBaseTokensEntity,
     message,
     title,
-    linkTo
+    linkTo,
+    userIds
 ): ISendFirebaseMessages => ({
     token: tokens.token,
     message: message,
     title: title,
-    linkTo: linkTo
+    linkTo: linkTo,
+    userIds: userIds
 })

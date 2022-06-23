@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common';
 import { mapLimit } from 'async';
 import * as firebase from 'firebase-admin';
 import { BatchResponse } from 'firebase-admin/lib/messaging/messaging-api';
-import { chunk } from 'lodash';
+import  { chunk } from 'lodash';
+import * as _ from 'lodash';
 import {NotificationsRepository} from "./notifications.repository";
 import {UpdateTokenDto} from "./dto/updateToken.dto";
 import {UserEntity} from "../user/user.entity";
 import {FireBaseTokensEntity} from "./fireBaseTokens.entity";
-import {InsertResult, UpdateResult} from "typeorm";
 import {notificationsMessages} from "./notifications.mapper";
 
 export interface ISendFirebaseMessages {
@@ -15,6 +15,7 @@ export interface ISendFirebaseMessages {
     title?: string;
     message: string;
     linkTo: string;
+    userIds: string;
 }
 
 @Injectable()
@@ -29,8 +30,9 @@ export class NotificationsService {
     }
 
     async sendNotifications(userIds: number[], title: string, message:string, linkTo: string): Promise<void> {
-        const tokens: FireBaseTokensEntity[] = await this.findTokens(userIds)
-        const firebaseMessages: ISendFirebaseMessages[] = tokens.map(token => notificationsMessages(token, message, title, linkTo))
+        const uniqueUserIds: number[] = userIds.length > 1 ? _.uniq(userIds) : userIds
+        const tokens: FireBaseTokensEntity[] = await this.findTokens(uniqueUserIds)
+        const firebaseMessages: ISendFirebaseMessages[] = tokens.map(token => notificationsMessages(token, message, title, linkTo, uniqueUserIds.toString()))
         const fireBaseResp: BatchResponse = await this.sendAll(firebaseMessages)
         console.log(fireBaseResp)
     }
@@ -43,9 +45,9 @@ export class NotificationsService {
             process.env.FIREBASE_PARALLEL_LIMIT, // 3 is a good place to start - async limit
             async (groupedFirebaseMessages: ISendFirebaseMessages[]): Promise<BatchResponse> => {
                 try {
-                    const tokenMessages: firebase.messaging.TokenMessage[] = groupedFirebaseMessages.map(({ message, title, token , linkTo}) => ({
+                    const tokenMessages: firebase.messaging.TokenMessage[] = groupedFirebaseMessages.map(({ message, title, token , linkTo, userIds}) => ({
                         notification: { body: message, title },
-                        data: { linkTo },
+                        data: { linkTo, userIds},
                         token,
                         apns: {
                             payload: {
