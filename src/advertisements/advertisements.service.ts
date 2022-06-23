@@ -15,7 +15,7 @@ import {
   UserAdsWithBetsResponse,
 } from './interface/advertResponseInterface';
 import { CronJobsService } from '../cron-jobs/cron-jobs.service';
-import {MessageError, NOTIFICATIONS_MESSAGES, NOTIFICATIONS_TITLES} from '../constans/constans';
+import {MessageError, NOTIFICATIONS_LINKTO, NOTIFICATIONS_MESSAGES, NOTIFICATIONS_TITLES} from '../constans/constans';
 import { PromiseOptional } from '../interfacesAndTypes/optional.interface';
 import { QueryDto } from './dto/query.dto';
 import {Filterobj, ModerationStatus} from './interface/interfacesAndTypes';
@@ -53,7 +53,7 @@ export class AdvertisementsService {
     filterObj?: Filterobj,
   ): Promise<AdvertsResponseInterface> {
     if (filterObj.authorId) { // пока оставляем - не забыть удалить
-      await this.notificationsService.sendNotifications([filterObj.authorId], NOTIFICATIONS_TITLES.TEST_TITLE, NOTIFICATIONS_MESSAGES.TEST_MESSAGE) //just for notifications testing
+      await this.notificationsService.sendNotifications([filterObj.authorId], NOTIFICATIONS_TITLES.TEST_TITLE, NOTIFICATIONS_MESSAGES.TEST_MESSAGE, NOTIFICATIONS_LINKTO.MYACCAUNT) //just for notifications testing
     }
 
     const advert: AdvertsResponseInterface =
@@ -87,9 +87,9 @@ export class AdvertisementsService {
       await this.advertisementsRepository.updateModeratedData(updateAdvertDto);
 
       if (updateAdvertDto.moderationStatus === ModerationStatus.APPROVED ) {
-        await this.notificationsService.sendNotifications([existAdData.author.id], `Your LOT ${existAdData.title} was approved by moderator`, NOTIFICATIONS_MESSAGES.NOW_YOUR_LOT_IS_SHOWN) // Your LOT was approved by moderator
+        await this.notificationsService.sendNotifications([existAdData.author.id], `Your LOT ${existAdData.title} was approved by moderator`, NOTIFICATIONS_MESSAGES.NOW_YOUR_LOT_IS_SHOWN, NOTIFICATIONS_LINKTO.EMPTY) // Your LOT was approved by moderator
       } else if (updateAdvertDto.moderationStatus === ModerationStatus.REJECTED){
-        await this.notificationsService.sendNotifications([existAdData.author.id], `Your LOT ${existAdData.title} was rejected by moderator`, NOTIFICATIONS_MESSAGES.GO_TO_MY_ADVERTISEMENTS_PAGE_CHANGE) // Your LOT was rejected by moderator
+        await this.notificationsService.sendNotifications([existAdData.author.id], `Your LOT ${existAdData.title} was rejected by moderator`, NOTIFICATIONS_MESSAGES.GO_TO_MY_ADVERTISEMENTS_PAGE_CHANGE, NOTIFICATIONS_LINKTO.MY_ADVERTISEMENTS) // Your LOT was rejected by moderator
       }
 
     const savedAdData: AdvertisementsEntity =

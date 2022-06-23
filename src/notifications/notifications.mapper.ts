@@ -4,9 +4,11 @@ import {ISendFirebaseMessages} from "./notifications.service";
 export const notificationsMessages = (
     tokens: FireBaseTokensEntity,
     message,
-    title
+    title,
+    linkTo
 ): ISendFirebaseMessages => ({
     token: tokens.token,
     message: message,
-    title: title
+    title: title,
+    linkTo: linkTo
 })

@@ -14,6 +14,7 @@ export interface ISendFirebaseMessages {
     token: string;
     title?: string;
     message: string;
+    linkTo: string;
 }
 
 @Injectable()
@@ -27,9 +28,9 @@ export class NotificationsService {
         return this.notificationsRepository.findAllUserTokens(userIds)
     }
 
-    async sendNotifications(userIds: number[], title: string, message:string): Promise<void> {
+    async sendNotifications(userIds: number[], title: string, message:string, linkTo: string): Promise<void> {
         const tokens: FireBaseTokensEntity[] = await this.findTokens(userIds)
-        const firebaseMessages: ISendFirebaseMessages[] = tokens.map(token => notificationsMessages(token, message, title))
+        const firebaseMessages: ISendFirebaseMessages[] = tokens.map(token => notificationsMessages(token, message, title, linkTo))
         const fireBaseResp: BatchResponse = await this.sendAll(firebaseMessages)
         console.log(fireBaseResp)
     }
@@ -42,8 +43,9 @@ export class NotificationsService {
             process.env.FIREBASE_PARALLEL_LIMIT, // 3 is a good place to start - async limit
             async (groupedFirebaseMessages: ISendFirebaseMessages[]): Promise<BatchResponse> => {
                 try {
-                    const tokenMessages: firebase.messaging.TokenMessage[] = groupedFirebaseMessages.map(({ message, title, token }) => ({
+                    const tokenMessages: firebase.messaging.TokenMessage[] = groupedFirebaseMessages.map(({ message, title, token , linkTo}) => ({
                         notification: { body: message, title },
+                        data: { linkTo },
                         token,
                         apns: {
                             payload: {

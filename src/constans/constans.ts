@@ -77,5 +77,13 @@ export const enum NOTIFICATIONS_MESSAGES {
   GO_TO_MY_ORDERS_PAGE = 'Go to My Orders page to see the deal',
   CHOOSE_ANOTHER_LOT = 'Choose another LOT',
   GO_TO_MY_ADVERTISEMENTS_PAGE_CHANGE = 'Go to My advertisements page to change the LOT',
-  NOW_YOUR_LOT_IS_SHOWN = 'Now your LOT is shown on the main page'
+  NOW_YOUR_LOT_IS_SHOWN = 'Now your LOT is published on the main page'
+}
+
+export const enum NOTIFICATIONS_LINKTO {
+  MY_ADVERTISEMENTS = 'myAdvertisements',
+  BETTING = 'betting',
+  MYORDERS = 'myOrders',
+  MYACCAUNT = 'myAccount',
+  EMPTY = ''
 }
