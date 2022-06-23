@@ -1,5 +1,6 @@
-import {IsInt, IsNotEmpty, IsNumber, Length, Max, Min} from 'class-validator';
+import {IsEnum, IsInt, IsNotEmpty, IsNumber, Length, Max, Min} from 'class-validator';
 import { Transform } from 'class-transformer';
+import {Category} from "../interface/interfacesAndTypes";
 
 export class CreateAdvertisementDto {
   @Length(5, 40)
@@ -12,6 +13,7 @@ export class CreateAdvertisementDto {
   location: string;
 
   @IsNotEmpty()
+  @IsEnum(Category)
   category: string;
 
   @Transform(({ value }) => Number(value), { toClassOnly: true }) //преобразует в number

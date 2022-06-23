@@ -15,14 +15,22 @@ import {
   UserAdsWithBetsResponse,
 } from './interface/advertResponseInterface';
 import { CronJobsService } from '../cron-jobs/cron-jobs.service';
-import { MessageError } from '../constans/constans';
+import {
+  MessageError,
+  NOTIFICATIONS_LINKTO, NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_APPROVED, NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_REJECTED,
+  NOTIFICATIONS_MESSAGES,
+  NOTIFICATIONS_TEST_TITLES,
+} from '../constans/constans';
 import { PromiseOptional } from '../interfacesAndTypes/optional.interface';
 import { QueryDto } from './dto/query.dto';
-import { Filterobj } from './interface/interfacesAndTypes';
+import {Filterobj, ModerationStatus} from './interface/interfacesAndTypes';
+import {ISendFirebaseMessages, NotificationsService} from "../notifications/notifications.service";
+
 
 @Injectable()
 export class AdvertisementsService {
   constructor(
+    private readonly notificationsService: NotificationsService,
     private readonly cronJobsService: CronJobsService,
     private readonly advertisementsRepository: AdvertisementsRepository,
   ) {}
@@ -44,10 +52,15 @@ export class AdvertisementsService {
     return await this.advertisementsRepository.findBySlug(slug, filterObj);
   }
 
+
   async findAll(
     query: QueryDto,
     filterObj?: Filterobj,
   ): Promise<AdvertsResponseInterface> {
+    if (filterObj.authorId) { // TODO пока оставляем - не забыть удалить
+      await this.notificationsService.sendNotifications([filterObj.authorId], NOTIFICATIONS_TEST_TITLES.TEST_TITLE, NOTIFICATIONS_MESSAGES.TEST_MESSAGE, NOTIFICATIONS_LINKTO.MYACCAUNT) //just for notifications testing
+    }
+
     const advert: AdvertsResponseInterface =
       await this.advertisementsRepository.findAll(query, filterObj);
     return advertisementsResponseAll(advert);
@@ -77,6 +90,12 @@ export class AdvertisementsService {
       );
     } else
       await this.advertisementsRepository.updateModeratedData(updateAdvertDto);
+
+      if (updateAdvertDto.moderationStatus === ModerationStatus.APPROVED ) {
+        await this.notificationsService.sendNotifications([existAdData.author.id], NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_APPROVED(existAdData.title), NOTIFICATIONS_MESSAGES.NOW_YOUR_LOT_IS_SHOWN, NOTIFICATIONS_LINKTO.EMPTY) // Your LOT was approved by moderator
+      } else if (updateAdvertDto.moderationStatus === ModerationStatus.REJECTED){
+        await this.notificationsService.sendNotifications([existAdData.author.id], NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_REJECTED(existAdData.title), NOTIFICATIONS_MESSAGES.GO_TO_MY_ADVERTISEMENTS_PAGE_CHANGE, NOTIFICATIONS_LINKTO.MY_ADVERTISEMENTS) // Your LOT was rejected by moderator
+      }
 
     const savedAdData: AdvertisementsEntity =
       await this.advertisementsRepository.findBySlug(updateAdvertDto.slug);

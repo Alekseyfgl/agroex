@@ -1,4 +1,4 @@
-import { IsNumber, IsOptional } from 'class-validator';
+import {IsNumber, IsOptional, IsString} from 'class-validator';
 import { Transform } from 'class-transformer';
 
 export class QueryDto {
@@ -16,4 +16,8 @@ export class QueryDto {
   @IsOptional()
   @IsNumber()
   offset: number;
+
+  @IsOptional()
+  @IsString()
+  category: string;
 }

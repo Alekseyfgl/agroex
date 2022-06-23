@@ -4,8 +4,15 @@ import { BetRepository } from './bet.repository';
 import { AdvertisementsService } from '../advertisements/advertisements.service';
 import { UserService } from '../user/user.service';
 import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
-import { MessageError } from '../constans/constans';
-import { BetType } from '../orders/interface/orders.interface';
+import {BetType, UserIdInBetsType} from '../orders/interface/orders.interface';
+import {
+  MessageError,
+  NOTIFICATIONS_LINKTO, NOTIFICATIONS_MESSAGE_LOT_WAS_BOUGHT, NOTIFICATIONS_MESSAGE_NEW_BET_WAS_PLACED,
+  NOTIFICATIONS_MESSAGES,
+  NOTIFICATIONS_TITLE_YOUR_BET_OUTBID
+} from '../constans/constans';
+import {NotificationsService} from "../notifications/notifications.service";
+import {BetAndAdvertInterface} from "./interface/bet.interface";
 
 @Injectable()
 export class BetService {
@@ -13,6 +20,7 @@ export class BetService {
     private readonly betRepository: BetRepository,
     private readonly advertisementsService: AdvertisementsService,
     private readonly userService: UserService,
+    private readonly notificationsService: NotificationsService
   ) {}
 
   async createBet(
@@ -27,14 +35,15 @@ export class BetService {
     const advertisementWithLastBet: BetAndAdvertInterface =
       await this.betRepository.getAdvertisementWithLastBet(advert.id);
 
-    const isMaxBet: string = bet.status;
+    const isMaxBet: boolean = bet.isMaxBet;
     const priceSeller: number = +advert.price;
     const lastBet: number = +advertisementWithLastBet.betValue;
     const currentBet: number = bet.betValue;
     const isActive: boolean = advert.isActive;
     const isConfirmed: boolean = advert.isConfirmed;
     const currentUserId: number = user.id;
-    const authorAdvertisement: number = advert.author.id;
+    const authorAdvertisementId: number = advert.author.id;
+    const userBettedPreviouslyId: number = advertisementWithLastBet.user_id
 
     if (!isActive) {
       throw new HttpException(
@@ -46,7 +55,7 @@ export class BetService {
       );
     }
 
-    if (currentUserId === authorAdvertisement) {
+    if (currentUserId === authorAdvertisementId) {
       throw new HttpException(
         {
           status: HttpStatus.FORBIDDEN,
@@ -66,8 +75,14 @@ export class BetService {
       );
     }
 
-    if (isMaxBet) {
+    if (isMaxBet) { // === buy now logic
       await this.betRepository.createBet(advert, user, bet);
+      if (userBettedPreviouslyId) {
+        await this.notificationsService.sendNotifications([userBettedPreviouslyId], NOTIFICATIONS_TITLE_YOUR_BET_OUTBID(advert.title), NOTIFICATIONS_MESSAGE_LOT_WAS_BOUGHT(advert.title), NOTIFICATIONS_LINKTO.BETTING) // Your bet on LOT XXX was outbid
+      }
+
+      await this.notificationsService.sendNotifications([authorAdvertisementId], NOTIFICATIONS_MESSAGE_LOT_WAS_BOUGHT(advert.title), NOTIFICATIONS_MESSAGES.GO_TO_MY_BETTINGS_PAGE_NEW_BET, NOTIFICATIONS_LINKTO.BETTING) // Your LOT XXX is bought at original price.
+
       return;
     }
 
@@ -91,5 +106,15 @@ export class BetService {
       );
     }
     await this.betRepository.createBet(advert, user, bet);
+
+    if (advertisementWithLastBet.user_id !== currentUserId) {
+      await this.notificationsService.sendNotifications([advertisementWithLastBet.user_id], NOTIFICATIONS_TITLE_YOUR_BET_OUTBID(advert.title), NOTIFICATIONS_MESSAGES.GO_TO_MY_BETTINGS_PAGE_NEW_BET, NOTIFICATIONS_LINKTO.BETTING) // Your bet on LOT XXX was outbid
+    }
+    await this.notificationsService.sendNotifications([authorAdvertisementId], NOTIFICATIONS_MESSAGE_NEW_BET_WAS_PLACED(advert.title), NOTIFICATIONS_MESSAGES.GO_TO_MY_ADVERTISEMENTS_PAGE, NOTIFICATIONS_LINKTO.MY_ADVERTISEMENTS) // A new bet was placed on your LOT XXX
+  }
+
+  async getAllInactiveUserBets(advertId: number): Promise<number[]> {
+    const foundUserIds: UserIdInBetsType[] = await this.betRepository.findAllInactiveBets(advertId)
+    return foundUserIds.map(userId => userId.user_id)
   }
 }

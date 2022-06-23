@@ -1,12 +1,11 @@
 import { AbstractRepository, EntityRepository } from 'typeorm';
 import { UserBetEntity } from './user-bet.entity';
-import { Cron, SchedulerRegistry, Timeout } from '@nestjs/schedule';
-import { Body, HttpException, HttpStatus, Logger } from '@nestjs/common';
 import { CreateBetDto } from './dto/createBet.dto';
 import { UserEntity } from '../user/user.entity';
-import { MessageError } from '../constans/constans';
 import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
 import { PromiseOptional } from '../interfacesAndTypes/optional.interface';
+import {BetAndAdvertInterface} from "./interface/bet.interface";
+import {UserIdInBetsType} from "../orders/interface/orders.interface";
 
 @EntityRepository(UserBetEntity)
 export class BetRepository extends AbstractRepository<UserBetEntity> {
@@ -58,5 +57,15 @@ export class BetRepository extends AbstractRepository<UserBetEntity> {
         );
       }
     } catch (e) {}
+  }
+
+  async findAllInactiveBets(advertId: number): Promise<UserIdInBetsType[]> {
+    return this.repository.find({
+      select: ["user_id"],
+      where: {
+        advertisement_id: advertId,
+        isActive: false
+      },
+    })
   }
 }

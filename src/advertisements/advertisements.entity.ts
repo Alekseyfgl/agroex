@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
 import { UserBetEntity } from '../bets/user-bet.entity';
-import { ModerationStatus } from './interface/interfacesAndTypes';
+import {Category, ModerationStatus} from './interface/interfacesAndTypes';
 
 @Entity({ name: 'advertisements' })
 export class AdvertisementsEntity {
@@ -30,7 +30,7 @@ export class AdvertisementsEntity {
   slug: string;
 
   @Column('varchar', { length: 100 })
-  category: string;
+  category: Category;
 
   @Column('varchar', { default: null, length: 100 })
   subCategory: string | null;

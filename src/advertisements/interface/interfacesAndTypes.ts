@@ -9,3 +9,10 @@ export type Filterobj = {
   isModerated?: boolean;
   authorId?: number;
 };
+
+export enum Category  {
+  FRUITS= 'Fruits',
+  DRY_FRUITS = 'Dry Fruits',
+  VEGETABLES = 'Vegetables',
+  CROPS = 'Crops'
+}

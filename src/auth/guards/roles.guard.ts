@@ -17,9 +17,9 @@ import { UserEntity } from '../../user/user.entity';
 export class RolesGuard implements CanActivate {
   constructor(private reflector: Reflector) {}
 
-  canActivate(
+  async canActivate(
     context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  ): Promise<boolean>{
     try {
       const requiredRoles: string[] = this.reflector.getAllAndOverride<
         string[]
@@ -29,8 +29,7 @@ export class RolesGuard implements CanActivate {
       }
       const req: ExpressRequestInterface = context.switchToHttp().getRequest();
       const token: string = req.headers.authorization.split(' ')[1];
-
-      const user: UserEntity = verify(token, process.env.JWT_SECRET);
+      const user: UserEntity =  await this.validateToken(token);
       req.user = user;
       return user.userRoles.some((role) =>
         requiredRoles.includes(role.role_id.toString()),
@@ -44,5 +43,15 @@ export class RolesGuard implements CanActivate {
         HttpStatus.FORBIDDEN,
       );
     }
+  }
+
+   validateToken(token: string): Promise<UserEntity> {
+    return new Promise((resolve, reject) => {
+      verify(token, process.env.JWT_SECRET, (error, decoded: UserEntity) => {
+        if (error) return reject(error);
+
+        resolve(decoded);
+      })
+    });
   }
 }
