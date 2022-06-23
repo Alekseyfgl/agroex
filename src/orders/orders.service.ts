@@ -10,7 +10,12 @@ import {
 } from './interface/orders.interface';
 import { UserEntity } from '../user/user.entity';
 import { BetService } from '../bets/bet.service';
-import {MessageError, NOTIFICATIONS_LINKTO, NOTIFICATIONS_MESSAGES} from '../constans/constans';
+import {
+  MessageError,
+  NOTIFICATIONS_LINKTO, NOTIFICATIONS_MESSAGE_LOT_HAS_ENDED,
+  NOTIFICATIONS_MESSAGE_YOUR_BET_WAS_CONFIRMED,
+  NOTIFICATIONS_MESSAGES
+} from '../constans/constans';
 import {NotificationsService} from "../notifications/notifications.service";
 
 @Injectable()
@@ -69,8 +74,8 @@ export class OrdersService {
       );
     }
     await this.ordersRepository.confirmBet(advertBySlug);
-    await this.notificationsService.sendNotifications([advertBySlug.userBets[0].user_id], `Your bet on LOT ${advertBySlug.title} was confirmed`, NOTIFICATIONS_MESSAGES.GO_TO_MY_ORDERS_PAGE, NOTIFICATIONS_LINKTO.MYORDERS) // Your bet on LOT XXX was confirmed
-    await this.notificationsService.sendNotifications(inactiveUsersBetsIds, `The LOT ${advertBySlug.title} in which you participated has ended`, NOTIFICATIONS_MESSAGES.CHOOSE_ANOTHER_LOT, NOTIFICATIONS_LINKTO.EMPTY) // The LOT XXX in which you participated has ended
+    await this.notificationsService.sendNotifications([advertBySlug.userBets[0].user_id], NOTIFICATIONS_MESSAGE_YOUR_BET_WAS_CONFIRMED(advertBySlug.title), NOTIFICATIONS_MESSAGES.GO_TO_MY_ORDERS_PAGE, NOTIFICATIONS_LINKTO.MYORDERS) // Your bet on LOT XXX was confirmed
+    await this.notificationsService.sendNotifications(inactiveUsersBetsIds, NOTIFICATIONS_MESSAGE_LOT_HAS_ENDED(advertBySlug.title), NOTIFICATIONS_MESSAGES.CHOOSE_ANOTHER_LOT, NOTIFICATIONS_LINKTO.EMPTY) // The LOT XXX in which you participated has ended
   }
 
   async buyNow(currentUser: UserEntity, slug: string): Promise<void> {

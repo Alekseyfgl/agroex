@@ -19,9 +19,9 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
       // url: process.env.DATABASE_URL,
 
       extra: {
-        //ssl: {
-        //rejectUnauthorized: false,
-        //},
+        // ssl: {
+        // rejectUnauthorized: false,
+        // },
         charset: 'utf8mb4_unicode_ci',
       },
       entities: [__dirname + '/../**/*.entity.{js,ts}'],
@@ -44,9 +44,9 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   password: process.env.POSTGRES_PASSWORD,
   // url: process.env.DATABASE_URL,
   extra: {
-    //ssl: {
-    //rejectUnauthorized: false,
-    //},
+    // ssl: {
+    // rejectUnauthorized: false,
+    // },
     charset: 'utf8mb4_unicode_ci',
   },
   entities: [__dirname + '/../**/*.entity.{js,ts}'],

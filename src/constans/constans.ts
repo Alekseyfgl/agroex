@@ -65,7 +65,7 @@ export const enum FILES_ERRORS {
   FILE_EXPECTED = 'File expected',
 }
 
-export const enum NOTIFICATIONS_TITLES {
+export const enum NOTIFICATIONS_TEST_TITLES { //TODO remove after test
   TEST_TITLE = 'Hello everybody'
 }
 
@@ -87,3 +87,31 @@ export const enum NOTIFICATIONS_LINKTO {
   MYACCAUNT = 'myAccount',
   EMPTY = ''
 }
+
+export const NOTIFICATIONS_TITLE_YOUR_BET_OUTBID = (title: string): string => {
+  return `Your bet on LOT ${title} was outbid`;
+};
+
+export const NOTIFICATIONS_MESSAGE_LOT_WAS_BOUGHT = (title: string): string => {
+  return `LOT ${title} was bought at original price`;
+};
+
+export const NOTIFICATIONS_MESSAGE_NEW_BET_WAS_PLACED = (title: string): string => {
+  return `A new bet was placed on your LOT ${title}`;
+};
+
+export const NOTIFICATIONS_MESSAGE_YOUR_BET_WAS_CONFIRMED = (title: string): string => {
+  return `Your bet on LOT ${title} was confirmed`;
+};
+
+export const NOTIFICATIONS_MESSAGE_LOT_HAS_ENDED = (title: string): string => {
+  return `The LOT ${title} in which you participated has ended`;
+};
+
+export const NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_APPROVED = (title: string): string => {
+  return `Your LOT ${title} was approved by moderator`;
+};
+
+export const NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_REJECTED = (title: string): string => {
+  return `Your LOT ${title} was rejected by moderator`;
+};

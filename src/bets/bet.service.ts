@@ -5,7 +5,12 @@ import { AdvertisementsService } from '../advertisements/advertisements.service'
 import { UserService } from '../user/user.service';
 import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
 import {BetType, UserIdInBetsType} from '../orders/interface/orders.interface';
-import {MessageError, NOTIFICATIONS_LINKTO, NOTIFICATIONS_MESSAGES, NOTIFICATIONS_TITLES} from '../constans/constans';
+import {
+  MessageError,
+  NOTIFICATIONS_LINKTO, NOTIFICATIONS_MESSAGE_LOT_WAS_BOUGHT, NOTIFICATIONS_MESSAGE_NEW_BET_WAS_PLACED,
+  NOTIFICATIONS_MESSAGES,
+  NOTIFICATIONS_TITLE_YOUR_BET_OUTBID
+} from '../constans/constans';
 import {NotificationsService} from "../notifications/notifications.service";
 import {BetAndAdvertInterface} from "./interface/bet.interface";
 
@@ -73,10 +78,10 @@ export class BetService {
     if (isMaxBet) { // === buy now logic
       await this.betRepository.createBet(advert, user, bet);
       if (userBettedPreviouslyId) {
-        await this.notificationsService.sendNotifications([userBettedPreviouslyId], `Your bet on LOT ${advert.title} was outbid`, `LOT ${advert.title} was bought at original price`, NOTIFICATIONS_LINKTO.BETTING) // Your bet on LOT XXX was outbid
+        await this.notificationsService.sendNotifications([userBettedPreviouslyId], NOTIFICATIONS_TITLE_YOUR_BET_OUTBID(advert.title), NOTIFICATIONS_MESSAGE_LOT_WAS_BOUGHT(advert.title), NOTIFICATIONS_LINKTO.BETTING) // Your bet on LOT XXX was outbid
       }
 
-      await this.notificationsService.sendNotifications([authorAdvertisementId], `Your LOT ${advert.title} is bought at original price.`, NOTIFICATIONS_MESSAGES.GO_TO_MY_BETTINGS_PAGE_NEW_BET, NOTIFICATIONS_LINKTO.BETTING) // Your LOT XXX is bought at original price.
+      await this.notificationsService.sendNotifications([authorAdvertisementId], NOTIFICATIONS_MESSAGE_LOT_WAS_BOUGHT(advert.title), NOTIFICATIONS_MESSAGES.GO_TO_MY_BETTINGS_PAGE_NEW_BET, NOTIFICATIONS_LINKTO.BETTING) // Your LOT XXX is bought at original price.
 
       return;
     }
@@ -103,9 +108,9 @@ export class BetService {
     await this.betRepository.createBet(advert, user, bet);
 
     if (advertisementWithLastBet.user_id !== currentUserId) {
-      await this.notificationsService.sendNotifications([advertisementWithLastBet.user_id], `Your bet on LOT ${advert.title} was outbid`, NOTIFICATIONS_MESSAGES.GO_TO_MY_BETTINGS_PAGE_NEW_BET, NOTIFICATIONS_LINKTO.BETTING) // Your bet on LOT XXX was outbid
+      await this.notificationsService.sendNotifications([advertisementWithLastBet.user_id], NOTIFICATIONS_TITLE_YOUR_BET_OUTBID(advert.title), NOTIFICATIONS_MESSAGES.GO_TO_MY_BETTINGS_PAGE_NEW_BET, NOTIFICATIONS_LINKTO.BETTING) // Your bet on LOT XXX was outbid
     }
-    await this.notificationsService.sendNotifications([authorAdvertisementId], `A new bet was placed on your LOT ${advert.title}`, NOTIFICATIONS_MESSAGES.GO_TO_MY_ADVERTISEMENTS_PAGE, NOTIFICATIONS_LINKTO.MY_ADVERTISEMENTS) // A new bet was placed on your LOT XXX
+    await this.notificationsService.sendNotifications([authorAdvertisementId], NOTIFICATIONS_MESSAGE_NEW_BET_WAS_PLACED(advert.title), NOTIFICATIONS_MESSAGES.GO_TO_MY_ADVERTISEMENTS_PAGE, NOTIFICATIONS_LINKTO.MY_ADVERTISEMENTS) // A new bet was placed on your LOT XXX
   }
 
   async getAllInactiveUserBets(advertId: number): Promise<number[]> {
