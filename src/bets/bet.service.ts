@@ -86,15 +86,15 @@ export class BetService {
       if (userBettedPreviouslyId) {
         await this.notificationsService.sendNotifications(
           [userBettedPreviouslyId],
-          NOTIFICATIONS_TITLE_YOUR_BET_OUTBID(advert.title),
-          NOTIFICATIONS_MESSAGE_LOT_WAS_BOUGHT(advert.title),
+          NOTIFICATIONS_TITLE_YOUR_BET_OUTBID(advert.id.toString()),
+          NOTIFICATIONS_MESSAGE_LOT_WAS_BOUGHT(advert.id.toString()),
           NOTIFICATIONS_LINKTO.BETTING,
         ); // Your bet on LOT XXX was outbid
       }
 
       await this.notificationsService.sendNotifications(
         [authorAdvertisementId],
-        NOTIFICATIONS_MESSAGE_LOT_WAS_BOUGHT(advert.title),
+        NOTIFICATIONS_MESSAGE_LOT_WAS_BOUGHT(advert.id.toString()),
         NOTIFICATIONS_MESSAGES.GO_TO_MY_BETTINGS_PAGE_NEW_BET,
         NOTIFICATIONS_LINKTO.BETTING,
       ); // Your LOT XXX is bought at original price.
@@ -126,14 +126,14 @@ export class BetService {
     if (advertisementWithLastBet.user_id !== currentUserId) {
       await this.notificationsService.sendNotifications(
         [advertisementWithLastBet.user_id],
-        NOTIFICATIONS_TITLE_YOUR_BET_OUTBID(advert.title),
+        NOTIFICATIONS_TITLE_YOUR_BET_OUTBID(advert.id.toString()),
         NOTIFICATIONS_MESSAGES.GO_TO_MY_BETTINGS_PAGE_NEW_BET,
         NOTIFICATIONS_LINKTO.BETTING,
       ); // Your bet on LOT XXX was outbid
     }
     await this.notificationsService.sendNotifications(
       [authorAdvertisementId],
-      NOTIFICATIONS_MESSAGE_NEW_BET_WAS_PLACED(advert.title),
+      NOTIFICATIONS_MESSAGE_NEW_BET_WAS_PLACED(advert.id.toString()),
       NOTIFICATIONS_MESSAGES.GO_TO_MY_ADVERTISEMENTS_PAGE,
       NOTIFICATIONS_LINKTO.MY_ADVERTISEMENTS,
     ); // A new bet was placed on your LOT XXX

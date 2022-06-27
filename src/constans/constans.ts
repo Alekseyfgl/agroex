@@ -84,38 +84,38 @@ export const enum NOTIFICATIONS_LINKTO {
   EMPTY = '',
 }
 
-export const NOTIFICATIONS_TITLE_YOUR_BET_OUTBID = (title: string): string => {
-  return `Your bet on LOT ${title} was outbid`;
+export const NOTIFICATIONS_TITLE_YOUR_BET_OUTBID = (id: string): string => {
+  return `Your bet on LOT ID: ${id} was outbid`;
 };
 
-export const NOTIFICATIONS_MESSAGE_LOT_WAS_BOUGHT = (title: string): string => {
-  return `LOT ${title} was bought at original price`;
+export const NOTIFICATIONS_MESSAGE_LOT_WAS_BOUGHT = (id: string): string => {
+  return `LOT ID: ${id} was bought at original price`;
 };
 
 export const NOTIFICATIONS_MESSAGE_NEW_BET_WAS_PLACED = (
-  title: string,
+    id: string,
 ): string => {
-  return `A new bet was placed on your LOT ${title}`;
+  return `A new bet was placed on your LOT ID: ${id}`;
 };
 
 export const NOTIFICATIONS_MESSAGE_YOUR_BET_WAS_CONFIRMED = (
-  title: string,
+    id: string,
 ): string => {
-  return `Your bet on LOT ${title} was confirmed`;
+  return `Your bet on LOT ID: ${id} was confirmed`;
 };
 
-export const NOTIFICATIONS_MESSAGE_LOT_HAS_ENDED = (title: string): string => {
-  return `The LOT ${title} in which you participated has ended`;
+export const NOTIFICATIONS_MESSAGE_LOT_HAS_ENDED = (id: string): string => {
+  return `The LOT ID: ${id} in which you participated has ended`;
 };
 
 export const NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_APPROVED = (
-  title: string,
+    id: string,
 ): string => {
-  return `Your LOT ${title} was approved by moderator`;
+  return `Your LOT ID: ${id} was approved by moderator`;
 };
 
 export const NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_REJECTED = (
-  title: string,
+    id: string,
 ): string => {
-  return `Your LOT ${title} was rejected by moderator`;
+  return `Your LOT ID: ${id} was rejected by moderator`;
 };

@@ -91,14 +91,14 @@ export class AdvertisementsService {
     if (updateAdvertDto.moderationStatus === ModerationStatus.APPROVED) {
       await this.notificationsService.sendNotifications(
         [existAdData.author.id],
-        NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_APPROVED(existAdData.title),
+        NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_APPROVED(existAdData.id.toString()),
         NOTIFICATIONS_MESSAGES.NOW_YOUR_LOT_IS_SHOWN,
         NOTIFICATIONS_LINKTO.EMPTY,
       ); // Your LOT was approved by moderator
     } else if (updateAdvertDto.moderationStatus === ModerationStatus.REJECTED) {
       await this.notificationsService.sendNotifications(
         [existAdData.author.id],
-        NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_REJECTED(existAdData.title),
+        NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_REJECTED(existAdData.id.toString()),
         NOTIFICATIONS_MESSAGES.GO_TO_MY_ADVERTISEMENTS_PAGE_CHANGE,
         NOTIFICATIONS_LINKTO.MY_ADVERTISEMENTS,
       ); // Your LOT was rejected by moderator

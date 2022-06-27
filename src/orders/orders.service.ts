@@ -78,13 +78,13 @@ export class OrdersService {
     await this.ordersRepository.confirmBet(advertBySlug);
     await this.notificationsService.sendNotifications(
       [advertBySlug.userBets[0].user_id],
-      NOTIFICATIONS_MESSAGE_YOUR_BET_WAS_CONFIRMED(advertBySlug.title),
+      NOTIFICATIONS_MESSAGE_YOUR_BET_WAS_CONFIRMED(advertBySlug.id.toString()),
       NOTIFICATIONS_MESSAGES.GO_TO_MY_ORDERS_PAGE,
       NOTIFICATIONS_LINKTO.MYORDERS,
     ); // Your bet on LOT XXX was confirmed
     await this.notificationsService.sendNotifications(
       inactiveUsersBetsIds,
-      NOTIFICATIONS_MESSAGE_LOT_HAS_ENDED(advertBySlug.title),
+      NOTIFICATIONS_MESSAGE_LOT_HAS_ENDED(advertBySlug.id.toString()),
       NOTIFICATIONS_MESSAGES.CHOOSE_ANOTHER_LOT,
       NOTIFICATIONS_LINKTO.EMPTY,
     ); // The LOT XXX in which you participated has ended
