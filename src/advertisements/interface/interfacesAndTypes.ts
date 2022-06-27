@@ -10,9 +10,9 @@ export type Filterobj = {
   authorId?: number;
 };
 
-export enum Category  {
-  FRUITS= 'Fruits',
+export enum Category {
+  FRUITS = 'Fruits',
   DRY_FRUITS = 'Dry Fruits',
   VEGETABLES = 'Vegetables',
-  CROPS = 'Crops'
+  CROPS = 'Crops',
 }

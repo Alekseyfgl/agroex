@@ -9,7 +9,7 @@ import { BetRepository } from './bet.repository';
 import { AdvertisementsModule } from '../advertisements/advertisements.module';
 import { UserModule } from '../user/user.module';
 import { CronJobsModule } from '../cron-jobs/cron-jobs.module';
-import {NotificationsModule} from "../notifications/notifications.module";
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
   imports: [
@@ -22,7 +22,7 @@ import {NotificationsModule} from "../notifications/notifications.module";
     UserModule,
     AdvertisementsModule,
     CronJobsModule,
-    NotificationsModule
+    NotificationsModule,
   ],
   controllers: [BetController],
   providers: [BetService],

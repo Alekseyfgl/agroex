@@ -1,7 +1,7 @@
 import { Injectable, NestMiddleware } from '@nestjs/common';
 import { NextFunction, Response } from 'express';
 import { ExpressRequestInterface } from '../interfacesAndTypes/expressRequest.interface';
-import {JwtPayload, verify} from 'jsonwebtoken';
+import { JwtPayload, verify } from 'jsonwebtoken';
 import { UserService } from '../../user/user.service';
 import { UserEntity } from '../../user/user.entity';
 
@@ -34,7 +34,7 @@ export class AuthMiddleware implements NestMiddleware {
         if (error) return reject(error);
 
         resolve(decoded);
-      })
+      });
     });
   }
 }

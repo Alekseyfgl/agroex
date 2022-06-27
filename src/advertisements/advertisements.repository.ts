@@ -161,12 +161,14 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
       });
     }
 
-
-    if(query.category) {
+    if (query.category) {
       const currentCategory = query.category.split('-').join(' ');
-      queryBuilder.andWhere('LOWER(advertisements.category) =  LOWER(:category)', {
-        category: `${currentCategory}`
-      })
+      queryBuilder.andWhere(
+        'LOWER(advertisements.category) =  LOWER(:category)',
+        {
+          category: `${currentCategory}`,
+        },
+      );
     }
 
     const advertisementCount: number = await queryBuilder.getCount(); //тотал по нашей таблице

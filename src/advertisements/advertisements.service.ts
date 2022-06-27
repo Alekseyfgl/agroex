@@ -17,14 +17,18 @@ import {
 import { CronJobsService } from '../cron-jobs/cron-jobs.service';
 import {
   MessageError,
-  NOTIFICATIONS_LINKTO, NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_APPROVED, NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_REJECTED,
+  NOTIFICATIONS_LINKTO,
+  NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_APPROVED,
+  NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_REJECTED,
   NOTIFICATIONS_MESSAGES,
 } from '../constans/constans';
 import { PromiseOptional } from '../interfacesAndTypes/optional.interface';
 import { QueryDto } from './dto/query.dto';
-import {Filterobj, ModerationStatus} from './interface/interfacesAndTypes';
-import {ISendFirebaseMessages, NotificationsService} from "../notifications/notifications.service";
-
+import { Filterobj, ModerationStatus } from './interface/interfacesAndTypes';
+import {
+  ISendFirebaseMessages,
+  NotificationsService,
+} from '../notifications/notifications.service';
 
 @Injectable()
 export class AdvertisementsService {
@@ -50,7 +54,6 @@ export class AdvertisementsService {
   ): Promise<AdvertisementsEntity> {
     return await this.advertisementsRepository.findBySlug(slug, filterObj);
   }
-
 
   async findAll(
     query: QueryDto,
@@ -86,11 +89,21 @@ export class AdvertisementsService {
     } else
       await this.advertisementsRepository.updateModeratedData(updateAdvertDto);
 
-      if (updateAdvertDto.moderationStatus === ModerationStatus.APPROVED ) {
-        await this.notificationsService.sendNotifications([existAdData.author.id], NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_APPROVED(existAdData.title), NOTIFICATIONS_MESSAGES.NOW_YOUR_LOT_IS_SHOWN, NOTIFICATIONS_LINKTO.EMPTY) // Your LOT was approved by moderator
-      } else if (updateAdvertDto.moderationStatus === ModerationStatus.REJECTED){
-        await this.notificationsService.sendNotifications([existAdData.author.id], NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_REJECTED(existAdData.title), NOTIFICATIONS_MESSAGES.GO_TO_MY_ADVERTISEMENTS_PAGE_CHANGE, NOTIFICATIONS_LINKTO.MY_ADVERTISEMENTS) // Your LOT was rejected by moderator
-      }
+    if (updateAdvertDto.moderationStatus === ModerationStatus.APPROVED) {
+      await this.notificationsService.sendNotifications(
+        [existAdData.author.id],
+        NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_APPROVED(existAdData.title),
+        NOTIFICATIONS_MESSAGES.NOW_YOUR_LOT_IS_SHOWN,
+        NOTIFICATIONS_LINKTO.EMPTY,
+      ); // Your LOT was approved by moderator
+    } else if (updateAdvertDto.moderationStatus === ModerationStatus.REJECTED) {
+      await this.notificationsService.sendNotifications(
+        [existAdData.author.id],
+        NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_REJECTED(existAdData.title),
+        NOTIFICATIONS_MESSAGES.GO_TO_MY_ADVERTISEMENTS_PAGE_CHANGE,
+        NOTIFICATIONS_LINKTO.MY_ADVERTISEMENTS,
+      ); // Your LOT was rejected by moderator
+    }
 
     const savedAdData: AdvertisementsEntity =
       await this.advertisementsRepository.findBySlug(updateAdvertDto.slug);

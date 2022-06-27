@@ -4,8 +4,8 @@ import { CreateBetDto } from './dto/createBet.dto';
 import { UserEntity } from '../user/user.entity';
 import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
 import { PromiseOptional } from '../interfacesAndTypes/optional.interface';
-import {BetAndAdvertInterface} from "./interface/bet.interface";
-import {UserIdInBetsType} from "../orders/interface/orders.interface";
+import { BetAndAdvertInterface } from './interface/bet.interface';
+import { UserIdInBetsType } from '../orders/interface/orders.interface';
 
 @EntityRepository(UserBetEntity)
 export class BetRepository extends AbstractRepository<UserBetEntity> {
@@ -61,11 +61,11 @@ export class BetRepository extends AbstractRepository<UserBetEntity> {
 
   async findAllInactiveBets(advertId: number): Promise<UserIdInBetsType[]> {
     return this.repository.find({
-      select: ["user_id"],
+      select: ['user_id'],
       where: {
         advertisement_id: advertId,
-        isActive: false
+        isActive: false,
       },
-    })
+    });
   }
 }

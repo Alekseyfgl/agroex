@@ -20,7 +20,7 @@ export const typeOrmAsyncConfig: TypeOrmModuleAsyncOptions = {
 
       extra: {
         ssl: {
-        rejectUnauthorized: false,
+          rejectUnauthorized: false,
         },
         charset: 'utf8mb4_unicode_ci',
       },
@@ -45,7 +45,7 @@ export const typeOrmConfig: TypeOrmModuleOptions = {
   url: process.env.DATABASE_URL,
   extra: {
     ssl: {
-    rejectUnauthorized: false,
+      rejectUnauthorized: false,
     },
     charset: 'utf8mb4_unicode_ci',
   },

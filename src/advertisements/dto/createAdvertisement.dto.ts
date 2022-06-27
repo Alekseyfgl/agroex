@@ -1,6 +1,14 @@
-import {IsEnum, IsInt, IsNotEmpty, IsNumber, Length, Max, Min} from 'class-validator';
+import {
+  IsEnum,
+  IsInt,
+  IsNotEmpty,
+  IsNumber,
+  Length,
+  Max,
+  Min,
+} from 'class-validator';
 import { Transform } from 'class-transformer';
-import {Category} from "../interface/interfacesAndTypes";
+import { Category } from '../interface/interfacesAndTypes';
 
 export class CreateAdvertisementDto {
   @Length(5, 40)

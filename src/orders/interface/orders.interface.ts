@@ -64,5 +64,5 @@ export type BetType = {
 };
 
 export type UserIdInBetsType = {
-  user_id: number
-}
+  user_id: number;
+};

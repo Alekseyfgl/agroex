@@ -73,7 +73,7 @@ export const enum NOTIFICATIONS_MESSAGES {
   GO_TO_MY_ORDERS_PAGE = 'Go to My Orders page to see the deal',
   CHOOSE_ANOTHER_LOT = 'Choose another LOT',
   GO_TO_MY_ADVERTISEMENTS_PAGE_CHANGE = 'Go to My advertisements page to change the LOT',
-  NOW_YOUR_LOT_IS_SHOWN = 'Now your LOT is published on the main page'
+  NOW_YOUR_LOT_IS_SHOWN = 'Now your LOT is published on the main page',
 }
 
 export const enum NOTIFICATIONS_LINKTO {
@@ -81,7 +81,7 @@ export const enum NOTIFICATIONS_LINKTO {
   BETTING = 'betting',
   MYORDERS = 'myOrders',
   MYACCAUNT = 'myAccount',
-  EMPTY = ''
+  EMPTY = '',
 }
 
 export const NOTIFICATIONS_TITLE_YOUR_BET_OUTBID = (title: string): string => {
@@ -92,11 +92,15 @@ export const NOTIFICATIONS_MESSAGE_LOT_WAS_BOUGHT = (title: string): string => {
   return `LOT ${title} was bought at original price`;
 };
 
-export const NOTIFICATIONS_MESSAGE_NEW_BET_WAS_PLACED = (title: string): string => {
+export const NOTIFICATIONS_MESSAGE_NEW_BET_WAS_PLACED = (
+  title: string,
+): string => {
   return `A new bet was placed on your LOT ${title}`;
 };
 
-export const NOTIFICATIONS_MESSAGE_YOUR_BET_WAS_CONFIRMED = (title: string): string => {
+export const NOTIFICATIONS_MESSAGE_YOUR_BET_WAS_CONFIRMED = (
+  title: string,
+): string => {
   return `Your bet on LOT ${title} was confirmed`;
 };
 
@@ -104,10 +108,14 @@ export const NOTIFICATIONS_MESSAGE_LOT_HAS_ENDED = (title: string): string => {
   return `The LOT ${title} in which you participated has ended`;
 };
 
-export const NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_APPROVED = (title: string): string => {
+export const NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_APPROVED = (
+  title: string,
+): string => {
   return `Your LOT ${title} was approved by moderator`;
 };
 
-export const NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_REJECTED = (title: string): string => {
+export const NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_REJECTED = (
+  title: string,
+): string => {
   return `Your LOT ${title} was rejected by moderator`;
 };

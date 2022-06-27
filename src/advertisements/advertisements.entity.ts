@@ -10,7 +10,7 @@ import {
 } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
 import { UserBetEntity } from '../bets/user-bet.entity';
-import {Category, ModerationStatus} from './interface/interfacesAndTypes';
+import { Category, ModerationStatus } from './interface/interfacesAndTypes';
 
 @Entity({ name: 'advertisements' })
 export class AdvertisementsEntity {

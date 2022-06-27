@@ -1,16 +1,22 @@
-import {Column, CreateDateColumn, Entity, Generated, PrimaryGeneratedColumn, UpdateDateColumn} from 'typeorm';
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  Generated,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-import {DeviceTypes} from "./interfacesAndTypes/interfacesAndTypes";
+import { DeviceTypes } from './interfacesAndTypes/interfacesAndTypes';
 
 @Entity({ name: 'fireBaseTokens' })
 export class FireBaseTokensEntity {
-
   @ApiProperty({ example: 'user_id' })
-  @Column({type: 'int', primary: true})
+  @Column({ type: 'int', primary: true })
   userId: number;
 
   @ApiProperty({ example: 'device_type' })
-  @Column({type: "varchar", primary: true})
+  @Column({ type: 'varchar', primary: true })
   deviceType: DeviceTypes;
 
   @ApiProperty({ example: 'token' })
