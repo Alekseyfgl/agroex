@@ -107,7 +107,6 @@ export class AdvertisementsController {
   ): Promise<AdvertsResponseInterface> {
     return this.advertisementsService.findAll(query, {
       authorId: currentUserId,
-      isModerated: true,
     });
   }
 
