@@ -30,7 +30,7 @@ import { FilesService } from '../files/files.service';
 import { fileMimetypeFilter } from '../files/filters/file-mimetype-filter';
 import { ParseFile } from '../files/pipes/parse-file.pipe';
 import { UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
-import { MAX_IMAGE_SIZE, ROLES_ID } from '../constans/constans';
+import {MAX_IMAGE_SIZE, ORDER, ROLES_ID} from '../constans/constans';
 import { Roles } from '../roles/decorators/roles-auth.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { SetModerationStatusDto } from './dto/setUpdatedAd.dto';
@@ -94,7 +94,7 @@ export class AdvertisementsController {
   ): Promise<AdvertsResponseInterface> {
     return await this.advertisementsService.findAll(query, {
       isActive: true,
-      isModerated: true,
+      order: ORDER.DESC
     });
   }
 
@@ -107,6 +107,7 @@ export class AdvertisementsController {
   ): Promise<AdvertsResponseInterface> {
     return this.advertisementsService.findAll(query, {
       authorId: currentUserId,
+      order: ORDER.DESC
     });
   }
 
@@ -167,7 +168,8 @@ export class AdvertisementsController {
     return this.advertisementsService.findAll(query, {
       isActive: false,
       isModerated: false,
-    }); // возвращаем только рекламы не прошедшие модерацию (isModerated=false)
+      order: ORDER.ASC
+    });
   }
 
   @Patch('/moderation/set')

@@ -1,3 +1,5 @@
+import {ORDER} from "../../constans/constans";
+
 export enum ModerationStatus {
   UNMODERATED = 'unmoderated',
   APPROVED = 'approved',
@@ -8,6 +10,7 @@ export type Filterobj = {
   isActive?: boolean;
   isModerated?: boolean;
   authorId?: number;
+  order?: ORDER
 };
 
 export enum Category  {

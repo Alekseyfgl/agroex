@@ -9,13 +9,16 @@ import { UpdateTokenDto } from './dto/updateToken.dto';
 import { UserEntity } from '../user/user.entity';
 import { FireBaseTokensEntity } from './fireBaseTokens.entity';
 import { notificationsMessages } from './notifications.mapper';
+import {NOTIFICATIONS_LINKTO, NOTIFICATIONS_STATUS, NOTIFICATIONS_TYPES} from "../constans/constans";
 
 export interface ISendFirebaseMessages {
   token: string;
   title?: string;
   message: string;
-  linkTo: string;
+  linkTo: NOTIFICATIONS_LINKTO;
   userIds: string;
+  type: NOTIFICATIONS_TYPES;
+  status: NOTIFICATIONS_STATUS
 }
 
 @Injectable()
@@ -42,7 +45,9 @@ export class NotificationsService {
     title: string,
     message: string,
     linkTo: string,
+    type: NOTIFICATIONS_TYPES
   ): Promise<void> {
+    const status = NOTIFICATIONS_STATUS.NEW;
     const uniqueUserIds: number[] =
       userIds.length > 1 ? _.uniq(userIds) : userIds;
     const tokens: FireBaseTokensEntity[] = await this.findTokens(uniqueUserIds);
@@ -53,6 +58,8 @@ export class NotificationsService {
         title,
         linkTo,
         uniqueUserIds.toString(),
+        type,
+        status
       ),
     );
     const fireBaseResp: BatchResponse = await this.sendAll(firebaseMessages);
@@ -77,9 +84,9 @@ export class NotificationsService {
         try {
           const tokenMessages: firebase.messaging.TokenMessage[] =
             groupedFirebaseMessages.map(
-              ({ message, title, token, linkTo, userIds }) => ({
+              ({ message, title, token, linkTo, userIds , type, status}) => ({
                 notification: { body: message, title },
-                data: { linkTo, userIds },
+                data: { linkTo, userIds, type, status},
                 token,
                 apns: {
                   payload: {

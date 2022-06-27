@@ -7,10 +7,14 @@ export const notificationsMessages = (
   title,
   linkTo,
   userIds,
+  type,
+  status
 ): ISendFirebaseMessages => ({
   token: tokens.token,
   message: message,
   title: title,
   linkTo: linkTo,
   userIds: userIds,
+  type: type,
+  status: status
 });

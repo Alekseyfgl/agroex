@@ -1,23 +1,20 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { OrdersRepository } from './orders.repository';
-import { AdvertisementsService } from '../advertisements/advertisements.service';
-import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
-import { allApprovedAdsResponse } from './orders.mapper';
-import {
-  ApprovedAdsResponseInterface,
-  BetType,
-  ConfirmedOrdersInterface,
-} from './interface/orders.interface';
-import { UserEntity } from '../user/user.entity';
-import { BetService } from '../bets/bet.service';
+import {HttpException, HttpStatus, Injectable} from '@nestjs/common';
+import {OrdersRepository} from './orders.repository';
+import {AdvertisementsService} from '../advertisements/advertisements.service';
+import {AdvertisementsEntity} from '../advertisements/advertisements.entity';
+import {allApprovedAdsResponse} from './orders.mapper';
+import {ApprovedAdsResponseInterface, BetType, ConfirmedOrdersInterface,} from './interface/orders.interface';
+import {UserEntity} from '../user/user.entity';
+import {BetService} from '../bets/bet.service';
 import {
   MessageError,
   NOTIFICATIONS_LINKTO,
   NOTIFICATIONS_MESSAGE_LOT_HAS_ENDED,
   NOTIFICATIONS_MESSAGE_YOUR_BET_WAS_CONFIRMED,
   NOTIFICATIONS_MESSAGES,
+  NOTIFICATIONS_TYPES,
 } from '../constans/constans';
-import { NotificationsService } from '../notifications/notifications.service';
+import {NotificationsService} from '../notifications/notifications.service';
 
 @Injectable()
 export class OrdersService {
@@ -33,7 +30,6 @@ export class OrdersService {
   ): Promise<ApprovedAdsResponseInterface[]> {
     const approvedAds: ConfirmedOrdersInterface[] =
       await this.ordersRepository.getAllApprovedAds(currentUserId);
-    // console.log('approvedAds=====>>>', approvedAds)
     return allApprovedAdsResponse(approvedAds);
   }
 
@@ -81,12 +77,14 @@ export class OrdersService {
       NOTIFICATIONS_MESSAGE_YOUR_BET_WAS_CONFIRMED(advertBySlug.id.toString()),
       NOTIFICATIONS_MESSAGES.GO_TO_MY_ORDERS_PAGE,
       NOTIFICATIONS_LINKTO.MYORDERS,
+      NOTIFICATIONS_TYPES.CONFIRMATION
     ); // Your bet on LOT XXX was confirmed
     await this.notificationsService.sendNotifications(
       inactiveUsersBetsIds,
       NOTIFICATIONS_MESSAGE_LOT_HAS_ENDED(advertBySlug.id.toString()),
       NOTIFICATIONS_MESSAGES.CHOOSE_ANOTHER_LOT,
       NOTIFICATIONS_LINKTO.EMPTY,
+      NOTIFICATIONS_TYPES.OUTBIDDING
     ); // The LOT XXX in which you participated has ended
   }
 

@@ -14,7 +14,7 @@ import {
   NOTIFICATIONS_MESSAGE_LOT_WAS_BOUGHT,
   NOTIFICATIONS_MESSAGE_NEW_BET_WAS_PLACED,
   NOTIFICATIONS_MESSAGES,
-  NOTIFICATIONS_TITLE_YOUR_BET_OUTBID,
+  NOTIFICATIONS_TITLE_YOUR_BET_OUTBID, NOTIFICATIONS_TYPES,
 } from '../constans/constans';
 import { NotificationsService } from '../notifications/notifications.service';
 import { BetAndAdvertInterface } from './interface/bet.interface';
@@ -89,14 +89,16 @@ export class BetService {
           NOTIFICATIONS_TITLE_YOUR_BET_OUTBID(advert.id.toString()),
           NOTIFICATIONS_MESSAGE_LOT_WAS_BOUGHT(advert.id.toString()),
           NOTIFICATIONS_LINKTO.BETTING,
+          NOTIFICATIONS_TYPES.OUTBIDDING
         ); // Your bet on LOT XXX was outbid
       }
 
       await this.notificationsService.sendNotifications(
         [authorAdvertisementId],
         NOTIFICATIONS_MESSAGE_LOT_WAS_BOUGHT(advert.id.toString()),
-        NOTIFICATIONS_MESSAGES.GO_TO_MY_BETTINGS_PAGE_NEW_BET,
-        NOTIFICATIONS_LINKTO.BETTING,
+        NOTIFICATIONS_MESSAGES.GO_TO_MY_ORDERS_PAGE,
+        NOTIFICATIONS_LINKTO.MYORDERS,
+        NOTIFICATIONS_TYPES.PURCHASE
       ); // Your LOT XXX is bought at original price.
 
       return;
@@ -126,16 +128,18 @@ export class BetService {
     if (advertisementWithLastBet.user_id !== currentUserId) {
       await this.notificationsService.sendNotifications(
         [advertisementWithLastBet.user_id],
-        NOTIFICATIONS_TITLE_YOUR_BET_OUTBID(advert.id.toString()),
+        NOTIFICATIONS_TITLE_YOUR_BET_OUTBID(advert.id.toString(), currentBet.toString(), advert.currency),
         NOTIFICATIONS_MESSAGES.GO_TO_MY_BETTINGS_PAGE_NEW_BET,
         NOTIFICATIONS_LINKTO.BETTING,
+        NOTIFICATIONS_TYPES.OUTBIDDING
       ); // Your bet on LOT XXX was outbid
     }
     await this.notificationsService.sendNotifications(
       [authorAdvertisementId],
-      NOTIFICATIONS_MESSAGE_NEW_BET_WAS_PLACED(advert.id.toString()),
+      NOTIFICATIONS_MESSAGE_NEW_BET_WAS_PLACED(advert.id.toString(), currentBet.toString(), advert.currency),
       NOTIFICATIONS_MESSAGES.GO_TO_MY_ADVERTISEMENTS_PAGE,
       NOTIFICATIONS_LINKTO.MY_ADVERTISEMENTS,
+      NOTIFICATIONS_TYPES.NEWBET
     ); // A new bet was placed on your LOT XXX
   }
 

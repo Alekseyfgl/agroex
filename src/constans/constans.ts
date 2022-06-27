@@ -84,38 +84,52 @@ export const enum NOTIFICATIONS_LINKTO {
   EMPTY = '',
 }
 
-export const NOTIFICATIONS_TITLE_YOUR_BET_OUTBID = (id: string): string => {
-  return `Your bet on LOT ID: ${id} was outbid`;
+export const enum NOTIFICATIONS_TYPES {
+  MODERATION = 'moderation',
+  CONFIRMATION = 'confirmation',
+  OUTBIDDING = 'outbidding',
+  PURCHASE = 'purchase',
+  NEWBET = 'newBet',
+}
+
+export const NOTIFICATIONS_TITLE_YOUR_BET_OUTBID = (id: string, betValue?: string, currency?: string): string => {
+  return `Your bet on LOT №: ${id} was outbid with bet value ${betValue} ${currency}`;
 };
 
 export const NOTIFICATIONS_MESSAGE_LOT_WAS_BOUGHT = (id: string): string => {
-  return `LOT ID: ${id} was bought at original price`;
+  return `LOT №: ${id} was bought at original price`;
 };
 
 export const NOTIFICATIONS_MESSAGE_NEW_BET_WAS_PLACED = (
     id: string,
+    betValue?: string,
+    currency?: string
 ): string => {
-  return `A new bet was placed on your LOT ID: ${id}`;
+  return `A new bet ${betValue} ${currency} was placed on your LOT №: ${id}`;
 };
 
 export const NOTIFICATIONS_MESSAGE_YOUR_BET_WAS_CONFIRMED = (
     id: string,
 ): string => {
-  return `Your bet on LOT ID: ${id} was confirmed`;
+  return `Your bet on LOT №: ${id} was confirmed`;
 };
 
 export const NOTIFICATIONS_MESSAGE_LOT_HAS_ENDED = (id: string): string => {
-  return `The LOT ID: ${id} in which you participated has ended`;
+  return `The LOT №: ${id} in which you participated has ended`;
 };
 
 export const NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_APPROVED = (
     id: string,
 ): string => {
-  return `Your LOT ID: ${id} was approved by moderator`;
+  return `Your LOT №: ${id} was approved by moderator`;
 };
 
 export const NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_REJECTED = (
     id: string,
 ): string => {
-  return `Your LOT ID: ${id} was rejected by moderator`;
+  return `Your LOT № ${id} was rejected by moderator`;
 };
+
+export const enum NOTIFICATIONS_STATUS {
+  NEW = 'new',
+}

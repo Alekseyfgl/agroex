@@ -116,7 +116,6 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
     filterObj?: Filterobj,
   ): Promise<AdvertsResponseInterface> {
     const filterOptions: Dictionary<any> = _.omitBy(filterObj, _.isNil);
-    // console.log('filterOptions======>>>>>', filterOptions)
     const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> =
       getRepository(AdvertisementsEntity)
         .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.TABLE)
@@ -133,13 +132,16 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
         )
 
         .addOrderBy(
-          DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.SORT_COLUMN_BY_UPDATED_AT,
-          `${filterOptions.isModerated ? ORDER.DESC : ORDER.ASC}`,
-        )
-        .addOrderBy(
           DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.SORT_BETS_BY_CREATE_AT,
           ORDER.DESC,
         );
+
+    if (_.has(filterOptions, 'order')) {
+      queryBuilder.addOrderBy(
+          DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.SORT_COLUMN_BY_UPDATED_AT,
+          filterOptions.order,
+      );
+    }
 
     if (_.has(filterOptions, 'isActive')) {
       queryBuilder.andWhere(
