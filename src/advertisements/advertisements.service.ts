@@ -24,11 +24,10 @@ import {
 } from '../constans/constans';
 import { PromiseOptional } from '../interfacesAndTypes/optional.interface';
 import { QueryDto } from './dto/query.dto';
-import { Filterobj, ModerationStatus } from './interface/interfacesAndTypes';
-import {
-  ISendFirebaseMessages,
-  NotificationsService,
-} from '../notifications/notifications.service';
+import {Filterobj, ModerationStatus} from './interface/interfacesAndTypes';
+import {NotificationsService} from "../notifications/notifications.service";
+
+
 
 @Injectable()
 export class AdvertisementsService {
