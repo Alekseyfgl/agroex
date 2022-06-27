@@ -61,14 +61,6 @@ export class AdvertisementsService {
     const advert: AdvertsResponseInterface =
       await this.advertisementsRepository.findAll(query, filterObj);
 
-    await this.notificationsService.sendNotifications(
-    [filterObj.authorId],
-        NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_REJECTED('1'),
-        NOTIFICATIONS_MESSAGES.GO_TO_MY_ADVERTISEMENTS_PAGE_CHANGE,
-        NOTIFICATIONS_LINKTO.MY_ADVERTISEMENTS,
-        NOTIFICATIONS_TYPES.MODERATION
-  );
-
     return advertisementsResponseAll(advert);
   }
 
