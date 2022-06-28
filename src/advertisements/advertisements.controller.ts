@@ -20,6 +20,7 @@ import { CreateAdvertisementDto } from './dto/createAdvertisement.dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { AdvertisementsEntity } from './advertisements.entity';
 import {
+  AdvertisementType,
   AdvertResponseInterface,
   AdvertResponseInterfaceForCreate,
   AdvertsResponseInterface,
@@ -37,7 +38,11 @@ import { SetModerationStatusDto } from './dto/setUpdatedAd.dto';
 import { UpdateAdDataDto } from './dto/updateAdData.dto';
 import { PromiseOptional } from '../interfacesAndTypes/optional.interface';
 import { QueryDto } from './dto/query.dto';
+import {ApiBody, ApiOperation, ApiParam, ApiProperty, ApiResponse, ApiTags} from "@nestjs/swagger";
+import { GetAllAdsSwagger} from "../../swagger/AdsSwagger";
+import {ApiImplicitBody} from "@nestjs/swagger/dist/decorators/api-implicit-body.decorator";
 
+@ApiTags('advertisements')
 @Controller('advertisements')
 export class AdvertisementsController {
   constructor(
@@ -45,6 +50,9 @@ export class AdvertisementsController {
     private readonly filesService: FilesService,
   ) {}
 
+  // @ApiOperation({summary: 'Create advertisement'})
+  // @ApiResponse({status: 201, description: 'Create advertisement for register user'})
+ @ApiProperty({type: CreateAdvertisementDto})
   @Post()
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
@@ -73,6 +81,8 @@ export class AdvertisementsController {
     );
   }
 
+  @ApiOperation({summary: 'Get one advertisement'})
+  @ApiResponse({status: 201, description: 'Get one advertisement by slug'})
   @Get('slug/:slug')
   async getSingleAdvertisement(
     @Param('slug') slug: string,
@@ -86,6 +96,11 @@ export class AdvertisementsController {
     );
   }
 
+@ApiOperation({summary: 'Get all advertisements'})
+@ApiResponse({
+  status: 200,
+  description: 'All advertisements that were checked by the moderator',
+  type: GetAllAdsSwagger})
   @Get()
   @UsePipes(new ValidationPipe())
   async findAllActiveAdvertisements(
@@ -98,6 +113,8 @@ export class AdvertisementsController {
     });
   }
 
+  @ApiOperation({summary: 'Get all user\'s advertisements'})
+  @ApiResponse({status: 200, description: 'Get all user\'s advertisements in personal account'})
   @Get('/my-advertisements') // для получения всех объявлений юзера для личного кабинета (не смотрим на isActive)
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
@@ -111,6 +128,8 @@ export class AdvertisementsController {
     });
   }
 
+  @ApiOperation({summary: 'Get all user\'s bets'})
+  @ApiResponse({status: 200, description: 'Get all user\'s bets in personal account'})
   @Get('/my-bets')
   @UseGuards(AuthGuard)
   async findAllAdsWithBetByAuthor(
@@ -119,6 +138,8 @@ export class AdvertisementsController {
     return this.advertisementsService.getAdsWithBetByAuthor(currentUserId);
   }
 
+  @ApiOperation({summary: 'Get user\'s advertisement'})
+  @ApiResponse({status: 200, description: 'Get user\'s advertisement by slug in personal account'})
   @Get('/my-advertisements/:slug') // для получения одного объявления юзера для личного кабинета (не смотрим на isActive)
   @UseGuards(AuthGuard)
   async getSingleMyAdvertisement(
@@ -131,6 +152,8 @@ export class AdvertisementsController {
     );
   }
 
+  @ApiOperation({summary: 'Editing advertisement by a moderator'})
+  @ApiResponse({status: 200, description: 'Editing advertisement by a moderator'})
   @Put('/update')
   @UseGuards(AuthGuard, RolesGuard)
   @UsePipes(new ValidationPipe())
@@ -157,6 +180,8 @@ export class AdvertisementsController {
     );
   }
 
+  @ApiOperation({summary: 'Get all advertisements for moderation ----------> Need to correct'})
+  @ApiResponse({status: 200, description: 'Get all advertisements for moderation'})
   @Get('/moderation/get')
   @Roles(ROLES_ID.MODERATOR)
   @UseGuards(AuthGuard, RolesGuard)
@@ -172,6 +197,8 @@ export class AdvertisementsController {
     });
   }
 
+  @ApiOperation({summary: 'Get all advertisements for moderation -----------> Need to correct'})
+  @ApiResponse({status: 200, description: 'Get all advertisements for moderation'})
   @Patch('/moderation/set')
   @Roles(ROLES_ID.MODERATOR)
   @UseGuards(AuthGuard, RolesGuard)
@@ -182,6 +209,8 @@ export class AdvertisementsController {
     return this.advertisementsService.setModeratedData(updateAdvertDto);
   }
 
+  @ApiOperation({summary: 'Get one advertisement for moderation'})
+  @ApiResponse({status: 200, description: 'Get one advertisement for moderation'})
   @Get('/moderation/:slug')
   @Roles(ROLES_ID.MODERATOR)
   @UseGuards(AuthGuard, RolesGuard)
