@@ -206,7 +206,8 @@ export class AdvertisementsController {
   }
 
   @ApiOperation({summary: 'Get all advertisements for moderation -----------> Need to correct'})
-  @ApiResponse({status: 200, description: 'Get all advertisements for moderation', type: 'ssss'})
+  @ApiResponse({status: 200, description: 'Get all advertisements for moderation'})
+  @ApiBody({type: ModerConfirmRequestSwagger})
   @Patch('/moderation/set')
   @Roles(ROLES_ID.MODERATOR)
   @UseGuards(AuthGuard, RolesGuard)

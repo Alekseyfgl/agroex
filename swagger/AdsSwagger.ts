@@ -54,13 +54,13 @@ export class GetUsersAdsWithBetsSwagger extends AdsSwagger {
 export class ModeratorConfirmation {
     @ApiProperty({example: 'tasty-blackbarry-xki02q'})
     slug: string
-    @ApiProperty()
+    @ApiProperty({example: ModerationStatus.APPROVED})
     moderationStatus: string
-    @ApiProperty()
-    moderationComment: null
+    @ApiProperty({example: null})
+    moderationComment: string
 }
 
-export class ModerConfirmRequestSwagger extends ModeratorConfirmation {
+export class ModerConfirmRequestSwagger {
     @ApiProperty()
     advertisements: ModeratorConfirmation
 }
