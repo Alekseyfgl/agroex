@@ -49,8 +49,7 @@ export class NotificationsService {
     linkTo: string,
     type: NOTIFICATIONS_TYPES
   ): Promise<void> {
-    const id = uuidv4()
-    const status = NOTIFICATIONS_STATUS.NEW;
+    const status:NOTIFICATIONS_STATUS = NOTIFICATIONS_STATUS.NEW;
     const uniqueUserIds: number[] =
       userIds.length > 1 ? _.uniq(userIds) : userIds;
     const tokens: FireBaseTokensEntity[] = await this.findTokens(uniqueUserIds);

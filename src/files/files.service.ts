@@ -1,14 +1,10 @@
-import { BadRequestException, HttpStatus, Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as sharp from 'sharp';
 import { MFile } from './InterfacesAndTypes/mfile.class';
 import { CloudinaryService } from '../cloudinary/cloudinary.service';
 import { UploadApiResponse } from 'cloudinary';
 import { MessageError } from '../constans/constans';
-//import { path } from 'app-root-path';
-//import { FileElementResponse } from "./dto/file-response-element.response";
-//import { format } from 'date-fns';
-//import { ensureDir, writeFile } from 'fs-extra';
-//import {HOST_URL} from "../constans/constans";
+
 
 @Injectable()
 export class FilesService {
@@ -17,10 +13,7 @@ export class FilesService {
   async saveFiles(file: MFile): Promise<UploadApiResponse> {
     //: Promise<FileElementResponse> {
     return await this.cloudinaryService.uploadImage(file).catch(() => {
-      throw new BadRequestException({
-        status: HttpStatus.NOT_ACCEPTABLE,
-        message: [MessageError.ERROR_WHILE_SAVING_ON_CLOUDINARY],
-      });
+      throw new HttpException([MessageError.ERROR_WHILE_SAVING_ON_CLOUDINARY], HttpStatus.NOT_ACCEPTABLE)
     });
 
     // для локального сохранения:

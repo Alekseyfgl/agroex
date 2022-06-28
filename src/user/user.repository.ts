@@ -16,13 +16,7 @@ export class UserRepository extends AbstractRepository<UserEntity> {
     const user: UserEntity = await this.getUserByEmail(createUserDto.email);
 
     if (user) {
-      throw new HttpException(
-        {
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
-          message: [MessageError.EMAIL_IS_TAKEN],
-        },
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
+      throw new HttpException([MessageError.EMAIL_IS_TAKEN], HttpStatus.BAD_REQUEST)
     }
 
     const newUser: UserEntity = new UserEntity();
@@ -50,13 +44,7 @@ export class UserRepository extends AbstractRepository<UserEntity> {
     );
 
     if (!isPassword) {
-      throw new HttpException(
-        {
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
-          message: [MessageError.INCORRECT_DATA],
-        },
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
+      throw new HttpException([MessageError.INCORRECT_DATA], HttpStatus.BAD_REQUEST)
     }
     return user;
   }
@@ -64,13 +52,7 @@ export class UserRepository extends AbstractRepository<UserEntity> {
   async checkUserByEmail(loginUserDto: LoginUserDto): Promise<CreateUserDto> {
     const user: UserEntity = await this.getUserByEmail(loginUserDto.email);
     if (!user) {
-      throw new HttpException(
-        {
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
-          message: [MessageError.INCORRECT_DATA],
-        },
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
+      throw new HttpException([MessageError.INCORRECT_DATA], HttpStatus.BAD_REQUEST)
     }
     return user;
   }
@@ -78,13 +60,7 @@ export class UserRepository extends AbstractRepository<UserEntity> {
   async checkIsBanned(loginUserDto: LoginUserDto): Promise<boolean> {
     const user: UserEntity = await this.getUserByEmail(loginUserDto.email);
     if (user.banned) {
-      throw new HttpException(
-        {
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
-          message: [MessageError.ACCESS_DENIED],
-        },
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
+      throw new HttpException([MessageError.ACCESS_DENIED], HttpStatus.FORBIDDEN)
     }
     return true;
   }
@@ -98,13 +74,7 @@ export class UserRepository extends AbstractRepository<UserEntity> {
     });
 
     if (!user) {
-      throw new HttpException(
-        {
-          status: HttpStatus.UNPROCESSABLE_ENTITY,
-          message: [MessageError.USER_ID_NOT_FOUND],
-        },
-        HttpStatus.UNPROCESSABLE_ENTITY,
-      );
+      throw new HttpException([MessageError.USER_ID_NOT_FOUND], HttpStatus.BAD_REQUEST)
     }
     return user;
   }
@@ -119,13 +89,7 @@ export class UserRepository extends AbstractRepository<UserEntity> {
       if (
         user.userRoles.some((userRole) => [role.id].includes(userRole.role_id))
       ) {
-        throw new HttpException(
-          {
-            status: HttpStatus.NOT_FOUND,
-            message: [MessageError.ROLE_IS_ALREADY_ADDED],
-          },
-          HttpStatus.NOT_FOUND,
-        );
+        throw new HttpException([MessageError.ROLE_IS_ALREADY_ADDED], HttpStatus.BAD_REQUEST)
       }
       await this.repository.save({
         ...user,
@@ -133,25 +97,13 @@ export class UserRepository extends AbstractRepository<UserEntity> {
       });
       return dto;
     }
-    throw new HttpException(
-      {
-        status: HttpStatus.NOT_FOUND,
-        message: [MessageError.ROLE_OR_USER_NOT_FOUND],
-      },
-      HttpStatus.NOT_FOUND,
-    );
+    throw new HttpException([MessageError.ROLE_OR_USER_NOT_FOUND], HttpStatus.NOT_FOUND)
   }
 
   async addBan(dto: BanUserDto): Promise<void> {
     const user: UserEntity = await this.findUserById(dto.userId);
     if (!user) {
-      throw new HttpException(
-        {
-          status: HttpStatus.NOT_FOUND,
-          message: [MessageError.USER_NOT_FOUND],
-        },
-        HttpStatus.NOT_FOUND,
-      );
+      throw new HttpException([MessageError.USER_NOT_FOUND], HttpStatus.NOT_FOUND)
     }
     user.banned = true;
     user.banReason = dto.banReason;

@@ -2,17 +2,11 @@ import {
   AbstractRepository,
   EntityRepository,
   In,
-  InsertResult,
-  UpdateResult,
 } from 'typeorm';
 import { FireBaseTokensEntity } from './fireBaseTokens.entity';
 import { UserEntity } from '../user/user.entity';
 import { UpdateTokenDto } from './dto/updateToken.dto';
-import {
-  DeviceTypes,
-  FireBaseTokenSaving,
-} from './interfacesAndTypes/interfacesAndTypes';
-import { PromiseOptional } from '../interfacesAndTypes/optional.interface';
+import { FireBaseTokenSaving } from './interfacesAndTypes/interfacesAndTypes';
 import * as moment from 'moment';
 
 @EntityRepository(FireBaseTokensEntity)

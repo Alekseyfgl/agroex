@@ -79,13 +79,7 @@ export class AdvertisementsService {
       await this.advertisementsRepository.findBySlug(updateAdvertDto.slug);
 
     if (existAdData.isModerated) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          message: [MessageError.ADVERTISEMENT_IS_ALREADY_MODERATED],
-        },
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException([MessageError.ADVERTISEMENT_IS_ALREADY_MODERATED], HttpStatus.BAD_REQUEST)
     } else
       await this.advertisementsRepository.updateModeratedData(updateAdvertDto);
 
@@ -129,23 +123,11 @@ export class AdvertisementsService {
       await this.advertisementsRepository.findBySlug(updateAdvertDto.slug);
 
     if (existAdData.author.id !== currentUser.id) {
-      throw new HttpException(
-        {
-          status: HttpStatus.FORBIDDEN,
-          message: [MessageError.ACCESS_DENIED],
-        },
-        HttpStatus.FORBIDDEN,
-      );
+      throw new HttpException([MessageError.ACCESS_DENIED], HttpStatus.FORBIDDEN)
     }
 
     if (existAdData.isActive || existAdData.isConfirmed) {
-      throw new HttpException(
-        {
-          status: HttpStatus.BAD_REQUEST,
-          message: [MessageError.ADVERTISEMENT_CAN_NOT_BE_CHANGED],
-        },
-        HttpStatus.BAD_REQUEST,
-      );
+      throw new HttpException([MessageError.ADVERTISEMENT_CAN_NOT_BE_CHANGED], HttpStatus.BAD_REQUEST)
     }
 
     await this.advertisementsRepository.updateAdData(updateAdvertDto);

@@ -33,13 +33,7 @@ export class RolesGuard implements CanActivate {
         requiredRoles.includes(role.role_id.toString()),
       );
     } catch (e) {
-      throw new HttpException(
-        {
-          status: HttpStatus.FORBIDDEN,
-          message: [MessageError.ACCESS_DENIED],
-        },
-        HttpStatus.FORBIDDEN,
-      );
+      throw new HttpException([MessageError.ACCESS_DENIED], HttpStatus.FORBIDDEN)
     }
   }
 
