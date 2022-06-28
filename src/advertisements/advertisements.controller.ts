@@ -38,9 +38,14 @@ import { SetModerationStatusDto } from './dto/setUpdatedAd.dto';
 import { UpdateAdDataDto } from './dto/updateAdData.dto';
 import { PromiseOptional } from '../interfacesAndTypes/optional.interface';
 import { QueryDto } from './dto/query.dto';
-import {ApiBody, ApiOperation, ApiParam, ApiProperty, ApiResponse, ApiTags} from "@nestjs/swagger";
-import { GetAllAdsSwagger} from "../../swagger/AdsSwagger";
-import {ApiImplicitBody} from "@nestjs/swagger/dist/decorators/api-implicit-body.decorator";
+import {ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiProperty, ApiResponse, ApiTags} from "@nestjs/swagger";
+import {
+  CreateAdResponseSwagger,
+  CreateAdSwagger,
+  GetAllAdsSwagger,
+  GetOneAdSwagger, GetUsersAdsWithBetsSwagger, ModerConfirmRequestSwagger
+} from "../../swagger/AdsSwagger";
+
 
 @ApiTags('advertisements')
 @Controller('advertisements')
@@ -50,9 +55,10 @@ export class AdvertisementsController {
     private readonly filesService: FilesService,
   ) {}
 
-  // @ApiOperation({summary: 'Create advertisement'})
-  // @ApiResponse({status: 201, description: 'Create advertisement for register user'})
- @ApiProperty({type: CreateAdvertisementDto})
+  @ApiOperation({summary: 'Create advertisement'})
+  @ApiResponse({status: 201, description: 'Create advertisement for register user', type: CreateAdResponseSwagger})
+ @ApiBody({type: CreateAdSwagger})
+  @ApiConsumes('multipart/form-data')
   @Post()
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
@@ -62,6 +68,7 @@ export class AdvertisementsController {
       limits: { fileSize: MAX_IMAGE_SIZE },
     }),
   )
+
   async createAdvertisement(
     @UploadedFile(ParseFile) file: Express.Multer.File, // получаем 1 файл, который нам отправляют
     @User() currentUser: UserEntity,
@@ -82,7 +89,7 @@ export class AdvertisementsController {
   }
 
   @ApiOperation({summary: 'Get one advertisement'})
-  @ApiResponse({status: 201, description: 'Get one advertisement by slug'})
+  @ApiResponse({status: 200, description: 'Get one advertisement by slug', type: GetOneAdSwagger})
   @Get('slug/:slug')
   async getSingleAdvertisement(
     @Param('slug') slug: string,
@@ -113,8 +120,9 @@ export class AdvertisementsController {
     });
   }
 
+
   @ApiOperation({summary: 'Get all user\'s advertisements'})
-  @ApiResponse({status: 200, description: 'Get all user\'s advertisements in personal account'})
+  @ApiResponse({status: 200, description: 'Get all user\'s advertisements in personal account', type: GetAllAdsSwagger})
   @Get('/my-advertisements') // для получения всех объявлений юзера для личного кабинета (не смотрим на isActive)
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
@@ -129,7 +137,7 @@ export class AdvertisementsController {
   }
 
   @ApiOperation({summary: 'Get all user\'s bets'})
-  @ApiResponse({status: 200, description: 'Get all user\'s bets in personal account'})
+  @ApiResponse({status: 200, description: 'Get all user\'s bets in personal account', type: GetUsersAdsWithBetsSwagger, isArray: true})
   @Get('/my-bets')
   @UseGuards(AuthGuard)
   async findAllAdsWithBetByAuthor(
@@ -139,7 +147,7 @@ export class AdvertisementsController {
   }
 
   @ApiOperation({summary: 'Get user\'s advertisement'})
-  @ApiResponse({status: 200, description: 'Get user\'s advertisement by slug in personal account'})
+  @ApiResponse({status: 200, description: 'Get user\'s advertisement by slug in personal account',type: GetOneAdSwagger})
   @Get('/my-advertisements/:slug') // для получения одного объявления юзера для личного кабинета (не смотрим на isActive)
   @UseGuards(AuthGuard)
   async getSingleMyAdvertisement(
@@ -181,7 +189,7 @@ export class AdvertisementsController {
   }
 
   @ApiOperation({summary: 'Get all advertisements for moderation ----------> Need to correct'})
-  @ApiResponse({status: 200, description: 'Get all advertisements for moderation'})
+  @ApiResponse({status: 200, description: 'Get all advertisements for moderation', type: GetAllAdsSwagger})
   @Get('/moderation/get')
   @Roles(ROLES_ID.MODERATOR)
   @UseGuards(AuthGuard, RolesGuard)
@@ -198,7 +206,7 @@ export class AdvertisementsController {
   }
 
   @ApiOperation({summary: 'Get all advertisements for moderation -----------> Need to correct'})
-  @ApiResponse({status: 200, description: 'Get all advertisements for moderation'})
+  @ApiResponse({status: 200, description: 'Get all advertisements for moderation', type: 'ssss'})
   @Patch('/moderation/set')
   @Roles(ROLES_ID.MODERATOR)
   @UseGuards(AuthGuard, RolesGuard)
@@ -210,7 +218,7 @@ export class AdvertisementsController {
   }
 
   @ApiOperation({summary: 'Get one advertisement for moderation'})
-  @ApiResponse({status: 200, description: 'Get one advertisement for moderation'})
+  @ApiResponse({status: 200, description: 'Get one advertisement for moderation', type: GetOneAdSwagger})
   @Get('/moderation/:slug')
   @Roles(ROLES_ID.MODERATOR)
   @UseGuards(AuthGuard, RolesGuard)

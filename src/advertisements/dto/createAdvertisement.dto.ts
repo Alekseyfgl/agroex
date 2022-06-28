@@ -15,6 +15,7 @@ export class CreateAdvertisementDto {
 
   @ApiProperty({
     description: 'Green apples',
+    example: 'Green apples',
     minLength: 5,
     maxLength: 40,
   })
@@ -22,6 +23,7 @@ export class CreateAdvertisementDto {
   readonly title: string;
 
   @ApiProperty({
+    example: 'Uzbekistan',
     description: 'Uzbekistan'
   })
   @IsNotEmpty()
@@ -29,17 +31,19 @@ export class CreateAdvertisementDto {
 
 
   @ApiProperty({
-    description: 'Bukhara Region'
+    description: 'Bukhara Region',
+    example: 'Bukhara Region',
   })
   @IsNotEmpty()
   location: string;
 
-  @ApiProperty({enum:Category})
+  @ApiProperty({enum:Category, example: Category.FRUITS})
   @IsNotEmpty()
   @IsEnum(Category)
   category: string;
 
   @ApiProperty({
+    example: '1000',
     description: '1000',
     minimum: 2,
     maximum:10000000000,
@@ -51,6 +55,7 @@ export class CreateAdvertisementDto {
   readonly price: number;
 
   @ApiProperty({
+    example: 'USD',
     description: 'USD',
     minLength: 2,
     maxLength: 3
@@ -58,12 +63,10 @@ export class CreateAdvertisementDto {
   @Length(2, 3)
   readonly currency: string;
 
-  @ApiProperty({
-    description: 'https://res.cloudinary.com/agroex-backend/image/upload/v1656319451/an1itowgp0ihudazw5js.webp'
-  })
   img: string;
 
   @ApiProperty({
+    example: '5000',
     description: '5000',
     minimum: 2,
     maximum:10000000000,
@@ -75,6 +78,7 @@ export class CreateAdvertisementDto {
   readonly quantity: number;
 
   @ApiProperty({
+    example: 'kg',
     description: 'kg',
     maxLength:1,
     minLength: 5

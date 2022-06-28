@@ -14,7 +14,9 @@ import { NotificationsService } from './notifications.service';
 import { UpdateTokenDto } from './dto/updateToken.dto';
 import { FireBaseTokensEntity } from './fireBaseTokens.entity';
 import { InsertResult, UpdateResult } from 'typeorm';
+import {ApiTags} from "@nestjs/swagger";
 
+@ApiTags('notifications')
 @Controller('notifications')
 export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService) {}

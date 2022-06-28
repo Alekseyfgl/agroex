@@ -4,7 +4,9 @@ import { AuthGuard } from '../auth/guards/auth.guard';
 import { User } from '../user/decorators/user.decarator';
 import { ApprovedAdsResponseInterface } from './interface/orders.interface';
 import { UserEntity } from '../user/user.entity';
+import {ApiTags} from "@nestjs/swagger";
 
+@ApiTags('orders')
 @Controller('orders')
 export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}

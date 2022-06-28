@@ -1,10 +1,9 @@
 import {AdvertisementsEntity} from "../src/advertisements/advertisements.entity";
-import {ApiProperty} from "@nestjs/swagger";
+import {ApiProperty, OmitType} from "@nestjs/swagger";
 import {CreateAdvertisementDto} from "../src/advertisements/dto/createAdvertisement.dto";
-import {Category} from "../src/advertisements/interface/interfacesAndTypes";
+import {ModerationStatus} from "../src/advertisements/interface/interfacesAndTypes";
 
-
-
+export class AdsSwagger extends OmitType(AdvertisementsEntity, ['userBets', 'author']) {}
 
 export class GetAllAdsSwagger {
     @ApiProperty({type: AdvertisementsEntity, isArray: true})
@@ -13,10 +12,55 @@ export class GetAllAdsSwagger {
     advertisementCount: number
 }
 
-// export class CreateAdSwagger  extends CreateAdvertisementDto {
-//     @ApiProperty()
-//     title: 'Banana'
-//     // country: 'Uzbekistan'
-//     // location: 'Bukhara Region'
-//     // Category: Category
-// }
+export class GetOneAdSwagger {
+    @ApiProperty({type: AdvertisementsEntity})
+    advertisements: AdvertisementsEntity
+}
+
+export class CreateAdSwagger extends CreateAdvertisementDto {
+    @ApiProperty()
+    file: any;
+}
+
+export class CreateAdResponse {
+    @ApiProperty({example: 'success'})
+    status: string;
+    @ApiProperty({example: 77})
+    id_advertisement: number;
+    @ApiProperty({example: 'tasty-apples--za6fiw'})
+    slug: string;
+}
+
+export class CreateAdResponseSwagger {
+    @ApiProperty()
+    advertisement: CreateAdResponse
+}
+
+export class LastBetInfoSwagger {
+    @ApiProperty({example: 214})
+    user_id_with_last_bet: number
+    @ApiProperty({example: '700'})
+    last_bet_value: string
+}
+
+export class GetUsersAdsWithBetsSwagger extends AdsSwagger {
+    @ApiProperty({example: 28})
+    authorId: number
+
+    @ApiProperty()
+    lastBetInfo: LastBetInfoSwagger
+}
+
+export class ModeratorConfirmation {
+    @ApiProperty({example: 'tasty-blackbarry-xki02q'})
+    slug: string
+    @ApiProperty()
+    moderationStatus: string
+    @ApiProperty()
+    moderationComment: null
+}
+
+export class ModerConfirmRequestSwagger extends ModeratorConfirmation {
+    @ApiProperty()
+    advertisements: ModeratorConfirmation
+}

@@ -15,39 +15,39 @@ import {ApiProperty} from "@nestjs/swagger";
 
 @Entity({ name: 'advertisements' })
 export class AdvertisementsEntity {
-  @ApiProperty()
+  @ApiProperty({example: 2})
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @ApiProperty()
+  @ApiProperty({example: 'Tasty apples'})
   @Column('varchar', { length: 200 })
   title: string;
 
-  @ApiProperty()
+  @ApiProperty({example: 'Uzbekistan'})
   @Column('varchar', { length: 100 })
   country: string;
 
-  @ApiProperty()
+  @ApiProperty({example: 'Bukhara Region'})
   @Column('varchar', { length: 300 })
   location: string;
 
-  @ApiProperty()
+  @ApiProperty({example: 'apples-qu6kke'})
   @Column('varchar', { unique: true })
   slug: string;
 
-  @ApiProperty()
+  @ApiProperty({example: 'Fruits'})
   @Column('varchar', { length: 100 })
   category: Category;
 
-  @ApiProperty()
+  @ApiProperty({default: null})
   @Column('varchar', { default: null, length: 100 })
   subCategory: string | null;
 
-  @ApiProperty()
+  @ApiProperty({default:false})
   @Column('boolean', { default: false })
   isModerated: boolean;
 
-  @ApiProperty()
+  @ApiProperty({default: false})
   @Column('boolean', { default: false })
   isActive: boolean;
 
@@ -61,31 +61,31 @@ export class AdvertisementsEntity {
   @CreateDateColumn({ type: 'timestamptz' })
   expireAdvert: Date;
 
-  @ApiProperty()
+  @ApiProperty({default: ModerationStatus.UNMODERATED})
   @Column({ default: ModerationStatus.UNMODERATED })
   moderationStatus: ModerationStatus;
 
-  @ApiProperty()
+  @ApiProperty({default: null})
   @Column('varchar', { default: null })
   moderationComment: string | null;
 
-  @ApiProperty()
+  @ApiProperty({example: 5000})
   @Column('decimal', { precision: 18, scale: 2 })
   price: number;
 
-  @ApiProperty()
+  @ApiProperty({example: 'USD'})
   @Column('varchar', { length: 3 })
   currency: string;
 
-  @ApiProperty()
+  @ApiProperty({example: 'https://res.cloudinary.com/agroex-backend/image/upload/v1656319454/rs2k74crvmzu872fm5sh.webp'})
   @Column('varchar')
   img: string;
 
-  @ApiProperty()
+  @ApiProperty({example: 400})
   @Column('decimal', { precision: 18, scale: 2 })
   quantity: number;
 
-  @ApiProperty()
+  @ApiProperty({example: 'kg'})
   @Column('varchar', { length: 5 })
   unit: string;
 
