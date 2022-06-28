@@ -8,7 +8,9 @@ import { NotificationsRepository } from './notifications.repository';
 import { UpdateTokenDto } from './dto/updateToken.dto';
 import { UserEntity } from '../user/user.entity';
 import { FireBaseTokensEntity } from './fireBaseTokens.entity';
+import { v4 as uuidv4 } from 'uuid';
 import { notificationsMessages } from './notifications.mapper';
+
 import {NOTIFICATIONS_LINKTO, NOTIFICATIONS_STATUS, NOTIFICATIONS_TYPES} from "../constans/constans";
 
 export interface ISendFirebaseMessages {
@@ -47,6 +49,7 @@ export class NotificationsService {
     linkTo: string,
     type: NOTIFICATIONS_TYPES
   ): Promise<void> {
+    const id = uuidv4()
     const status = NOTIFICATIONS_STATUS.NEW;
     const uniqueUserIds: number[] =
       userIds.length > 1 ? _.uniq(userIds) : userIds;
@@ -86,7 +89,7 @@ export class NotificationsService {
             groupedFirebaseMessages.map(
               ({ message, title, token, linkTo, userIds , type, status}) => ({
                 notification: { body: message, title },
-                data: { linkTo, userIds, type, status},
+                data: { linkTo, userIds, type, status, id: uuidv4()},
                 token,
                 apns: {
                   payload: {

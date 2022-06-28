@@ -95,7 +95,7 @@ export class AdvertisementsService {
         NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_APPROVED(existAdData.id.toString()),
         NOTIFICATIONS_MESSAGES.NOW_YOUR_LOT_IS_SHOWN,
         NOTIFICATIONS_LINKTO.EMPTY,
-        NOTIFICATIONS_TYPES.MODERATION
+        NOTIFICATIONS_TYPES.MODERATIONAPPROVED
       ); // Your LOT was approved by moderator
     } else if (updateAdvertDto.moderationStatus === ModerationStatus.REJECTED) {
       await this.notificationsService.sendNotifications(
@@ -103,7 +103,7 @@ export class AdvertisementsService {
         NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_REJECTED(existAdData.id.toString()),
         NOTIFICATIONS_MESSAGES.GO_TO_MY_ADVERTISEMENTS_PAGE_CHANGE,
         NOTIFICATIONS_LINKTO.MY_ADVERTISEMENTS,
-        NOTIFICATIONS_TYPES.MODERATION
+        NOTIFICATIONS_TYPES.MODERATIONREJECTED
       ); // Your LOT was rejected by moderator
     }
 

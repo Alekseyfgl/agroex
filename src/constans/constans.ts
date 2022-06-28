@@ -85,7 +85,8 @@ export const enum NOTIFICATIONS_LINKTO {
 }
 
 export const enum NOTIFICATIONS_TYPES {
-  MODERATION = 'moderation',
+  MODERATIONAPPROVED = 'moderationApproved',
+  MODERATIONREJECTED = 'moderationRejected',
   CONFIRMATION = 'confirmation',
   OUTBIDDING = 'outbidding',
   PURCHASE = 'purchase',
