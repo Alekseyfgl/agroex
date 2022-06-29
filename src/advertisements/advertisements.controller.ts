@@ -44,7 +44,7 @@ import {
   CreateAdSwagger,
   GetAllAdsSwagger,
   GetOneAdSwagger, GetUsersAdsWithBetsSwagger, ModerConfirmRequestSwagger
-} from "../../swagger/AdsSwagger";
+} from "../../swagger/adsSwagger";
 
 
 @ApiTags('advertisements')

@@ -1,4 +1,4 @@
-import {AdsWithoutBetsSwagger} from "./AdsSwagger";
+import {AdsWithoutBetsSwagger} from "./adsSwagger";
 import {ApiProperty} from "@nestjs/swagger";
 import {LoginUserDto} from "../src/auth/dto/loginUserDto";
 

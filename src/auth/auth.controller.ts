@@ -15,7 +15,7 @@ import { LoginUserDto } from './dto/loginUserDto';
 import { User } from '../user/decorators/user.decarator';
 import { AuthGuard } from './guards/auth.guard';
 import {ApiBody, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
-import {CreateAdResponseSwagger, CreateAdSwagger} from "../../swagger/AdsSwagger";
+import {CreateAdResponseSwagger, CreateAdSwagger} from "../../swagger/adsSwagger";
 import {LoginSwagger, RegisterSwagger, Users, UsersSwagger} from "../../swagger/usersSwagger";
 
 @ApiTags('auth')

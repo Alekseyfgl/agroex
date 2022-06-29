@@ -5,7 +5,7 @@ import { User } from '../user/decorators/user.decarator';
 import { ApprovedAdsResponseInterface } from './interface/orders.interface';
 import { UserEntity } from '../user/user.entity';
 import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
-import {GetAllAdsSwagger} from "../../swagger/AdsSwagger";
+import {GetAllAdsSwagger} from "../../swagger/adsSwagger";
 import {OrdersSwagger} from "../../swagger/ordersSwagger";
 
 @ApiTags('orders')

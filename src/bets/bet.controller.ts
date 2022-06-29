@@ -14,7 +14,7 @@ import { User } from '../user/decorators/user.decarator';
 import { UserEntity } from '../user/user.entity';
 import { UserBetEntity } from './user-bet.entity';
 import {ApiBody, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
-import {GetAllAdsSwagger} from "../../swagger/AdsSwagger";
+import {GetAllAdsSwagger} from "../../swagger/adsSwagger";
 
 @ApiTags('bets')
 @Controller()
