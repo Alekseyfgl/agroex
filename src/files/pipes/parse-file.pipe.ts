@@ -14,7 +14,7 @@ export class ParseFile implements PipeTransform {
     metadata: ArgumentMetadata,
   ): Express.Multer.File {
     if (files === undefined || files === null) {
-      throw new HttpException([FILES_ERRORS.FILE_EXPECTED], HttpStatus.NOT_FOUND)
+      throw new HttpException(FILES_ERRORS.FILE_EXPECTED, HttpStatus.NOT_FOUND)
     }
     return files;
   }

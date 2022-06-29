@@ -12,7 +12,6 @@ import { CreateBetDto } from './dto/createBet.dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { User } from '../user/decorators/user.decarator';
 import { UserEntity } from '../user/user.entity';
-import { UserBetEntity } from './user-bet.entity';
 
 @Controller()
 export class BetController {

@@ -13,7 +13,7 @@ export class FilesService {
   async saveFiles(file: MFile): Promise<UploadApiResponse> {
     //: Promise<FileElementResponse> {
     return await this.cloudinaryService.uploadImage(file).catch(() => {
-      throw new HttpException([MessageError.ERROR_WHILE_SAVING_ON_CLOUDINARY], HttpStatus.NOT_ACCEPTABLE)
+      throw new HttpException(MessageError.ERROR_WHILE_SAVING_ON_CLOUDINARY, HttpStatus.NOT_ACCEPTABLE)
     });
 
     // для локального сохранения:

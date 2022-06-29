@@ -43,15 +43,15 @@ export class OrdersService {
       await this.betService.getAllInactiveUserBets(advertBySlug.id);
 
     if (currentUser.id !== advertBySlug.author.id) {
-      throw new HttpException([MessageError.ACCESS_DENIED], HttpStatus.FORBIDDEN)
+      throw new HttpException(MessageError.ACCESS_DENIED, HttpStatus.FORBIDDEN)
     }
 
     if (isConfirmed) {
-      throw new HttpException([MessageError.ADVERTISEMENT_ALREADY_CONFIRMED], HttpStatus.NOT_FOUND)
+      throw new HttpException(MessageError.ADVERTISEMENT_ALREADY_CONFIRMED, HttpStatus.NOT_FOUND)
     }
 
     if (!isLastBet) {
-      throw new HttpException([MessageError.ADVERTISEMENT_HAS_NOT_BETS], HttpStatus.NOT_FOUND)
+      throw new HttpException(MessageError.ADVERTISEMENT_HAS_NOT_BETS, HttpStatus.NOT_FOUND)
     }
 
     await this.ordersRepository.confirmBet(advertBySlug);
@@ -86,7 +86,7 @@ export class OrdersService {
       await this.advertisementsService.getAdvertisementBySlug(slug);
 
     if (updatedAdBySlug.isConfirmed) {
-      throw new HttpException([MessageError.ADVERTISEMENT_ALREADY_CONFIRMED], HttpStatus.NOT_FOUND)
+      throw new HttpException(MessageError.ADVERTISEMENT_ALREADY_CONFIRMED, HttpStatus.NOT_FOUND)
     }
     await this.ordersRepository.confirmBet(updatedAdBySlug);
   }

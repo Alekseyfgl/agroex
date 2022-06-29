@@ -1,3 +1,5 @@
+import {HttpException, HttpStatus} from "@nestjs/common";
+
 export const numToEncode = 10;
 
 export const expiresInForToken = '168h';
@@ -135,3 +137,4 @@ export const NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_REJECTED = (
 export const enum NOTIFICATIONS_STATUS {
   NEW = 'new',
 }
+
