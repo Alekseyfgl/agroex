@@ -1,6 +1,7 @@
 import {IsEnum, IsNumber, IsOptional, IsString} from 'class-validator';
 import { Transform } from 'class-transformer';
-import {ApiProperty, ApiPropertyOptional} from "@nestjs/swagger";
+import {ApiPropertyOptional} from "@nestjs/swagger";
+import {AdType} from "../interface/interfacesAndTypes";
 
 export class QueryDto {
 
