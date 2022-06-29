@@ -14,7 +14,7 @@ import { UserEntity } from '../user/user.entity';
 import { LoginUserDto } from './dto/loginUserDto';
 import { User } from '../user/decorators/user.decarator';
 import { AuthGuard } from './guards/auth.guard';
-import {ApiBody, ApiOperation, ApiResponse, ApiSecurity, ApiTags} from "@nestjs/swagger";
+import {ApiBody, ApiOAuth2, ApiOperation, ApiResponse, ApiSecurity, ApiTags} from "@nestjs/swagger";
 import {CreateAdResponseSwagger, CreateAdSwagger} from "../../swagger/adsSwagger";
 import {LoginSwagger, RegisterSwagger, Users, UsersSwagger} from "../../swagger/usersSwagger";
 
@@ -51,14 +51,13 @@ export class AuthController {
   @ApiOperation({summary: 'Get current  user'})
   @ApiResponse({status: 200, description: 'Get current user by token', type: Users})
   @ApiSecurity('JWT-auth')
+  @ApiOAuth2(['pets:write'])
   @Get('user')
   @UseGuards(AuthGuard) // проверяем регистрац
   async currentUser(
     @User() user: UserEntity,
     @User('id') currentUserId: number,
   ): Promise<UserResponseInterface> {
-    // здесь всегда получим пользоватля, т.к. могут заходить только зарегестрированные
-    // console.log('------ currentUserId--------', currentUserId)
     return this.authService.buildUserResponseWithToken(user);
   }
 }
