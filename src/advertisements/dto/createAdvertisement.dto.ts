@@ -22,7 +22,7 @@ export class CreateAdvertisementDto {
 
   @IsNotEmpty()
   @IsEnum(Category)
-  category: string;
+  category: Category;
 
   @Transform(({ value }) => Number(value), { toClassOnly: true }) //преобразует в number
   @IsInt()

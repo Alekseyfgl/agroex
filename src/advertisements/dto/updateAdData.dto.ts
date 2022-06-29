@@ -1,4 +1,5 @@
 import {
+  IsEnum,
   IsNotEmpty,
   IsNumber,
   IsOptional,
@@ -8,6 +9,7 @@ import {
 } from 'class-validator';
 import { CreateAdvertisementDto } from './createAdvertisement.dto';
 import { Transform } from 'class-transformer';
+import {Category} from "../interface/interfacesAndTypes";
 
 export class UpdateAdDataDto {
   @IsNotEmpty()
@@ -26,8 +28,9 @@ export class UpdateAdDataDto {
   location: string;
 
   @IsOptional()
+  @IsEnum(Category)
   @IsNotEmpty()
-  category: string;
+  category: Category;
 
   @IsOptional()
   @Transform(({ value }) => Number(value), { toClassOnly: true }) //преобразует в number

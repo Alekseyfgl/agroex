@@ -12,20 +12,20 @@ import { AuthGuard } from '../auth/guards/auth.guard';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Post('/role')
   @ApiOperation({ summary: 'Выдать роль' })
   @ApiResponse({ status: 200 })
   @Roles(ROLES_ID.ADMIN)
   @UseGuards(AuthGuard, RolesGuard)
-  @Post('/role')
   addRole(@Body() dto: AddRoleDto): Promise<AddRoleDto> {
     return this.userService.addRole(dto);
   }
 
+  @Post('/ban')
   @ApiOperation({ summary: 'Забанить пользователя' })
   @ApiResponse({ status: 200 })
   @Roles(ROLES_ID.ADMIN)
   @UseGuards(AuthGuard, RolesGuard)
-  @Post('/ban')
   addBan(@Body() dto: BanUserDto): Promise<void> {
     return this.userService.addBan(dto);
   }

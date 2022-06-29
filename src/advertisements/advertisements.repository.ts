@@ -86,7 +86,7 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
       await queryBuilder.getOne();
 
     if (!advertisement) {
-      throw new HttpException([MessageError.ADVERTISEMENT_NOT_FOUND], HttpStatus.NOT_FOUND)
+      throw new HttpException(MessageError.ADVERTISEMENT_NOT_FOUND, HttpStatus.NOT_FOUND)
     }
 
     return advertisement;

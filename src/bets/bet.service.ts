@@ -51,15 +51,15 @@ export class BetService {
     const userBettedPreviouslyId: number = advertisementWithLastBet.user_id;
 
     if (!isActive) {
-      throw new HttpException([MessageError.ADVERTISEMENT_IS_NOT_ACTIVE], HttpStatus.BAD_REQUEST)
+      throw new HttpException(MessageError.ADVERTISEMENT_IS_NOT_ACTIVE, HttpStatus.BAD_REQUEST)
     }
 
     if (currentUserId === authorAdvertisementId) {
-      throw new HttpException([MessageError.ACCESS_DENIED], HttpStatus.FORBIDDEN)
+      throw new HttpException(MessageError.ACCESS_DENIED, HttpStatus.FORBIDDEN)
     }
 
     if (isConfirmed) {
-      throw new HttpException([MessageError.ADVERTISEMENT_ALREADY_CONFIRMED], HttpStatus.NOT_FOUND)
+      throw new HttpException(MessageError.ADVERTISEMENT_ALREADY_CONFIRMED, HttpStatus.NOT_FOUND)
     }
 
     if (isMaxBet) {
@@ -87,11 +87,11 @@ export class BetService {
     }
 
     if (currentBet >= priceSeller) {
-      throw new HttpException([MessageError.HIGHER_PRICE_THAN_SELLER], HttpStatus.BAD_REQUEST)
+      throw new HttpException(MessageError.HIGHER_PRICE_THAN_SELLER, HttpStatus.BAD_REQUEST)
     }
 
     if (lastBet && currentBet <= lastBet) {
-      throw new HttpException([MessageError.NEED_TO_REFRESH_THE_PAGE], HttpStatus.CONFLICT)
+      throw new HttpException(MessageError.NEED_TO_REFRESH_THE_PAGE, HttpStatus.CONFLICT)
     }
     await this.betRepository.createBet(advert, user, bet);
 
