@@ -16,6 +16,14 @@ async function bootstrap() {
     .setTitle('Backend for AGROEX')
     .setDescription('Documentation REST API for AGROEX')
     .setVersion('0.1.1')
+      .addBearerAuth({
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT',
+        name: 'JWT',
+        description: 'Enter JWT Token',
+        in: 'header'
+      }, 'JWT-auth')
     .build();
 
   const configService: ConfigService = app.get(ConfigService);

@@ -1,6 +1,4 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { CategoriesModule } from './categories/categories.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
@@ -34,8 +32,7 @@ import { NotificationsModule } from './notifications/notifications.module';
     OrdersModule,
     NotificationsModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, CloudinaryProvider],
+  providers: [ CloudinaryProvider],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer): void {
