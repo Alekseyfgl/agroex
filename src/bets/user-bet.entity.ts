@@ -12,15 +12,15 @@ import {ApiProperty} from "@nestjs/swagger";
 
 @Entity({ name: 'userBets' })
 export class UserBetEntity {
-  @ApiProperty()
+  @ApiProperty({example:3})
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ApiProperty()
+  @ApiProperty({example:1})
   @Column('int')
   user_id: number;
 
-  @ApiProperty()
+  @ApiProperty({example:33})
   @Column('int')
   advertisement_id: number;
 
@@ -28,18 +28,20 @@ export class UserBetEntity {
   @CreateDateColumn({ type: 'timestamptz' })
   created_at: Date;
 
-  @ApiProperty()
+  @ApiProperty({example:500})
   @Column('decimal', { precision: 18, scale: 2 })
   betValue: number;
 
-  @ApiProperty()
+  @ApiProperty({example: true})
   @Column('boolean', { default: true })
   isActive: boolean;
 
+  // @ApiProperty({type: ()=> UserEntity})
   @ManyToOne(() => UserEntity, (userEntity) => userEntity.userBets)
   @JoinColumn({ name: 'user_id' })
   user: UserEntity;
 
+  // @ApiProperty({type: UserBetEntity, isArray: true})
   @ManyToOne(
     () => AdvertisementsEntity,
     (advertisementEntity) => advertisementEntity.userBets,

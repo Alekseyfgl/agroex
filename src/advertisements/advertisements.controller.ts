@@ -20,7 +20,6 @@ import { CreateAdvertisementDto } from './dto/createAdvertisement.dto';
 import { AuthGuard } from '../auth/guards/auth.guard';
 import { AdvertisementsEntity } from './advertisements.entity';
 import {
-  AdvertisementType,
   AdvertResponseInterface,
   AdvertResponseInterfaceForCreate,
   AdvertsResponseInterface,
@@ -30,7 +29,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { FilesService } from '../files/files.service';
 import { fileMimetypeFilter } from '../files/filters/file-mimetype-filter';
 import { ParseFile } from '../files/pipes/parse-file.pipe';
-import { UploadApiErrorResponse, UploadApiResponse } from 'cloudinary';
+import { UploadApiResponse } from 'cloudinary';
 import {MAX_IMAGE_SIZE, ORDER, ROLES_ID} from '../constans/constans';
 import { Roles } from '../roles/decorators/roles-auth.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
@@ -38,8 +37,9 @@ import { SetModerationStatusDto } from './dto/setUpdatedAd.dto';
 import { UpdateAdDataDto } from './dto/updateAdData.dto';
 import { PromiseOptional } from '../interfacesAndTypes/optional.interface';
 import { QueryDto } from './dto/query.dto';
-import {ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiProperty, ApiResponse, ApiTags} from "@nestjs/swagger";
+import {ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {
+  AdsForModeratorSwagger,
   CreateAdResponseSwagger,
   CreateAdSwagger,
   GetAllAdsSwagger,
@@ -123,7 +123,7 @@ export class AdvertisementsController {
 
   @ApiOperation({summary: 'Get all user\'s advertisements'})
   @ApiResponse({status: 200, description: 'Get all user\'s advertisements in personal account', type: GetAllAdsSwagger})
-  @Get('/my-advertisements') // для получения всех объявлений юзера для личного кабинета (не смотрим на isActive)
+  @Get('/my-advertisements') // для получения всех объявлений юзера для личного кабинета
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
   async findAllAdvertisements(
@@ -189,7 +189,7 @@ export class AdvertisementsController {
   }
 
   @ApiOperation({summary: 'Get all advertisements for moderation ----------> Need to correct'})
-  @ApiResponse({status: 200, description: 'Get all advertisements for moderation', type: GetAllAdsSwagger})
+  @ApiResponse({status: 200, description: 'Get all advertisements for moderation', type: AdsForModeratorSwagger})
   @Get('/moderation/get')
   @Roles(ROLES_ID.MODERATOR)
   @UseGuards(AuthGuard, RolesGuard)
@@ -219,7 +219,7 @@ export class AdvertisementsController {
   }
 
   @ApiOperation({summary: 'Get one advertisement for moderation'})
-  @ApiResponse({status: 200, description: 'Get one advertisement for moderation', type: GetOneAdSwagger})
+  @ApiResponse({status: 200, description: 'Get one advertisement for moderation', type: AdsForModeratorSwagger})
   @Get('/moderation/:slug')
   @Roles(ROLES_ID.MODERATOR)
   @UseGuards(AuthGuard, RolesGuard)

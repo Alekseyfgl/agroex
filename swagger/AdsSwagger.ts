@@ -12,6 +12,8 @@ export class GetAllAdsSwagger {
     advertisementCount: number
 }
 
+export class AdsForModeratorSwagger extends OmitType(AdvertisementsEntity, ["userBets"]) {}
+
 export class GetOneAdSwagger {
     @ApiProperty({type: AdvertisementsEntity})
     advertisements: AdvertisementsEntity
@@ -46,7 +48,6 @@ export class LastBetInfoSwagger {
 export class GetUsersAdsWithBetsSwagger extends AdsSwagger {
     @ApiProperty({example: 28})
     authorId: number
-
     @ApiProperty()
     lastBetInfo: LastBetInfoSwagger
 }

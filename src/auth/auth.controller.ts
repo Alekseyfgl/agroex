@@ -14,13 +14,18 @@ import { UserEntity } from '../user/user.entity';
 import { LoginUserDto } from './dto/loginUserDto';
 import { User } from '../user/decorators/user.decarator';
 import { AuthGuard } from './guards/auth.guard';
-import {ApiTags} from "@nestjs/swagger";
+import {ApiBody, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
+import {CreateAdResponseSwagger, CreateAdSwagger} from "../../swagger/AdsSwagger";
+import {LoginSwagger, RegisterSwagger, Users, UsersSwagger} from "../../swagger/usersSwagger";
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @ApiOperation({summary: 'User registration'})
+  @ApiResponse({status: 201, description: 'For user registration', type: UsersSwagger})
+  @ApiBody({type: RegisterSwagger})
   @Post('register')
   @UsePipes(new ValidationPipe())
   async registerUser(
@@ -31,6 +36,9 @@ export class AuthController {
     return this.authService.buildUserResponseWithToken(user); // ответ для клиента после регистрации
   }
 
+  @ApiOperation({summary: 'User login'})
+  @ApiResponse({status: 201, description: 'For user login', type: UsersSwagger})
+  @ApiBody({type: LoginSwagger})
   @Post('login')
   @UsePipes(new ValidationPipe())
   async login(
@@ -40,6 +48,8 @@ export class AuthController {
     return this.authService.buildUserResponseWithToken(user); // ответ для клиента после авторизации
   }
 
+  @ApiOperation({summary: 'Get current  user'})
+  @ApiResponse({status: 200, description: 'Get current user by token', type: Users})
   @Get('user')
   @UseGuards(AuthGuard) // проверяем регистрац
   async currentUser(

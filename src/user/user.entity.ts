@@ -15,19 +15,19 @@ import {ApiProperty} from "@nestjs/swagger";
 
 @Entity({ name: 'users' })
 export class UserEntity {
-  @ApiProperty()
+  @ApiProperty({example: 1})
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @ApiProperty()
+  @ApiProperty({example: 'anton@gmail.com'})
   @Column('varchar', { unique: true })
   email: string;
 
-  @ApiProperty()
+  @ApiProperty({example: 'Anton'})
   @Column('varchar', { length: 50 })
   username: string;
 
-  @ApiProperty()
+  @ApiProperty({example: '+375333456778'})
   @Column('varchar', { length: 18 })
   phone: string;
 
@@ -35,25 +35,20 @@ export class UserEntity {
   @Column('varchar')
   password: string;
 
-  @ApiProperty({
-    default: null
-  })
-  @Column('varchar', { default: null })
+  @ApiProperty({example: null})
+  @Column('varchar', { default: null  })
   image?: string;
 
-  @ApiProperty({
-    default: false
-  })
+  @ApiProperty({ example: false})
   @Column('boolean', { default: false })
   banned: boolean;
 
-  @ApiProperty({
-    default: null
-  })
+  @ApiProperty({example: null})
   @Column('varchar', { default: null, length: 200 })
   banReason: string;
 
 
+  @ApiProperty({type: [UserRolesEntity]})
   @OneToMany(() => UserRolesEntity, (userRolesEntity) => userRolesEntity.user, {
     cascade: true,
     onDelete: 'CASCADE',
@@ -74,7 +69,7 @@ export class UserEntity {
   )
   advertisements: AdvertisementsEntity[];
 
-
+// @ApiProperty({type: UserBetEntity, isArray: true})
   @OneToMany(() => UserBetEntity, (userBetEntity) => userBetEntity.user, {
     cascade: true,
     onDelete: 'CASCADE',

@@ -11,7 +11,7 @@ import {
 import { UserEntity } from '../user/user.entity';
 import { UserBetEntity } from '../bets/user-bet.entity';
 import { Category, ModerationStatus } from './interface/interfacesAndTypes';
-import {ApiProperty} from "@nestjs/swagger";
+import {ApiProperty, OmitType} from "@nestjs/swagger";
 
 @Entity({ name: 'advertisements' })
 export class AdvertisementsEntity {
@@ -97,11 +97,12 @@ export class AdvertisementsEntity {
   @UpdateDateColumn({ type: 'timestamptz' })
   updatedAt: Date;
 
-  @ApiProperty({type: () => UserEntity})
+  // @ApiProperty({type: () =>OmitType(UserEntity, ['userRoles'])})
+  @ApiProperty({type: () =>UserEntity})
   @ManyToOne(() => UserEntity, (user) => user.advertisements, { eager: true })
   author: UserEntity;
 
-  @ApiProperty({type: [UserBetEntity]})
+  @ApiProperty({type:  [UserBetEntity]})
   @OneToMany(
     () => UserBetEntity,
     (userBetEntity) => userBetEntity.advertisement,
