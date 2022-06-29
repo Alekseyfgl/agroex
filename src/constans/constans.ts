@@ -137,3 +137,6 @@ export const enum NOTIFICATIONS_STATUS {
   NEW = 'new',
 }
 
+export const INTERNAL_SERVER_ERROR = 'Internal server error'
+
+

@@ -4,13 +4,13 @@ import { ConfigService } from '@nestjs/config';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import * as admin from 'firebase-admin';
 import { ServiceAccount } from 'firebase-admin';
-import {ExceptionsInterceptor} from "./interceptors/exceptions.interceptor";
+import {AllExceptionsFilter} from "./filters/allExceptionsFilter";
 
 async function bootstrap() {
   const PORT = process.env.PORT || 5000;
   const app = await NestFactory.create(AppModule, { cors: true });
 
-  app.useGlobalInterceptors(new ExceptionsInterceptor());
+  app.useGlobalFilters(new AllExceptionsFilter())
 
   const config = new DocumentBuilder()
     .setTitle('Backend for AGROEX')
