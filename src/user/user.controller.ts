@@ -13,7 +13,7 @@ import { AuthGuard } from '../auth/guards/auth.guard';
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @ApiOperation({ summary: 'Выдать роль' })
+  @ApiOperation({ summary: 'Functionality is frozen' })
   @ApiResponse({ status: 200 })
   @Roles(ROLES_ID.ADMIN)
   @UseGuards(AuthGuard, RolesGuard)
@@ -22,7 +22,7 @@ export class UserController {
     return this.userService.addRole(dto);
   }
 
-  @ApiOperation({ summary: 'Забанить пользователя' })
+  @ApiOperation({ summary: 'Functionality is frozen' })
   @ApiResponse({ status: 200 })
   @Roles(ROLES_ID.ADMIN)
   @UseGuards(AuthGuard, RolesGuard)

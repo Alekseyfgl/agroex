@@ -12,11 +12,11 @@ import {ApiProperty} from "@nestjs/swagger";
 
 @Entity({ name: 'orders' })
 export class OrdersEntity {
-  @ApiProperty()
+  @ApiProperty({example: 1})
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @ApiProperty()
+  @ApiProperty({example: DEAL_STATUS.CONFIRMED})
   @Column('varchar', { length: 20, default: DEAL_STATUS.CONFIRMED })
   dealStatus: string;
 
@@ -24,9 +24,8 @@ export class OrdersEntity {
   @CreateDateColumn({ type: 'timestamptz' })
   orderCreated: Date;
 
-
+@ApiProperty()
   @OneToOne(() => UserBetEntity)
   @JoinColumn({ name: 'bet_id' })
-  // @ApiProperty()
   bet: UserBetEntity;
 }

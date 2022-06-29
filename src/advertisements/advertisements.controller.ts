@@ -39,7 +39,7 @@ import { PromiseOptional } from '../interfacesAndTypes/optional.interface';
 import { QueryDto } from './dto/query.dto';
 import {ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
 import {
-  AdsForModeratorSwagger,
+  AdsWithoutBetsSwagger,
   CreateAdResponseSwagger,
   CreateAdSwagger,
   GetAllAdsSwagger,
@@ -188,8 +188,8 @@ export class AdvertisementsController {
     );
   }
 
-  @ApiOperation({summary: 'Get all advertisements for moderation ----------> Need to correct'})
-  @ApiResponse({status: 200, description: 'Get all advertisements for moderation', type: AdsForModeratorSwagger})
+  @ApiOperation({summary: 'Get all advertisements for moderation'})
+  @ApiResponse({status: 200, description: 'Get all advertisements for moderation', type: AdsWithoutBetsSwagger})
   @Get('/moderation/get')
   @Roles(ROLES_ID.MODERATOR)
   @UseGuards(AuthGuard, RolesGuard)
@@ -205,7 +205,7 @@ export class AdvertisementsController {
     });
   }
 
-  @ApiOperation({summary: 'Get all advertisements for moderation -----------> Need to correct'})
+  @ApiOperation({summary: 'Get all advertisements for moderation'})
   @ApiResponse({status: 200, description: 'Get all advertisements for moderation'})
   @ApiBody({type: ModerConfirmRequestSwagger})
   @Patch('/moderation/set')
@@ -219,7 +219,7 @@ export class AdvertisementsController {
   }
 
   @ApiOperation({summary: 'Get one advertisement for moderation'})
-  @ApiResponse({status: 200, description: 'Get one advertisement for moderation', type: AdsForModeratorSwagger})
+  @ApiResponse({status: 200, description: 'Get one advertisement for moderation', type: AdsWithoutBetsSwagger})
   @Get('/moderation/:slug')
   @Roles(ROLES_ID.MODERATOR)
   @UseGuards(AuthGuard, RolesGuard)
