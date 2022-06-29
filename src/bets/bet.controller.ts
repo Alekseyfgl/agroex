@@ -13,7 +13,7 @@ import { AuthGuard } from '../auth/guards/auth.guard';
 import { User } from '../user/decorators/user.decarator';
 import { UserEntity } from '../user/user.entity';
 import { UserBetEntity } from './user-bet.entity';
-import {ApiBody, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
+import {ApiBody, ApiOperation, ApiResponse, ApiSecurity, ApiTags} from "@nestjs/swagger";
 import {GetAllAdsSwagger} from "../../swagger/adsSwagger";
 
 @ApiTags('bets')
@@ -23,6 +23,7 @@ export class BetController {
 
   @ApiOperation({summary: 'Set bet as register user'})
 @ApiBody({type: CreateBetDto})
+  @ApiSecurity('JWT-auth')
   @Post(':slug/bet')
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())

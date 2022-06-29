@@ -1,6 +1,6 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { UserService } from './user.service';
-import {ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
+import {ApiOperation, ApiResponse, ApiSecurity, ApiTags} from '@nestjs/swagger';
 import { Roles } from '../roles/decorators/roles-auth.decorator';
 import { RolesGuard } from '../auth/guards/roles.guard';
 import { ROLES_ID } from '../constans/constans';
@@ -14,6 +14,7 @@ export class UserController {
   constructor(private readonly userService: UserService) {}
 
   @ApiOperation({ summary: 'Functionality is frozen' })
+  @ApiSecurity('JWT-auth')
   @ApiResponse({ status: 200 })
   @Roles(ROLES_ID.ADMIN)
   @UseGuards(AuthGuard, RolesGuard)
@@ -23,6 +24,7 @@ export class UserController {
   }
 
   @ApiOperation({ summary: 'Functionality is frozen' })
+  @ApiSecurity('JWT-auth')
   @ApiResponse({ status: 200 })
   @Roles(ROLES_ID.ADMIN)
   @UseGuards(AuthGuard, RolesGuard)

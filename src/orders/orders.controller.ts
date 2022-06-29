@@ -4,7 +4,7 @@ import { AuthGuard } from '../auth/guards/auth.guard';
 import { User } from '../user/decorators/user.decarator';
 import { ApprovedAdsResponseInterface } from './interface/orders.interface';
 import { UserEntity } from '../user/user.entity';
-import {ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
+import {ApiOperation, ApiResponse, ApiSecurity, ApiTags} from "@nestjs/swagger";
 import {GetAllAdsSwagger} from "../../swagger/adsSwagger";
 import {OrdersSwagger} from "../../swagger/ordersSwagger";
 
@@ -14,6 +14,7 @@ export class OrdersController {
   constructor(private readonly ordersService: OrdersService) {}
 
   @ApiOperation({summary: 'Get all confirmed advertisements'})
+  @ApiSecurity('JWT-auth')
   @ApiResponse({
     status: 200,
     type: OrdersSwagger})
@@ -26,6 +27,7 @@ export class OrdersController {
   }
 
   @ApiOperation({summary: 'Confirm the deal'})
+  @ApiSecurity('JWT-auth')
   @Post('confirm/:slug')
   @UseGuards(AuthGuard)
   async confirmBet(
@@ -36,6 +38,7 @@ export class OrdersController {
   }
 
   @ApiOperation({summary: 'Buy product now'})
+  @ApiSecurity('JWT-auth')
   @Post('buy/:slug')
   @UseGuards(AuthGuard)
   async buyNow(

@@ -37,7 +37,7 @@ import { SetModerationStatusDto } from './dto/setUpdatedAd.dto';
 import { UpdateAdDataDto } from './dto/updateAdData.dto';
 import { PromiseOptional } from '../interfacesAndTypes/optional.interface';
 import { QueryDto } from './dto/query.dto';
-import {ApiBody, ApiConsumes, ApiOperation, ApiResponse, ApiTags} from "@nestjs/swagger";
+import {ApiBody, ApiConsumes, ApiOperation, ApiParam, ApiResponse, ApiSecurity, ApiTags} from "@nestjs/swagger";
 import {
   AdsWithoutBetsSwagger,
   CreateAdResponseSwagger,
@@ -57,6 +57,7 @@ export class AdvertisementsController {
 
   @ApiOperation({summary: 'Create advertisement'})
   @ApiResponse({status: 201, description: 'Create advertisement for register user', type: CreateAdResponseSwagger})
+  @ApiSecurity('JWT-auth')
  @ApiBody({type: CreateAdSwagger})
   @ApiConsumes('multipart/form-data')
   @Post()
@@ -123,6 +124,7 @@ export class AdvertisementsController {
 
   @ApiOperation({summary: 'Get all user\'s advertisements'})
   @ApiResponse({status: 200, description: 'Get all user\'s advertisements in personal account', type: GetAllAdsSwagger})
+  @ApiSecurity('JWT-auth')
   @Get('/my-advertisements') // для получения всех объявлений юзера для личного кабинета
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
@@ -138,6 +140,7 @@ export class AdvertisementsController {
 
   @ApiOperation({summary: 'Get all user\'s bets'})
   @ApiResponse({status: 200, description: 'Get all user\'s bets in personal account', type: GetUsersAdsWithBetsSwagger, isArray: true})
+  @ApiSecurity('JWT-auth')
   @Get('/my-bets')
   @UseGuards(AuthGuard)
   async findAllAdsWithBetByAuthor(
@@ -148,6 +151,7 @@ export class AdvertisementsController {
 
   @ApiOperation({summary: 'Get user\'s advertisement'})
   @ApiResponse({status: 200, description: 'Get user\'s advertisement by slug in personal account',type: GetOneAdSwagger})
+  @ApiSecurity('JWT-auth')
   @Get('/my-advertisements/:slug') // для получения одного объявления юзера для личного кабинета (не смотрим на isActive)
   @UseGuards(AuthGuard)
   async getSingleMyAdvertisement(
@@ -162,6 +166,7 @@ export class AdvertisementsController {
 
   @ApiOperation({summary: 'Editing advertisement by a moderator'})
   @ApiResponse({status: 200, description: 'Editing advertisement by a moderator'})
+  @ApiSecurity('JWT-auth')
   @Put('/update')
   @UseGuards(AuthGuard, RolesGuard)
   @UsePipes(new ValidationPipe())
@@ -190,6 +195,7 @@ export class AdvertisementsController {
 
   @ApiOperation({summary: 'Get all advertisements for moderation'})
   @ApiResponse({status: 200, description: 'Get all advertisements for moderation', type: AdsWithoutBetsSwagger})
+  @ApiSecurity('JWT-auth')
   @Get('/moderation/get')
   @Roles(ROLES_ID.MODERATOR)
   @UseGuards(AuthGuard, RolesGuard)
@@ -208,6 +214,7 @@ export class AdvertisementsController {
   @ApiOperation({summary: 'Get all advertisements for moderation'})
   @ApiResponse({status: 200, description: 'Get all advertisements for moderation'})
   @ApiBody({type: ModerConfirmRequestSwagger})
+  @ApiSecurity('JWT-auth')
   @Patch('/moderation/set')
   @Roles(ROLES_ID.MODERATOR)
   @UseGuards(AuthGuard, RolesGuard)
@@ -220,6 +227,7 @@ export class AdvertisementsController {
 
   @ApiOperation({summary: 'Get one advertisement for moderation'})
   @ApiResponse({status: 200, description: 'Get one advertisement for moderation', type: AdsWithoutBetsSwagger})
+  @ApiSecurity('JWT-auth')
   @Get('/moderation/:slug')
   @Roles(ROLES_ID.MODERATOR)
   @UseGuards(AuthGuard, RolesGuard)
