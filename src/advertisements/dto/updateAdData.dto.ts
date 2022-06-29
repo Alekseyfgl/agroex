@@ -30,7 +30,7 @@ export class UpdateAdDataDto {
   @IsOptional()
   @IsEnum(Category)
   @IsNotEmpty()
-  category: string;
+  category: Category;
 
   @IsOptional()
   @Transform(({ value }) => Number(value), { toClassOnly: true }) //преобразует в number
