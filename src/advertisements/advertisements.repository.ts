@@ -95,8 +95,7 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
   async findAdsWithBetByUser(
     currentUserId: number,
   ): Promise<UserAdsAndWithBets[]> {
-    return this.repository
-      .query(`SELECT DISTINCT adv.id, user_id_with_last_bet, last_bet_value, adv.*  FROM advertisements AS adv 
+    return this.repository.query(`SELECT DISTINCT adv.id, user_id_with_last_bet, last_bet_value, adv.*  FROM advertisements AS adv 
                                                         LEFT JOIN "userBets" AS ub ON adv.id=ub.advertisement_id
                                                         JOIN (SELECT adv.id, ub."betValue" AS last_bet_value, ub.user_id AS user_id_with_last_bet FROM advertisements AS adv 
                                                         LEFT JOIN "userBets" AS ub ON adv.id=ub.advertisement_id

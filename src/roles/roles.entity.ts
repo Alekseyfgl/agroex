@@ -11,18 +11,19 @@ import { roleName } from './types/types';
 
 @Entity({ name: 'roles' })
 export class RolesEntity {
-  @ApiProperty({ example: '1', description: 'Уникальный идентификатор' })
+  @ApiProperty({ example: 1 })
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @ApiProperty({ example: 'admin', description: 'Уникальное значение роли ' })
+  @ApiProperty({ example: 'user' })
   @Column('varchar', { unique: true })
   roleName: roleName;
 
-  @ApiProperty({ example: 'Администратор', description: 'Описание роли' })
+  @ApiProperty({ example: 'Some description'})
   @Column('varchar', { length: 100 })
   description: string;
 
+  @ApiProperty({type: UserRolesEntity})
   @OneToMany(() => UserRolesEntity, (userRolesEntity) => userRolesEntity.role, {
     cascade: true,
     onDelete: 'CASCADE',
