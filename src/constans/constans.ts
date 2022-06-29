@@ -1,4 +1,3 @@
-import {HttpException, HttpStatus} from "@nestjs/common";
 
 export const numToEncode = 10;
 
