@@ -1,5 +1,6 @@
-import { IsNumber, IsOptional, IsString } from 'class-validator';
+import {IsEnum, IsNumber, IsOptional, IsString} from 'class-validator';
 import { Transform } from 'class-transformer';
+import {AdType} from "../interface/interfacesAndTypes";
 
 export class QueryDto {
   @Transform(({ value }) => Number(value), { toClassOnly: true })
@@ -20,4 +21,8 @@ export class QueryDto {
   @IsOptional()
   @IsString()
   category: string;
+
+  @IsOptional()
+  @IsEnum(AdType)
+  type: AdType
 }

@@ -44,6 +44,7 @@ export const enum DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS {
   TABLE = 'advertisements',
   USER = 'author',
   ISMODERATED = 'advertisements.isModerated = :isModerated',
+  MODERATIONSTATUS = 'advertisements.moderationStatus IN (:...moderationStatus)',
   ISACTIVE = 'advertisements.isActive = :isActive',
   LEFT_JOIN_AND_SELECT = 'advertisements.author',
   LEFT_JOIN_AND_SELECT_USERBETS = 'advertisements.userBets',

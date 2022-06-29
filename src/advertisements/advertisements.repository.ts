@@ -1,7 +1,7 @@
 import {
   AbstractRepository,
   EntityRepository,
-  getRepository,
+  getRepository, In,
   SelectQueryBuilder,
 } from 'typeorm';
 import { AdvertisementsEntity } from './advertisements.entity';
@@ -18,7 +18,7 @@ import {
   UserAdsAndWithBets,
 } from './interface/advertResponseInterface';
 import { createSlug } from '../helper/helper';
-import { Filterobj, ModerationStatus } from './interface/interfacesAndTypes';
+import {AdType, Filterobj, ModerationStatus} from './interface/interfacesAndTypes';
 import { Optional } from '../interfacesAndTypes/optional.interface';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import * as moment from 'moment';
@@ -166,6 +166,32 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
         },
       );
     }
+
+    if (query.type === AdType.PENDING) {
+      queryBuilder.andWhere(
+          DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.MODERATIONSTATUS,
+          { moderationStatus: [ModerationStatus.REJECTED, ModerationStatus.UNMODERATED] },
+      );
+    }
+
+    if (query.type === AdType.INACTIVE) {
+      queryBuilder.andWhere(
+          DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.MODERATIONSTATUS,
+          { moderationStatus: [ModerationStatus.APPROVED] },
+      );
+      queryBuilder.andWhere(
+          DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISACTIVE,
+          { isActive: false },
+      );
+    }
+
+    if (query.type === AdType.ACTIVE) {
+      queryBuilder.andWhere(
+          DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISACTIVE,
+          { isActive: true },
+      );
+    }
+
 
     const advertisementCount: number = await queryBuilder.getCount(); //тотал по нашей таблице
     //create limit

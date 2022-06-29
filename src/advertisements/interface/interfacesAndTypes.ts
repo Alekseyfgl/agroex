@@ -13,6 +13,12 @@ export type Filterobj = {
   order?: ORDER
 };
 
+export enum AdType {
+  ACTIVE = 'active',
+  PENDING = 'pending',
+  INACTIVE = 'inactive'
+}
+
 export enum Category  {
   FRUITS= 'Fruits',
   DRY_FRUITS = 'Dry fruits',
