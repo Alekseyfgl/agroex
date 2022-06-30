@@ -3,15 +3,15 @@ import { ApiProperty } from '@nestjs/swagger';
 
 @Entity({ name: 'categories' })
 export class CategoriesEntity {
-  @ApiProperty({ example: 'id' })
-  @PrimaryGeneratedColumn()
+  @ApiProperty({ example: '1' })
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @ApiProperty({ example: 'title' })
-  @Column()
+  @ApiProperty({ example: 'Fruits' })
+  @Column('varchar', { length: 100 })
   title: string;
   
   @ApiProperty({ example: 'img' })
-  @Column()
+  @Column('varchar')
   img: string;
 }

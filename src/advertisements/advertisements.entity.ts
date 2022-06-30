@@ -1,63 +1,117 @@
 import {
-    Column,
-    CreateDateColumn,
-    Entity,
-    ManyToOne,
-    PrimaryGeneratedColumn,
-    UpdateDateColumn
-} from "typeorm";
-import {UserEntity} from "../user/user.entity";
+  Column,
+  CreateDateColumn,
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from 'typeorm';
+import { UserEntity } from '../user/user.entity';
+import { UserBetEntity } from '../bets/user-bet.entity';
+import { Category, ModerationStatus } from './interface/interfacesAndTypes';
+import {ApiProperty, OmitType} from "@nestjs/swagger";
 
-
-@Entity({name: 'advertisements'})
+@Entity({ name: 'advertisements' })
 export class AdvertisementsEntity {
-    @PrimaryGeneratedColumn('increment')
-    id: number;
+  @ApiProperty({example: 2})
+  @PrimaryGeneratedColumn('increment')
+  id: number;
 
-    @Column("varchar", { length: 200 })
-    title: string;
+  @ApiProperty({example: 'Tasty apples'})
+  @Column('varchar', { length: 200 })
+  title: string;
 
-    @Column("varchar", { length: 100 })
-    country: string;
+  @ApiProperty({example: 'Uzbekistan'})
+  @Column('varchar', { length: 100 })
+  country: string;
 
-    @Column()
-    location: string;
+  @ApiProperty({example: 'Bukhara Region'})
+  @Column('varchar', { length: 300 })
+  location: string;
 
-    @Column({unique: true})
-    slug: string
+  @ApiProperty({example: 'apples-qu6kke'})
+  @Column('varchar', { unique: true })
+  slug: string;
 
-    @Column({ default: null })
-    category: string
+  @ApiProperty({example: 'Fruits'})
+  @Column('varchar', { length: 100 })
+  category: Category;
 
-    @Column({ default: null })
-    subCategory: string
+  @ApiProperty({default: null})
+  @Column('varchar', { default: null, length: 100 })
+  subCategory: string | null;
 
+  @ApiProperty({default:false})
+  @Column('boolean', { default: false })
+  isModerated: boolean;
 
-    @Column({ default: false })
-    isModerated: boolean
+  @ApiProperty({default: false})
+  @Column('boolean', { default: false })
+  isActive: boolean;
 
-    @Column('decimal', {precision: 18, scale: 2})
-    price: number;
+  @ApiProperty({
+    default: false
+  })
+  @Column('boolean', { default: false })
+  isConfirmed: boolean;
 
-    @Column("varchar", { length: 3 })
-    currency: string;
+  @ApiProperty()
+  @CreateDateColumn({ type: 'timestamptz' })
+  expireAdvert: Date;
 
-    @Column()
-    img: string;
+  @ApiProperty()
+  @Column({ default: ModerationStatus.UNMODERATED })
+  moderationStatus: ModerationStatus;
 
-    @Column('decimal', {precision: 18, scale: 2})
-    quantity: number;
+  @ApiProperty({default: null})
+  @Column('varchar', { default: null })
+  moderationComment: string | null;
 
-    @Column("varchar", { length: 5 })
-    unit: string;
+  @ApiProperty({example: 5000})
+  @Column('decimal', { precision: 18, scale: 2 })
+  price: number;
 
-    @CreateDateColumn()
-    createAt: Date
+  @ApiProperty({example: 'USD'})
+  @Column('varchar', { length: 3 })
+  currency: string;
 
-    @UpdateDateColumn()
-    updatedAt: Date
+  @ApiProperty({example: 'https://res.cloudinary.com/agroex-backend/image/upload/v1656319454/rs2k74crvmzu872fm5sh.webp'})
+  @Column('varchar')
+  img: string;
 
+  @ApiProperty({example: 400})
+  @Column('decimal', { precision: 18, scale: 2 })
+  quantity: number;
 
-    @ManyToOne(() => UserEntity, user => user.advertisements, {eager: true})
-    author: UserEntity
+  @ApiProperty({example: 'kg'})
+  @Column('varchar', { length: 5 })
+  unit: string;
+
+  @ApiProperty()
+  @CreateDateColumn({ type: 'timestamptz' })
+  createAt: Date;
+
+  @ApiProperty()
+  @UpdateDateColumn({ type: 'timestamptz' })
+  updatedAt: Date;
+
+  // @ApiProperty({type: () =>OmitType(UserEntity, ['userRoles'])})
+  @ApiProperty({type: () =>UserEntity})
+  @ManyToOne(() => UserEntity, (user) => user.advertisements, { eager: true })
+  author: UserEntity;
+
+  @ApiProperty({type:  [UserBetEntity]})
+  @OneToMany(
+    () => UserBetEntity,
+    (userBetEntity) => userBetEntity.advertisement,
+    {
+      cascade: true,
+      onDelete: 'CASCADE',
+      onUpdate: 'CASCADE',
+    },
+  )
+  @JoinColumn({ referencedColumnName: 'advertisement_id' })
+  userBets!: UserBetEntity[];
 }

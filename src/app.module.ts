@@ -1,6 +1,4 @@
 import { MiddlewareConsumer, Module, RequestMethod } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { CategoriesModule } from './categories/categories.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule } from '@nestjs/config';
@@ -10,22 +8,31 @@ import { UserModule } from './user/user.module';
 import { AuthModule } from './auth/auth.module';
 import { AuthMiddleware } from './auth/middlewares/auth.middleware';
 import { AdvertisementsModule } from './advertisements/advertisements.module';
-import {CloudinaryModule} from "./cloudinary/cloudinary.module";
-import {CloudinaryProvider} from './cloudinary/cloudinary.provider';
+import { CloudinaryModule } from './cloudinary/cloudinary.module';
+import { CloudinaryProvider } from './cloudinary/cloudinary.provider';
+import { BetModule } from './bets/bet.module';
+import { ScheduleModule } from '@nestjs/schedule';
+import { CronJobsModule } from './cron-jobs/cron-jobs.module';
+import { OrdersModule } from './orders/orders.module';
+import { NotificationsModule } from './notifications/notifications.module';
 
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRootAsync(typeOrmAsyncConfig),
     EventEmitterModule.forRoot(),
+    ScheduleModule.forRoot(),
     CategoriesModule,
     UserModule,
     AuthModule,
     AdvertisementsModule,
     CloudinaryModule,
+    BetModule,
+    CronJobsModule,
+    OrdersModule,
+    NotificationsModule,
   ],
-  controllers: [AppController],
-  providers: [AppService, CloudinaryProvider],
+  providers: [ CloudinaryProvider],
 })
 export class AppModule {
   configure(consumer: MiddlewareConsumer): void {

@@ -19,12 +19,6 @@ export class AuthGuard implements CanActivate {
     if (request.user) {
       return true; // если true, то мы можем попасть в наш контроллер
     }
-    throw new HttpException(
-      {
-        status: HttpStatus.UNAUTHORIZED,
-        message: [MessageError.NOT_AUTHORIZED],
-      },
-      HttpStatus.UNAUTHORIZED,
-    );
+    throw new HttpException(MessageError.NOT_AUTHORIZED, HttpStatus.UNAUTHORIZED)
   }
 }

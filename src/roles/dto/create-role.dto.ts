@@ -1,4 +1,6 @@
+import { roleName } from '../types/types';
+
 export class CreateRoleDto {
-  readonly value: string;
+  readonly roleName: roleName;
   readonly description: string;
 }

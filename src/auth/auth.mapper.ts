@@ -1,5 +1,5 @@
 import { UserEntity } from '../user/user.entity';
-import { UserResponseInterface } from './interfacesAndTypes/userResponse.interface';
+import { UserResponseInterface } from '../user/interfacesAndTypes/userResponse.interface';
 
 export const userForResponse = (
   user: UserEntity,
@@ -15,7 +15,7 @@ export const userForResponse = (
     userRoles: user.userRoles,
     banned: user.banned,
     banReason: user.banReason,
-    advertisements: user.advertisements
+    advertisements: user.advertisements,
+    userBets: user.userBets,
   },
 });
-

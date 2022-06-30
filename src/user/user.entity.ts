@@ -1,35 +1,54 @@
-import {BeforeInsert, Column, Entity, JoinColumn, OneToMany, PrimaryGeneratedColumn} from 'typeorm';
+import {
+  BeforeInsert,
+  Column,
+  Entity,
+  JoinColumn,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
 import { hash } from 'bcrypt';
 import { numToEncode } from '../constans/constans';
-import {UserRolesEntity} from "../roles/user-roles.entity";
-import {AdvertisementsEntity} from "../advertisements/advertisements.entity";
+import { UserRolesEntity } from '../roles/user-roles.entity';
+import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
+import { UserBetEntity } from '../bets/user-bet.entity';
+import {ApiProperty} from "@nestjs/swagger";
 
 @Entity({ name: 'users' })
 export class UserEntity {
+  @ApiProperty({example: 1})
   @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @Column({ unique: true })
+  @ApiProperty({example: 'anton@gmail.com'})
+  @Column('varchar', { unique: true })
   email: string;
 
-  @Column()
+  @ApiProperty({example: 'Anton'})
+  @Column('varchar', { length: 50 })
   username: string;
 
-  @Column()
+  @ApiProperty({example: '+375333456778'})
+  @Column('varchar', { length: 18 })
   phone: string;
 
-  @Column() //так мы исключаем пароль по умолчанию
+  @ApiProperty()
+  @Column('varchar')
   password: string;
 
-  @Column({ default: null })
+  @ApiProperty({example: null})
+  @Column('varchar', { default: null  })
   image?: string;
 
-  @Column({ default: false })
+  @ApiProperty({ example: false})
+  @Column('boolean', { default: false })
   banned: boolean;
 
-  @Column({ default: null })
+  @ApiProperty({example: null})
+  @Column('varchar', { default: null, length: 200 })
   banReason: string;
 
+
+  @ApiProperty({type: [UserRolesEntity]})
   @OneToMany(() => UserRolesEntity, (userRolesEntity) => userRolesEntity.user, {
     cascade: true,
     onDelete: 'CASCADE',
@@ -43,7 +62,19 @@ export class UserEntity {
     this.password = await hash(this.password, numToEncode);
   }
 
-  @OneToMany(()=> AdvertisementsEntity,(advertisement) => advertisement.author)
-  advertisements: AdvertisementsEntity[]
 
+  @OneToMany(
+    () => AdvertisementsEntity,
+    (advertisement) => advertisement.author,
+  )
+  advertisements: AdvertisementsEntity[];
+
+// @ApiProperty({type: UserBetEntity, isArray: true})
+  @OneToMany(() => UserBetEntity, (userBetEntity) => userBetEntity.user, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
+  @JoinColumn({ referencedColumnName: 'user_id' })
+  userBets!: UserBetEntity[];
 }

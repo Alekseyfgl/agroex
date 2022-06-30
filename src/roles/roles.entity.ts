@@ -6,24 +6,24 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { ApiProperty } from '@nestjs/swagger';
-
 import { UserRolesEntity } from './user-roles.entity';
-
+import { roleName } from './types/types';
 
 @Entity({ name: 'roles' })
 export class RolesEntity {
-  @ApiProperty({ example: '1', description: 'Уникальный идентификатор' })
-  @PrimaryGeneratedColumn()
+  @ApiProperty({ example: 1 })
+  @PrimaryGeneratedColumn('increment')
   id: number;
 
-  @ApiProperty({ example: 'admin', description: 'Уникальное значение роли ' })
-  @Column({ unique: true })
-  value: string;
+  @ApiProperty({ example: 'user' })
+  @Column('varchar', { unique: true })
+  roleName: roleName;
 
-  @ApiProperty({ example: 'Администратор', description: 'Описание роли' })
-  @Column()
+  @ApiProperty({ example: 'Some description'})
+  @Column('varchar', { length: 100 })
   description: string;
 
+  @ApiProperty({type: UserRolesEntity})
   @OneToMany(() => UserRolesEntity, (userRolesEntity) => userRolesEntity.role, {
     cascade: true,
     onDelete: 'CASCADE',
