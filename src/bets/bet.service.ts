@@ -49,6 +49,7 @@ export class BetService {
     const currentUserId: number = user.id;
     const authorAdvertisementId: number = advert.author.id;
     const userBettedPreviouslyId: number = advertisementWithLastBet.user_id;
+    const currency: string = advert.currency
 
     if (!isActive) {
       throw new HttpException(MessageError.ADVERTISEMENT_IS_NOT_ACTIVE, HttpStatus.BAD_REQUEST)
@@ -63,12 +64,12 @@ export class BetService {
     }
 
     if (isMaxBet) {
-      // === buy now logic
       await this.betRepository.createBet(advert, user, bet);
+      // === buy now logic
       if (userBettedPreviouslyId) {
         await this.notificationsService.sendNotifications(
           [userBettedPreviouslyId],
-          NOTIFICATIONS_TITLE_YOUR_BET_OUTBID(advert.id.toString()),
+          NOTIFICATIONS_TITLE_YOUR_BET_OUTBID(advert.id.toString(),lastBet.toString(),currency),
           NOTIFICATIONS_MESSAGE_LOT_WAS_BOUGHT(advert.id.toString()),
           NOTIFICATIONS_LINKTO.BETTING,
           NOTIFICATIONS_TYPES.OUTBIDDING
@@ -82,7 +83,6 @@ export class BetService {
         NOTIFICATIONS_LINKTO.MYORDERS,
         NOTIFICATIONS_TYPES.PURCHASE
       ); // Your LOT XXX is bought at original price.
-
       return;
     }
 
@@ -98,7 +98,7 @@ export class BetService {
     if (advertisementWithLastBet.user_id !== currentUserId) {
       await this.notificationsService.sendNotifications(
         [advertisementWithLastBet.user_id],
-        NOTIFICATIONS_TITLE_YOUR_BET_OUTBID(advert.id.toString(), currentBet.toString(), advert.currency),
+        NOTIFICATIONS_TITLE_YOUR_BET_OUTBID(advert.id.toString(), currentBet.toString(), currency),
         NOTIFICATIONS_MESSAGES.GO_TO_MY_BETTINGS_PAGE_NEW_BET,
         NOTIFICATIONS_LINKTO.BETTING,
         NOTIFICATIONS_TYPES.OUTBIDDING
