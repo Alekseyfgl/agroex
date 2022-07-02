@@ -16,7 +16,7 @@ export class CreateAdvertisementDto {
   @ApiProperty({
     description: 'Green apples',
     example: 'Green apples',
-    minLength: 5,
+    minLength: 3,
     maxLength: 40,
   })
   @Length(3, 40)
