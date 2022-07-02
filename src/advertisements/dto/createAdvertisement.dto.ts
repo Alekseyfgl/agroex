@@ -19,7 +19,7 @@ export class CreateAdvertisementDto {
     minLength: 5,
     maxLength: 40,
   })
-  @Length(5, 40)
+  @Length(3, 40)
   readonly title: string;
 
   @ApiProperty({
