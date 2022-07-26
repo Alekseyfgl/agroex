@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserService } from '../user/user.service';
-import { CreateUserDto } from './dto/createUser.dto';
+import { CreatePersonDto, CreateCompanyDto  } from './dto/createUser.dto';
 import { UserEntity } from '../user/user.entity';
 import { sign } from 'jsonwebtoken';
 import { expiresInForToken } from '../constans/constans';
@@ -11,11 +11,11 @@ import { LoginUserDto } from './dto/loginUserDto';
 export class AuthService {
   constructor(private readonly userService: UserService) {}
 
-  async registerUser(createUserDto: CreateUserDto): Promise<UserEntity> {
+  async registerUser(createUserDto: CreatePersonDto|CreateCompanyDto): Promise<UserEntity> {
     return await this.userService.createUser(createUserDto);
   }
 
-  async loginUser(loginUserDto: LoginUserDto): Promise<CreateUserDto> {
+  async loginUser(loginUserDto: LoginUserDto): Promise<UserEntity> {
     return await this.userService.getRegisteredUser(loginUserDto);
   }
 

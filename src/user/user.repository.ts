@@ -1,6 +1,6 @@
 import { AbstractRepository, EntityRepository } from 'typeorm';
 import { UserEntity } from './user.entity';
-import { CreateUserDto } from '../auth/dto/createUser.dto';
+import {CreateCompanyDto, CreatePersonDto} from '../auth/dto/createUser.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
 import { DB_RELATIONS, MessageError, ROLES_ID } from '../constans/constans';
 import { LoginUserDto } from '../auth/dto/loginUserDto';
@@ -12,7 +12,7 @@ import { Optional } from '../interfacesAndTypes/optional.interface';
 
 @EntityRepository(UserEntity)
 export class UserRepository extends AbstractRepository<UserEntity> {
-  async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
+  async createUser(createUserDto: CreatePersonDto|CreateCompanyDto): Promise<UserEntity> {
     const user: UserEntity = await this.getUserByEmail(createUserDto.email);
 
     if (user) {
@@ -49,7 +49,7 @@ export class UserRepository extends AbstractRepository<UserEntity> {
     return user;
   }
 
-  async checkUserByEmail(loginUserDto: LoginUserDto): Promise<CreateUserDto> {
+  async checkUserByEmail(loginUserDto: LoginUserDto): Promise<UserEntity> {
     const user: UserEntity = await this.getUserByEmail(loginUserDto.email);
     if (!user) {
       throw new HttpException(MessageError.INCORRECT_DATA, HttpStatus.BAD_REQUEST)

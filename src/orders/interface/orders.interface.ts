@@ -3,6 +3,7 @@ import { OrdersEntity } from '../entities/orders.entity';
 import { UserEntity } from '../../user/user.entity';
 import { AdvertisementsEntity } from '../../advertisements/advertisements.entity';
 import { UserBetEntity } from '../../bets/user-bet.entity';
+import {userType} from "../../user/interfacesAndTypes/user.type";
 
 export type OrdersType = OrdersEntity & { bet_id: number };
 
@@ -38,10 +39,16 @@ export type ApprovedAdsResponseInterface = {
   expireAdvert: Date;
   author: {
     id: number;
+    type: userType;
     email: string;
-    username: string;
+    name: string;
+    surname: string;
     phone: string;
     image: Optional<string>;
+    companyName: string;
+    companyTaxNumber: string;
+    bankAccount: string;
+    certificateImage: string;
     banned: boolean;
     banReason: Optional<string>;
   };

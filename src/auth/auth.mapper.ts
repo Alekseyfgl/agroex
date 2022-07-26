@@ -1,5 +1,6 @@
 import { UserEntity } from '../user/user.entity';
 import { UserResponseInterface } from '../user/interfacesAndTypes/userResponse.interface';
+import {userType} from "../user/interfacesAndTypes/user.type";
 
 export const userForResponse = (
   user: UserEntity,
@@ -7,7 +8,13 @@ export const userForResponse = (
 ): UserResponseInterface => ({
   user: {
     id: user.id,
-    username: user.username,
+    type: user.type,
+    name: user.name,
+    surname: user.surname,
+    companyName: user.companyName,
+    companyTaxNumber: user.companyTaxNumber,
+    bankAccount: user.bankAccount,
+    certificateImage: user.certificateImage,
     phone: user.phone,
     email: user.email,
     token: token,

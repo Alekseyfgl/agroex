@@ -5,10 +5,10 @@ import {
   UsePipes,
   ValidationPipe,
   Get,
-  UseGuards,
+  UseGuards, UseInterceptors, UploadedFile,
 } from '@nestjs/common';
 import { AuthService } from './auth.service';
-import { CreateUserDto } from './dto/createUser.dto';
+import {CreateCompanyDto, CreatePersonDto} from './dto/createUser.dto';
 import { UserResponseInterface } from '../user/interfacesAndTypes/userResponse.interface';
 import { UserEntity } from '../user/user.entity';
 import { LoginUserDto } from './dto/loginUserDto';
@@ -17,23 +17,56 @@ import { AuthGuard } from './guards/auth.guard';
 import {ApiBody, ApiOAuth2, ApiOperation, ApiResponse, ApiSecurity, ApiTags} from "@nestjs/swagger";
 import {CreateAdResponseSwagger, CreateAdSwagger} from "../../swagger/adsSwagger";
 import {LoginSwagger, RegisterSwagger, Users, UsersSwagger} from "../../swagger/usersSwagger";
+import {FileInterceptor} from "@nestjs/platform-express";
+import {fileMimetypeFilter} from "../files/filters/file-mimetype-filter";
+import {MAX_IMAGE_SIZE} from "../constans/constans";
+import {ParseFile} from "../files/pipes/parse-file.pipe";
+import {UploadApiResponse} from "cloudinary";
+import {FilesService} from "../files/files.service";
 
 @ApiTags('auth')
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+      private readonly authService: AuthService,
+      private readonly filesService: FilesService
+  ) {}
 
-  @ApiOperation({summary: 'User registration'})
+  @ApiOperation({summary: 'Person registration'})
   @ApiResponse({status: 201, description: 'For user registration', type: UsersSwagger})
   @ApiBody({type: RegisterSwagger})
-  @Post('register')
+  @Post('signup/person')
   @UsePipes(new ValidationPipe())
-  async registerUser(
-    @Body('user') createUserDto: CreateUserDto,
+  async registerPerson(
+    @Body('user') createUserDto: CreatePersonDto,
   ): Promise<UserResponseInterface> {
     // console.log('createUserDto', createUserDto); // {username: 'Masha',email: 'masha21@mail.com',password: '777',phone: '+375336429395'}
     const user: UserEntity = await this.authService.registerUser(createUserDto);
     return this.authService.buildUserResponseWithToken(user); // ответ для клиента после регистрации
+  }
+
+  @ApiOperation({summary: 'Company registration'})
+  @ApiResponse({status: 201, description: 'For company registration', type: UsersSwagger})
+  @ApiBody({type: RegisterSwagger})
+  @Post('signup/company')
+  @UsePipes(new ValidationPipe())
+  @UseInterceptors(
+      FileInterceptor('files', {
+        fileFilter: fileMimetypeFilter('image'),
+        limits: { fileSize: MAX_IMAGE_SIZE },
+      }),
+  )
+
+  async registerCompany(
+      @UploadedFile(ParseFile) file: Express.Multer.File,
+      @Body() createUserDto: CreateCompanyDto,
+  ): Promise<UserResponseInterface> {
+    const imgSavedData: UploadApiResponse =
+        await this.filesService.getSavedImgData(file);
+    Object.assign(createUserDto, { certificateImage: imgSavedData.secure_url });
+
+    const user: UserEntity = await this.authService.registerUser(createUserDto);
+    return this.authService.buildUserResponseWithToken(user);
   }
 
   @ApiOperation({summary: 'User login'})
@@ -41,10 +74,11 @@ export class AuthController {
   @ApiBody({type: LoginSwagger})
   @Post('login')
   @UsePipes(new ValidationPipe())
+
   async login(
     @Body('user') loginUserDto: LoginUserDto,
   ): Promise<UserResponseInterface> {
-    const user: CreateUserDto = await this.authService.loginUser(loginUserDto);
+    const user: UserEntity = await this.authService.loginUser(loginUserDto);
     return this.authService.buildUserResponseWithToken(user); // ответ для клиента после авторизации
   }
 

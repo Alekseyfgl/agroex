@@ -1,6 +1,6 @@
 import {UserEntity} from "../src/user/user.entity";
 import {ApiProperty, OmitType} from "@nestjs/swagger";
-import {CreateUserDto} from "../src/auth/dto/createUser.dto";
+import {CreatePersonDto, CreateCompanyDto} from "../src/auth/dto/createUser.dto";
 import {LoginUserDto} from "../src/auth/dto/loginUserDto";
 
 
@@ -20,7 +20,7 @@ export class UsersSwagger {
 
 export class RegisterSwagger {
     @ApiProperty()
-    user: CreateUserDto
+    user: CreatePersonDto | CreateCompanyDto
 }
 
 export class LoginSwagger {

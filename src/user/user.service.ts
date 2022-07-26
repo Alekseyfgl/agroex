@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { UserRepository } from './user.repository';
-import { CreateUserDto } from '../auth/dto/createUser.dto';
+import {CreateCompanyDto, CreatePersonDto} from '../auth/dto/createUser.dto';
 import { UserEntity } from './user.entity';
 import { LoginUserDto } from '../auth/dto/loginUserDto';
 import { AddRoleDto } from './dto/add-role.dto';
@@ -14,12 +14,12 @@ export class UserService {
     private readonly roleService: RolesService,
   ) {}
 
-  async createUser(createUserDto: CreateUserDto): Promise<UserEntity> {
+  async createUser(createUserDto: CreatePersonDto|CreateCompanyDto): Promise<UserEntity> {
     return await this.userRepository.createUser(createUserDto);
   }
 
-  async getRegisteredUser(loginUserDto: LoginUserDto): Promise<CreateUserDto> {
-    const user: CreateUserDto = await this.userRepository.checkUserByEmail(
+  async getRegisteredUser(loginUserDto: LoginUserDto): Promise<UserEntity> {
+    const user: UserEntity = await this.userRepository.checkUserByEmail(
       loginUserDto,
     );
     const isPassword: UserEntity =
