@@ -1,4 +1,4 @@
-import { UnsupportedMediaTypeException } from '@nestjs/common';
+ import { UnsupportedMediaTypeException } from '@nestjs/common';
 import { FILES_ERRORS } from '../../constans/constans';
 
 export function fileMimetypeFilter(...mimetypes: string[]) {
@@ -7,6 +7,7 @@ export function fileMimetypeFilter(...mimetypes: string[]) {
     file: Express.Multer.File,
     callback: (error: Error | null, acceptFile: boolean) => void,
   ) => {
+
     if (mimetypes.some((m) => file.mimetype.includes(m))) {
       callback(null, true);
     } else {

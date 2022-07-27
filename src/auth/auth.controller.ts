@@ -52,7 +52,7 @@ export class AuthController {
   @UsePipes(new ValidationPipe())
   @UseInterceptors(
       FileInterceptor('files', {
-        fileFilter: fileMimetypeFilter('image'),
+        fileFilter: fileMimetypeFilter('image', 'application'),
         limits: { fileSize: MAX_IMAGE_SIZE },
       }),
   )
@@ -61,6 +61,7 @@ export class AuthController {
       @UploadedFile(ParseFile) file: Express.Multer.File,
       @Body() createUserDto: CreateCompanyDto,
   ): Promise<UserResponseInterface> {
+
     const imgSavedData: UploadApiResponse =
         await this.filesService.getSavedImgData(file);
     Object.assign(createUserDto, { certificateImage: imgSavedData.secure_url });

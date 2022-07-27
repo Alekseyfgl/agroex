@@ -36,6 +36,14 @@ export class CreateCompanyDto {
 
   @ApiProperty({example: 'Dima'})
   @IsNotEmpty()
+  readonly name: string;
+
+  @ApiProperty({example: 'Ivanov'})
+  @IsNotEmpty()
+  readonly surname: string;
+
+  @ApiProperty({example: 'Dima'})
+  @IsNotEmpty()
   readonly companyName: string;
 
   @ApiProperty({example: 'Ivanov'})
@@ -60,17 +68,3 @@ export class CreateCompanyDto {
   @Length(5, 30)
   readonly password: string;
 }
-
-//   id: number;
-//   type: userType
-//   email: string;
-//   name: string;
-//   surname: string;
-//   phone: string;
-//   image: Optional<string>;
-//   companyName: string;
-//   companyTaxNumber: string;
-//   bankAccount: string;
-//   certificateImage: string;
-//   banned: boolean;
-//   banReason: Optional<string>;

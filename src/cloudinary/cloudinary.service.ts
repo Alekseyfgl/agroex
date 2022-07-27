@@ -7,7 +7,7 @@ import { MFile } from '../files/InterfacesAndTypes/mfile.class';
 export class CloudinaryService {
   async uploadImage(file: MFile): Promise<UploadApiResponse> {
     return new Promise((resolve, reject) => {
-      const upload = v2.uploader.upload_stream((error, result) => {
+      const upload = v2.uploader.upload_stream({resource_type: "auto"}, (error, result) => {
         if (error) return reject(error);
         resolve(result);
       });
