@@ -20,7 +20,7 @@ import {
   NOTIFICATIONS_LINKTO,
   NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_APPROVED,
   NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_REJECTED,
-  NOTIFICATIONS_MESSAGES, NOTIFICATIONS_TYPES,
+  NOTIFICATIONS_MESSAGES, NOTIFICATIONS_TYPES, ROLES_ID,
 } from '../constans/constans';
 import { PromiseOptional } from '../interfacesAndTypes/optional.interface';
 import { QueryDto } from './dto/query.dto';
@@ -41,6 +41,13 @@ export class AdvertisementsService {
     currentUser: UserEntity,
     createAdvertDto: CreateAdvertisementDto,
   ): Promise<AdvertisementsEntity> {
+
+    currentUser.userRoles.forEach(role => {
+      if (role.role_id.toString() === ROLES_ID.MODERATOR) {
+        throw new HttpException(MessageError.ACCESS_DENIED, HttpStatus.FORBIDDEN)
+      }
+    })
+
     return await this.advertisementsRepository.createAdvertisement(
       currentUser,
       createAdvertDto,
