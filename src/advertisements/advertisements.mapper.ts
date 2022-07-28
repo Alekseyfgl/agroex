@@ -42,6 +42,7 @@ export const advertisementForGetBySlug = (
     expireAdvert: advert.expireAdvert,
     author: {
       id: advert.author.id,
+      uuid: advert.author.uuid,
       type: advert.author.type,
       email: advert.author.email,
       name: advert.author.name,

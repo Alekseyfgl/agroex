@@ -24,6 +24,10 @@ export class UserEntity {
   @Column('varchar')
   type: userType
 
+  @ApiProperty({example: 'an12469423'})
+  @Column('varchar', { unique: true })
+  uuid: string;
+
   @ApiProperty({example: 'anton@gmail.com'})
   @Column('varchar', { unique: true })
   email: string;

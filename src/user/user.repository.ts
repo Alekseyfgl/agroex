@@ -1,4 +1,5 @@
 import { AbstractRepository, EntityRepository } from 'typeorm';
+import { customAlphabet } from 'nanoid'
 import { UserEntity } from './user.entity';
 import {CreateCompanyDto, CreatePersonDto} from '../auth/dto/createUser.dto';
 import { HttpException, HttpStatus } from '@nestjs/common';
@@ -14,15 +15,35 @@ import { Optional } from '../interfacesAndTypes/optional.interface';
 export class UserRepository extends AbstractRepository<UserEntity> {
   async createUser(createUserDto: CreatePersonDto|CreateCompanyDto): Promise<UserEntity> {
     const user: UserEntity = await this.getUserByEmail(createUserDto.email);
+    const nanoid = customAlphabet('1234567890', 10)
 
     if (user) {
       throw new HttpException(MessageError.EMAIL_IS_TAKEN, HttpStatus.BAD_REQUEST)
     }
 
+    let uuid: string = `${createUserDto.name.substr(0,1)}${createUserDto.surname.substr(0,1)}-${nanoid()}`
+
     const newUser: UserEntity = new UserEntity();
     Object.assign(newUser, createUserDto, {
       userRoles: [{ role_id: +ROLES_ID.USER }],
+      uuid: uuid
     });
+    
+    // const users: UserEntity[] = await this.repository.find()
+    //
+    // try {
+    //   for (let i=0; i <= users.length; i++) {
+    //     if (!users[i].uuid) {
+    //       users[i].uuid = `${users[i].name.substr(0, 1)}${users[i].surname ? users[i].surname.substr(0,1) : users[i].name.substr(1, 1)}-${nanoid()}`
+    //     }
+    //   }
+    // }
+    // catch (e) {
+    //   console.log(e)
+    // }
+    //
+    // await this.repository.save(users)
+
     // Listeners currently only work when attempting to save proper Entity class instances (not plain objects)
     return await this.repository.save(newUser);
   }

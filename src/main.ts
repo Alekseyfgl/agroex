@@ -8,7 +8,7 @@ import {AllExceptionsFilter} from "./filters/allExceptionsFilter";
 
 async function bootstrap() {
   const PORT = process.env.PORT || 5000;
-  const app = await NestFactory.create(AppModule, { cors: true });
+  const app = await NestFactory.create(AppModule, { cors: true , logger: ['error', 'warn', 'log']});
 
   app.useGlobalFilters(new AllExceptionsFilter())
 

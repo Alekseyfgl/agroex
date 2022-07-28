@@ -1,7 +1,8 @@
 import { Optional } from '../../interfacesAndTypes/optional.interface';
 
-export type UserType = {
+export type User = {
   id: number;
+  uuid: string;
   type: userType;
   email: string;
   name: string;

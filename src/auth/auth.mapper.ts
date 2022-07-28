@@ -8,6 +8,7 @@ export const userForResponse = (
 ): UserResponseInterface => ({
   user: {
     id: user.id,
+    uuid: user.uuid,
     type: user.type,
     name: user.name,
     surname: user.surname,

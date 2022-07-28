@@ -2,7 +2,7 @@ import { AdvertisementsEntity } from '../advertisements.entity';
 import { UserBetEntity } from '../../bets/user-bet.entity';
 import { Optional } from '../../interfacesAndTypes/optional.interface';
 import { ModerationStatus } from './interfacesAndTypes';
-import { UserType } from '../../user/interfacesAndTypes/user.type';
+import { User } from '../../user/interfacesAndTypes/user.type';
 
 export type AdvertisementType = {
   id: number;
@@ -29,7 +29,7 @@ export type AdvertisementType = {
 };
 
 export interface AdvertResponseInterface {
-  advertisement: AdvertisementType & { author: UserType } & {
+  advertisement: AdvertisementType & { author: User } & {
     userBets: UserBetEntity[];
   };
 }
