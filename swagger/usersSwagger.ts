@@ -2,6 +2,7 @@ import {UserEntity} from "../src/user/user.entity";
 import {ApiProperty, OmitType} from "@nestjs/swagger";
 import {CreatePersonDto, CreateCompanyDto} from "../src/auth/dto/createUser.dto";
 import {LoginUserDto} from "../src/auth/dto/loginUserDto";
+import {userType} from "../src/user/interfacesAndTypes/user.type";
 
 
 
@@ -13,14 +14,29 @@ export class Users extends OmitType(UserEntity, ['password']) {
 export class UserWithoutBetsSwagger extends OmitType(Users, ['userBets']) {
 }
 
+export class UserWithCorrectTypeSwagger extends OmitType(CreatePersonDto, ['type']) {
+    @ApiProperty({example: userType.PERSON})
+    type: userType.PERSON
+}
+
+export class CompanyWithCorrectTypeSwagger extends OmitType(CreateCompanyDto, ['type']) {
+    @ApiProperty({example: userType.LEGALENTITY})
+    type: userType.LEGALENTITY
+}
+
 export class UsersSwagger {
     @ApiProperty()
     users: UserWithoutBetsSwagger
 }
 
-export class RegisterSwagger {
+export class PersonRegisterSwagger {
     @ApiProperty()
-    user: CreatePersonDto | CreateCompanyDto
+    user: UserWithCorrectTypeSwagger
+}
+
+export class CompanyRegisterSwagger {
+    @ApiProperty()
+    user: CompanyWithCorrectTypeSwagger
 }
 
 export class LoginSwagger {

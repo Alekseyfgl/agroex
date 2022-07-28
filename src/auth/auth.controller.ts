@@ -16,7 +16,13 @@ import { User } from '../user/decorators/user.decarator';
 import { AuthGuard } from './guards/auth.guard';
 import {ApiBody, ApiOAuth2, ApiOperation, ApiResponse, ApiSecurity, ApiTags} from "@nestjs/swagger";
 import {CreateAdResponseSwagger, CreateAdSwagger} from "../../swagger/adsSwagger";
-import {LoginSwagger, RegisterSwagger, Users, UsersSwagger} from "../../swagger/usersSwagger";
+import {
+  CompanyRegisterSwagger,
+  LoginSwagger,
+  PersonRegisterSwagger,
+  Users,
+  UsersSwagger
+} from "../../swagger/usersSwagger";
 import {FileInterceptor} from "@nestjs/platform-express";
 import {fileMimetypeFilter} from "../files/filters/file-mimetype-filter";
 import {MAX_IMAGE_SIZE} from "../constans/constans";
@@ -34,7 +40,7 @@ export class AuthController {
 
   @ApiOperation({summary: 'Person registration'})
   @ApiResponse({status: 201, description: 'For user registration', type: UsersSwagger})
-  @ApiBody({type: RegisterSwagger})
+  @ApiBody({type: PersonRegisterSwagger})
   @Post('signup/person')
   @UsePipes(new ValidationPipe())
   async registerPerson(
@@ -47,7 +53,7 @@ export class AuthController {
 
   @ApiOperation({summary: 'Company registration'})
   @ApiResponse({status: 201, description: 'For company registration', type: UsersSwagger})
-  @ApiBody({type: RegisterSwagger})
+  @ApiBody({type: CompanyRegisterSwagger})
   @Post('signup/company')
   @UsePipes(new ValidationPipe())
   @UseInterceptors(

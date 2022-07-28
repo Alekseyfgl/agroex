@@ -42,15 +42,15 @@ export class CreateCompanyDto {
   @IsNotEmpty()
   readonly surname: string;
 
-  @ApiProperty({example: 'Dima'})
+  @ApiProperty({example: 'Agroex'})
   @IsNotEmpty()
   readonly companyName: string;
 
-  @ApiProperty({example: 'Ivanov'})
+  @ApiProperty({example: '12345678'})
   @IsNotEmpty()
   readonly companyTaxNumber: string;
 
-  @ApiProperty({example: 'Ivanov'})
+  @ApiProperty({example: '987654321'})
   @IsNotEmpty()
   readonly bankAccount: string;
 
