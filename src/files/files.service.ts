@@ -26,7 +26,6 @@ export class FilesService {
     // return res;
   }
 
-  //конвертируем файл
   async convertToWebP(file: Buffer): Promise<Buffer> {
     return sharp(file).webp().toBuffer();
   }

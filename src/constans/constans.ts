@@ -54,6 +54,20 @@ export const enum DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS {
   USERBETS_IS_ACTIVE = 'userBets.isActive = :isActive',
   SORT_BETS_BY_CREATE_AT = 'userBets.created_at',
   ADVERT_SLUG = 'advertisements.slug = :slug',
+  ACTIVE_ADV = 'activeAdvUserBet',
+  ACTIVE_ADV_ISACTIVE = 'activeAdvUserBet.isActive=:isActive',
+  IS_CURRENT_USER = 'userBets.user_id=:currentUser',
+  ADV_ORDERS = 'userBets.orders',
+  ORDERS_TABLE = 'orders',
+  ADV_IS_AUTHOR = 'advertisements.author.id = :authorId',
+  ORDERS_CREATED_FIELD = 'orders.orderCreated'
+}
+
+export const enum DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_IMG {
+  TABLE = 'advertisements',
+  LEFT_JOIN_AND_SELECT = 'advertisements.img',
+  IMG = 'img',
+  IMG_SELECT = 'img.img',
 }
 
 export const enum HOST_URL {

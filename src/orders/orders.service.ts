@@ -28,9 +28,12 @@ export class OrdersService {
   async getAllApprovedAds(
     currentUserId: number,
   ): Promise<ApprovedAdsResponseInterface[]> {
-    const approvedAds: ConfirmedOrdersInterface[] =
-      await this.ordersRepository.getAllApprovedAds(currentUserId);
+
+    const approvedAds: AdvertisementsEntity[] =
+      await this.advertisementsService.getAllApprovedAds(currentUserId);
+
     return allApprovedAdsResponse(approvedAds);
+
   }
 
   async confirmBet(currentUser: UserEntity, slug: string): Promise<void> {

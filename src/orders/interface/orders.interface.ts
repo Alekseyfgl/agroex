@@ -4,6 +4,7 @@ import { UserEntity } from '../../user/user.entity';
 import { AdvertisementsEntity } from '../../advertisements/advertisements.entity';
 import { UserBetEntity } from '../../bets/user-bet.entity';
 import {userType} from "../../user/interfacesAndTypes/user.type";
+import {AdvertisementsImagesEntity} from "../../advertisements/advertisements-images.entity";
 
 export type OrdersType = OrdersEntity & { bet_id: number };
 
@@ -29,10 +30,10 @@ export type ApprovedAdsResponseInterface = {
   isModerated: boolean;
   isActive: boolean;
   moderationComment: Optional<string>;
-  price: string;
+  price: number;
   currency: string;
-  img: Optional<string>;
-  quantity: string;
+  img: AdvertisementsImagesEntity[];
+  quantity: number;
   unit: string;
   createAt: Date;
   updatedAt: Date;
@@ -54,7 +55,7 @@ export type ApprovedAdsResponseInterface = {
   };
   orderInfo: {
     orderCreated: Date;
-    totalPrice: string;
+    totalPrice: number;
     bet_id: number;
     dealStatus: string;
   };

@@ -70,7 +70,7 @@ export const advertisementsResponseAll = (
 };
 
 export const userAdsWithActiveBets = (
-  ads: UserAdsAndWithBets[],
+  ads,
 ): UserAdsWithBetsResponse[] => {
   return ads.map(
     (ad: UserAdsAndWithBets): UserAdsWithBetsResponse => ({
@@ -95,9 +95,25 @@ export const userAdsWithActiveBets = (
       expireAdvert: ad.expireAdvert,
       moderationStatus: ad.moderationStatus,
       isConfirmed: ad.isConfirmed,
+      author: {
+        id: ad.author.id,
+        uuid: ad.author.uuid,
+        type: ad.author.type,
+        email: ad.author.email,
+        name: ad.author.name,
+        surname: ad.author.surname,
+        companyName: ad.author.companyName,
+        companyTaxNumber: ad.author.companyTaxNumber,
+        certificateImage: ad.author.certificateImage,
+        bankAccount: ad.author.bankAccount,
+        phone: ad.author.phone,
+        image: ad.author.image,
+        banned: ad.author.banned,
+        banReason: ad.author.banReason,
+      },
       lastBetInfo: {
-        user_id_with_last_bet: ad.user_id_with_last_bet,
-        last_bet_value: ad.last_bet_value,
+        user_id: ad.userBets[0].user_id,
+        betValue: ad.userBets[0].betValue,
       },
     }),
   );

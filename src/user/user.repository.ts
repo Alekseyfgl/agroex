@@ -28,7 +28,7 @@ export class UserRepository extends AbstractRepository<UserEntity> {
       userRoles: [{ role_id: +ROLES_ID.USER }],
       uuid: uuid
     });
-    
+
     // const users: UserEntity[] = await this.repository.find()
     //
     // try {

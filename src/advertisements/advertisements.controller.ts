@@ -7,7 +7,7 @@ import {
   Post,
   Put,
   Query,
-  UploadedFile,
+  UploadedFile, UploadedFiles,
   UseGuards,
   UseInterceptors,
   UsePipes,
@@ -25,7 +25,7 @@ import {
   AdvertsResponseInterface,
   UserAdsWithBetsResponse,
 } from './interface/advertResponseInterface';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { FilesService } from '../files/files.service';
 import { fileMimetypeFilter } from '../files/filters/file-mimetype-filter';
 import { ParseFile } from '../files/pipes/parse-file.pipe';
@@ -64,20 +64,26 @@ export class AdvertisementsController {
   @UseGuards(AuthGuard)
   @UsePipes(new ValidationPipe())
   @UseInterceptors(
-    FileInterceptor('files', {
+    FilesInterceptor('files', 4,{
       fileFilter: fileMimetypeFilter('image'),
       limits: { fileSize: MAX_IMAGE_SIZE },
     }),
   )
 
   async createAdvertisement(
-    @UploadedFile(ParseFile) file: Express.Multer.File, // получаем 1 файл, который нам отправляют
+    @UploadedFiles(ParseFile) files: Express.Multer.File[],
     @User() currentUser: UserEntity,
     @Body() createAdvertDto: CreateAdvertisementDto,
   ): Promise<AdvertResponseInterfaceForCreate> {
-    const imgSavedData: UploadApiResponse =
-      await this.filesService.getSavedImgData(file);
-    Object.assign(createAdvertDto, { img: imgSavedData.secure_url });
+    const imgSavedData = [];
+    console.log(files)
+    for (const file of files) {
+      const imgUrl: UploadApiResponse = await this.filesService.getSavedImgData(file);
+      imgSavedData.push({img: imgUrl.secure_url})
+    }
+    console.log(imgSavedData)
+    Object.assign(createAdvertDto, {img: imgSavedData});
+    console.log(createAdvertDto)
     const advertisement: AdvertisementsEntity =
       await this.advertisementsService.createAdvertisement(
         currentUser,

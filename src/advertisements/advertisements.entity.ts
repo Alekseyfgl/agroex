@@ -12,6 +12,7 @@ import { UserEntity } from '../user/user.entity';
 import { UserBetEntity } from '../bets/user-bet.entity';
 import { Category, ModerationStatus } from './interface/interfacesAndTypes';
 import {ApiProperty, OmitType} from "@nestjs/swagger";
+import {AdvertisementsImagesEntity} from "./advertisements-images.entity";
 
 @Entity({ name: 'advertisements' })
 export class AdvertisementsEntity {
@@ -77,10 +78,6 @@ export class AdvertisementsEntity {
   @Column('varchar', { length: 3 })
   currency: string;
 
-  @ApiProperty({example: 'https://res.cloudinary.com/agroex-backend/image/upload/v1656319454/rs2k74crvmzu872fm5sh.webp'})
-  @Column('varchar')
-  img: string;
-
   @ApiProperty({example: 400})
   @Column('decimal', { precision: 18, scale: 2 })
   quantity: number;
@@ -114,4 +111,17 @@ export class AdvertisementsEntity {
   )
   @JoinColumn({ referencedColumnName: 'advertisement_id' })
   userBets!: UserBetEntity[];
+
+  @ApiProperty({type:  [AdvertisementsImagesEntity]})
+  @OneToMany(
+      () => AdvertisementsImagesEntity,
+      (advertisementImageEntity) => advertisementImageEntity.advertisement_id,
+      {
+        cascade: true,
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE',
+      },
+  )
+  @JoinColumn({ referencedColumnName: 'advertisement_id' })
+  img: AdvertisementsImagesEntity[];
 }

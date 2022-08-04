@@ -26,6 +26,8 @@ import { PromiseOptional } from '../interfacesAndTypes/optional.interface';
 import { QueryDto } from './dto/query.dto';
 import {Filterobj, ModerationStatus} from './interface/interfacesAndTypes';
 import {NotificationsService} from "../notifications/notifications.service";
+import {allApprovedAdsResponse} from "../orders/orders.mapper";
+import {ConfirmedOrdersInterface} from "../orders/interface/orders.interface";
 
 
 
@@ -74,8 +76,9 @@ export class AdvertisementsService {
   async getAdsWithBetByAuthor(
     currentUserId: number,
   ): Promise<UserAdsWithBetsResponse[]> {
-    const ads: UserAdsAndWithBets[] =
+    const ads: AdvertisementsEntity[] =
       await this.advertisementsRepository.findAdsWithBetByUser(currentUserId);
+
     return userAdsWithActiveBets(ads);
   }
 
@@ -138,6 +141,10 @@ export class AdvertisementsService {
     }
 
     await this.advertisementsRepository.updateAdData(updateAdvertDto);
+  }
+
+  async getAllApprovedAds(currentUserId: number): Promise<AdvertisementsEntity[]> {
+    return await this.advertisementsRepository.getAllApprovedAds(currentUserId)
   }
 
   public buildAdvertisementResponseForCreate(
