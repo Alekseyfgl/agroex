@@ -21,6 +21,9 @@ export class UserRepository extends AbstractRepository<UserEntity> {
       throw new HttpException(MessageError.EMAIL_IS_TAKEN, HttpStatus.BAD_REQUEST)
     }
 
+    if (await this.getUserByPhone(createUserDto.phone)) {
+      throw new HttpException(MessageError.PHONE_IS_TAKEN, HttpStatus.BAD_REQUEST)
+    }
     let uuid: string = `${createUserDto.name.substr(0,1)}${createUserDto.surname.substr(0,1)}-${nanoid()}`
 
     const newUser: UserEntity = new UserEntity();
@@ -28,21 +31,6 @@ export class UserRepository extends AbstractRepository<UserEntity> {
       userRoles: [{ role_id: +ROLES_ID.USER }],
       uuid: uuid
     });
-
-    // const users: UserEntity[] = await this.repository.find()
-    //
-    // try {
-    //   for (let i=0; i <= users.length; i++) {
-    //     if (!users[i].uuid) {
-    //       users[i].uuid = `${users[i].name.substr(0, 1)}${users[i].surname ? users[i].surname.substr(0,1) : users[i].name.substr(1, 1)}-${nanoid()}`
-    //     }
-    //   }
-    // }
-    // catch (e) {
-    //   console.log(e)
-    // }
-    //
-    // await this.repository.save(users)
 
     // Listeners currently only work when attempting to save proper Entity class instances (not plain objects)
     return await this.repository.save(newUser);
@@ -52,6 +40,15 @@ export class UserRepository extends AbstractRepository<UserEntity> {
     return await this.repository.findOne({
       where: {
         email: email,
+      },
+      relations: [DB_RELATIONS.USER_ROLES, DB_RELATIONS.ROLES],
+    });
+  }
+
+  async getUserByPhone(phone: string): Promise<UserEntity> {
+    return await this.repository.findOne({
+      where: {
+        phone: phone,
       },
       relations: [DB_RELATIONS.USER_ROLES, DB_RELATIONS.ROLES],
     });

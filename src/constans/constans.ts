@@ -18,6 +18,7 @@ export const enum ROLES_ID {
 
 export const enum MessageError {
   EMAIL_IS_TAKEN = 'This email is already taken',
+  PHONE_IS_TAKEN = 'This phone is already taken',
   INCORRECT_DATA = 'You entered incorrect data',
   USER_ID_NOT_FOUND = 'User with this id not found',
   NOT_AUTHORIZED = 'Not authorized',
