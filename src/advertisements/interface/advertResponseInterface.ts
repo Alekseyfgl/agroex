@@ -21,7 +21,7 @@ export type AdvertisementType = {
   moderationComment: Optional<string>;
   price: number;
   currency: string;
-  img: AdvertisementsImagesEntity[];
+  images: AdvertisementsImagesEntity[];
   quantity: number;
   unit: string;
   createAt: Date;

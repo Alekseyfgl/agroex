@@ -66,9 +66,9 @@ export const enum DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS {
 
 export const enum DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_IMG {
   TABLE = 'advertisements',
-  LEFT_JOIN_AND_SELECT = 'advertisements.img',
-  IMG = 'img',
-  IMG_SELECT = 'img.img',
+  LEFT_JOIN_AND_SELECT = 'advertisements.images',
+  IMG = 'images',
+  IMG_SELECT = 'images.img',
 }
 
 export const enum HOST_URL {

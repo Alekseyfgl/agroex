@@ -22,7 +22,7 @@ export const allApprovedAdsResponse = (
       moderationComment: ad.moderationComment,
       price: ad.price,
       currency: ad.currency,
-      img: ad.img,
+      images: ad.images,
       quantity: ad.quantity,
       unit: ad.unit,
       createAt: ad.createAt,

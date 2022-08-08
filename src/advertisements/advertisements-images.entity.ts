@@ -7,7 +7,7 @@ import {
 import {ApiProperty} from "@nestjs/swagger";
 import {AdvertisementsEntity} from "./advertisements.entity";
 
-@Entity({ name: 'advertisements-images' })
+@Entity({ name: 'advertisementsImages' })
 export class AdvertisementsImagesEntity {
     @ApiProperty({example: 2})
     @PrimaryGeneratedColumn('increment')
@@ -19,7 +19,7 @@ export class AdvertisementsImagesEntity {
 
     @ApiProperty({example: '21', type: () => AdvertisementsEntity})
     @Column('int')
-    @ManyToOne(() => AdvertisementsEntity, (advertisement) => advertisement.img, { eager: true })
+    @ManyToOne(() => AdvertisementsEntity, (advertisement) => advertisement.images, { eager: true })
     @JoinColumn({ name: 'advertisement_id' })
     advertisement_id: string;
 }

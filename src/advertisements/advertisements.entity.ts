@@ -123,5 +123,5 @@ export class AdvertisementsEntity {
       },
   )
   @JoinColumn({ referencedColumnName: 'advertisement_id' })
-  img: AdvertisementsImagesEntity[];
+  images: AdvertisementsImagesEntity[];
 }

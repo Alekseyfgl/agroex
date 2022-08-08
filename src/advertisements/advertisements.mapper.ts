@@ -34,7 +34,7 @@ export const advertisementForGetBySlug = (
     moderationComment: advert.moderationComment,
     price: advert.price,
     currency: advert.currency,
-    img: advert.img,
+    images: advert.images,
     quantity: advert.quantity,
     unit: advert.unit,
     createAt: advert.createAt,
@@ -75,7 +75,7 @@ export const userAdsWithActiveBets = (
   return ads.map(
     (ad: UserAdsAndWithBets): UserAdsWithBetsResponse => ({
       id: ad.id,
-      img: ad.img,
+      images: ad.images,
       createAt: ad.createAt,
       updatedAt: ad.updatedAt,
       authorId: ad.authorId,

@@ -261,12 +261,15 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
     const updateObj = _.omit(updateAdvertDto, ['slug']);
     updateObj.moderationStatus = ModerationStatus.UNMODERATED;
     updateObj.isModerated = false;
-    await this.repository.update(
-      {
-        slug: updateAdvertDto.slug,
-      },
-      updateObj,
-    );
+
+    const advData = await this.repository.findOne({slug: updateAdvertDto.slug})
+    await this.repository.merge(advData, updateObj)
+
+    if (updateObj.images) {
+      await this.repository.query(`DELETE FROM "advertisementsImages" WHERE "advertisement_id"=${advData.id}`)
+    }
+
+    await this.repository.save(advData)
   }
 
   async getAllApprovedAds(currentUserId: number): Promise<AdvertisementsEntity[]> {
