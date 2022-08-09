@@ -24,7 +24,7 @@ export class AuthService {
       {
         id: user.id,
         email: user.email,
-        userRoles: user.userRoles,
+        userRoles: user.userRoles
       },
       process.env.JWT_SECRET,
       { expiresIn: expiresInForToken },

@@ -1,11 +1,10 @@
 import { UserEntity } from '../user/user.entity';
-import { UserResponseInterface } from '../user/interfacesAndTypes/userResponse.interface';
-import {userType} from "../user/interfacesAndTypes/user.type";
+import { UserResponseWithTokenInterface } from '../user/interfacesAndTypes/userResponse.interface';
 
 export const userForResponse = (
   user: UserEntity,
   token: string,
-): UserResponseInterface => ({
+): UserResponseWithTokenInterface => ({
   user: {
     id: user.id,
     uuid: user.uuid,
@@ -23,6 +22,8 @@ export const userForResponse = (
     userRoles: user.userRoles,
     banned: user.banned,
     banReason: user.banReason,
+    moderationStatus: user.moderationStatus,
+    moderationComment: user.moderationComment,
     advertisements: user.advertisements,
     userBets: user.userBets,
   },

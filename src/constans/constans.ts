@@ -26,6 +26,8 @@ export const enum MessageError {
   ROLE_OR_USER_NOT_FOUND = 'User or role not found',
   USER_NOT_FOUND = 'User not found',
   ACCESS_DENIED = 'Access denied',
+  USER_IS_NOT_APPROVED = 'User is not approved by moderator',
+  USER_IS_ALREADY_BEEN_APPROVED = 'User is already been approved',
   ADVERTISEMENT_NOT_FOUND = 'This advertisement was not found',
   ERROR_WHILE_SAVING_ON_CLOUDINARY = 'Error while saving on cloudinary',
   HIGHER_PRICE_THAN_SELLER = 'Your price is higher than the seller',

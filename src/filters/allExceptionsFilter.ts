@@ -14,7 +14,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
         const exceptionMessage: string | HttpException["response"] = exception instanceof HttpException
             ? exception.getResponse()
             : INTERNAL_SERVER_ERROR;
-        console.log(exceptionMessage)
+
         const arrMessage: string[] = Array.isArray(exceptionMessage.message) ?  exceptionMessage.message : [exceptionMessage.message ? exceptionMessage.message : exceptionMessage]
 
         response

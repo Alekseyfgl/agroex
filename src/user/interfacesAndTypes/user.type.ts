@@ -1,4 +1,7 @@
 import { Optional } from '../../interfacesAndTypes/optional.interface';
+import {ModerationStatus} from "../../advertisements/interface/interfacesAndTypes";
+import {UserRolesEntity} from "../../roles/user-roles.entity";
+import {UserEntity} from "../user.entity";
 
 export type User = {
   id: number;
@@ -15,6 +18,13 @@ export type User = {
   certificateImage: string;
   banned: boolean;
   banReason: Optional<string>;
+  moderationStatus: ModerationStatus;
+  moderationComment: Optional<string>;
+  userRoles: UserRolesEntity[];
+};
+
+export type Users = {
+  users: User[]
 };
 
 export enum userType {

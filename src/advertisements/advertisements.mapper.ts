@@ -54,7 +54,10 @@ export const advertisementForGetBySlug = (
       phone: advert.author.phone,
       image: advert.author.image,
       banned: advert.author.banned,
+      userRoles: advert.author.userRoles,
       banReason: advert.author.banReason,
+      moderationStatus: advert.author.moderationStatus,
+      moderationComment: advert.author.moderationComment
     },
     userBets: advert.userBets, // UserBets : [{id,user_id,advertisement_id, created_at,expireBet,betValue,isActive},{...}]
   },
@@ -110,6 +113,9 @@ export const userAdsWithActiveBets = (
         image: ad.author.image,
         banned: ad.author.banned,
         banReason: ad.author.banReason,
+        userRoles: ad.author.userRoles,
+        moderationStatus: ad.author.moderationStatus,
+        moderationComment: ad.author.moderationComment
       },
       lastBetInfo: {
         user_id: ad.userBets[0].user_id,

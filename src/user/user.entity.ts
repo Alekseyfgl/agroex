@@ -13,6 +13,7 @@ import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
 import { UserBetEntity } from '../bets/user-bet.entity';
 import {ApiProperty} from "@nestjs/swagger";
 import {userType} from "./interfacesAndTypes/user.type";
+import {ModerationStatus} from "../advertisements/interface/interfacesAndTypes";
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -76,6 +77,14 @@ export class UserEntity {
   @Column('varchar', { default: null, length: 200 })
   banReason: string;
 
+  @ApiProperty()
+  @Column({ default: ModerationStatus.UNMODERATED })
+  moderationStatus: ModerationStatus;
+
+  @ApiProperty({default: null})
+  @Column('varchar', { default: null })
+  moderationComment: string | null;
+
   @ApiProperty({type: [UserRolesEntity]})
   @OneToMany(() => UserRolesEntity, (userRolesEntity) => userRolesEntity.user, {
     cascade: true,
@@ -89,7 +98,6 @@ export class UserEntity {
   async hashPassword() {
     this.password = await hash(this.password, numToEncode);
   }
-
 
   @OneToMany(
     () => AdvertisementsEntity,

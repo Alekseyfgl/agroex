@@ -7,6 +7,7 @@ import { UserEntity } from '../user/user.entity';
 import {ApiOperation, ApiResponse, ApiSecurity, ApiTags} from "@nestjs/swagger";
 import {GetAllAdsSwagger} from "../../swagger/adsSwagger";
 import {OrdersSwagger} from "../../swagger/ordersSwagger";
+import {ApprovedUserGuard} from "../user/guards/approvedUser.guard";
 
 
 @ApiTags('orders')
@@ -30,7 +31,7 @@ export class OrdersController {
   @ApiOperation({summary: 'Confirm the deal'})
   @ApiSecurity('JWT-auth')
   @Post('confirm/:slug')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, ApprovedUserGuard)
   async confirmBet(
     @User() currentUser: UserEntity,
     @Param('slug') slug: string,
@@ -41,7 +42,7 @@ export class OrdersController {
   @ApiOperation({summary: 'Buy product now'})
   @ApiSecurity('JWT-auth')
   @Post('buy/:slug')
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, ApprovedUserGuard)
   async buyNow(
     @User() currentUser: UserEntity,
     @Param('slug') slug: string,

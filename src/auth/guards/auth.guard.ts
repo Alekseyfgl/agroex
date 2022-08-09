@@ -17,7 +17,7 @@ export class AuthGuard implements CanActivate {
       .getRequest<ExpressRequestInterface>();
 
     if (request.user) {
-      return true; // если true, то мы можем попасть в наш контроллер
+      return true;
     }
     throw new HttpException(MessageError.NOT_AUTHORIZED, HttpStatus.UNAUTHORIZED)
   }

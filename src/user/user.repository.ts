@@ -1,15 +1,19 @@
-import { AbstractRepository, EntityRepository } from 'typeorm';
-import { customAlphabet } from 'nanoid'
-import { UserEntity } from './user.entity';
+import {AbstractRepository, EntityRepository} from 'typeorm';
+import {customAlphabet} from 'nanoid'
+import {UserEntity} from './user.entity';
 import {CreateCompanyDto, CreatePersonDto} from '../auth/dto/createUser.dto';
-import { HttpException, HttpStatus } from '@nestjs/common';
-import { DB_RELATIONS, MessageError, ROLES_ID } from '../constans/constans';
-import { LoginUserDto } from '../auth/dto/loginUserDto';
-import { compare } from 'bcrypt';
-import { RolesEntity } from '../roles/roles.entity';
-import { AddRoleDto } from './dto/add-role.dto';
-import { BanUserDto } from './dto/ban-user.dto';
-import { Optional } from '../interfacesAndTypes/optional.interface';
+import {HttpException, HttpStatus} from '@nestjs/common';
+import {DB_RELATIONS, MessageError, ROLES_ID} from '../constans/constans';
+import {LoginUserDto} from '../auth/dto/loginUserDto';
+import {compare} from 'bcrypt';
+import {RolesEntity} from '../roles/roles.entity';
+import {AddRoleDto} from './dto/add-role.dto';
+import {BanUserDto} from './dto/ban-user.dto';
+import {Optional} from '../interfacesAndTypes/optional.interface';
+import {ModerationStatus} from "../advertisements/interface/interfacesAndTypes";
+import {Dictionary} from "lodash";
+import * as _ from "lodash";
+import {ModerationDataDto} from "./dto/user-moderation.dto";
 
 @EntityRepository(UserEntity)
 export class UserRepository extends AbstractRepository<UserEntity> {
@@ -86,8 +90,6 @@ export class UserRepository extends AbstractRepository<UserEntity> {
   async findUserById(id: number): Promise<UserEntity> {
     const user: UserEntity = await this.repository.findOne({
       where: { id: id },
-      //      userRoles- назв таблицы               userRoles.role
-      //      userBets- назв таблицы             userBets
       relations: ['userBets', DB_RELATIONS.USER_ROLES, DB_RELATIONS.ROLES],
     });
 
@@ -127,4 +129,17 @@ export class UserRepository extends AbstractRepository<UserEntity> {
     user.banReason = dto.banReason;
     await this.repository.save(user);
   }
+  
+  async getUnmoderatedUsers(): Promise<UserEntity[]> {
+    return await this.repository.find({where: {moderationStatus: ModerationStatus.UNMODERATED}})
+  }
+
+  async setModerationData(moderationDataDto: ModerationDataDto): Promise<void> {
+    const moderationData: Dictionary<any> = _.omit(moderationDataDto, 'userId');
+
+    await this.repository.update({id: moderationDataDto.userId}, {
+      ...moderationData
+    })
+  }
+
 }

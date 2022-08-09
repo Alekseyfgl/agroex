@@ -13,7 +13,7 @@ export class ParseFile implements PipeTransform {
     files: Express.Multer.File,
     metadata: ArgumentMetadata,
   ): Express.Multer.File {
-    console.log('filePipe: ' + files)
+
     if (files === undefined || files === null ) {
       throw new HttpException(FILES_ERRORS.FILE_EXPECTED, HttpStatus.NOT_FOUND)
     }
@@ -27,9 +27,6 @@ export class ParseFiles implements PipeTransform {
       files: Array<Express.Multer.File>,
       metadata: ArgumentMetadata,
   ): Express.Multer.File[] {
-    console.log('filesPipe: ' + files)
-
-    console.log('filesPipe: isArray' + Array.isArray(files))
 
     if (files.length === 0) {
       throw new HttpException(FILES_ERRORS.FILE_EXPECTED, HttpStatus.NOT_FOUND)

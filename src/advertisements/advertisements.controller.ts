@@ -45,6 +45,7 @@ import {
   GetAllAdsSwagger,
   GetOneAdSwagger, GetUsersAdsWithBetsSwagger, ModerConfirmRequestSwagger
 } from "../../swagger/adsSwagger";
+import {ApprovedUserGuard} from "../user/guards/approvedUser.guard";
 
 
 @ApiTags('advertisements')
@@ -58,10 +59,10 @@ export class AdvertisementsController {
   @ApiOperation({summary: 'Create advertisement'})
   @ApiResponse({status: 201, description: 'Create advertisement for register user', type: CreateAdResponseSwagger})
   @ApiSecurity('JWT-auth')
- @ApiBody({type: CreateAdSwagger})
+  @ApiBody({type: CreateAdSwagger})
   @ApiConsumes('multipart/form-data')
   @Post()
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, ApprovedUserGuard)
   @UsePipes(new ValidationPipe())
   @UseInterceptors(
     FilesInterceptor('files', 4,{
@@ -76,7 +77,7 @@ export class AdvertisementsController {
     @Body() createAdvertDto: CreateAdvertisementDto,
   ): Promise<AdvertResponseInterfaceForCreate> {
     const imgSavedData = [];
-
+    console.log('in controleller ' + currentUser)
     for (const file of files) {
       const imgUrl: UploadApiResponse = await this.filesService.getSavedImgData(file);
       imgSavedData.push({img: imgUrl.secure_url})
@@ -174,7 +175,7 @@ export class AdvertisementsController {
   @ApiResponse({status: 200, description: 'Editing advertisement by a user'})
   @ApiSecurity('JWT-auth')
   @Put('/update')
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, ApprovedUserGuard)
   @UsePipes(new ValidationPipe())
   @UseInterceptors(
     FilesInterceptor('files', 4,{
