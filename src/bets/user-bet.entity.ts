@@ -3,12 +3,13 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  ManyToOne,
+  ManyToOne, OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { UserEntity } from '../user/user.entity';
 import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
 import {ApiProperty} from "@nestjs/swagger";
+import {OrdersEntity} from "../orders/entities/orders.entity";
 
 @Entity({ name: 'userBets' })
 export class UserBetEntity {
@@ -48,4 +49,8 @@ export class UserBetEntity {
   )
   @JoinColumn({ name: 'advertisement_id' })
   advertisement: AdvertisementsEntity;
+
+  @ApiProperty({type: () =>  OrdersEntity})
+  @OneToOne(() => OrdersEntity, (ordersEntity) => ordersEntity.userBet)
+  orders: OrdersEntity;
 }

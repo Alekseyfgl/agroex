@@ -29,7 +29,6 @@ export class CreateAdvertisementDto {
   @IsNotEmpty()
   country: string;
 
-
   @ApiProperty({
     description: 'Bukhara Region',
     example: 'Bukhara Region',
@@ -63,7 +62,7 @@ export class CreateAdvertisementDto {
   @Length(2, 3)
   readonly currency: string;
 
-  img: string;
+  img: string[];
 
   @ApiProperty({
     example: '5000',

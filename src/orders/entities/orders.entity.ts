@@ -24,8 +24,8 @@ export class OrdersEntity {
   @CreateDateColumn({ type: 'timestamptz' })
   orderCreated: Date;
 
-@ApiProperty()
-  @OneToOne(() => UserBetEntity)
+@ApiProperty({type: () => UserBetEntity})
+  @OneToOne(() => UserBetEntity, (userBetEntity) => userBetEntity.orders)
   @JoinColumn({ name: 'bet_id' })
-  bet: UserBetEntity;
+  userBet: UserBetEntity;
 }

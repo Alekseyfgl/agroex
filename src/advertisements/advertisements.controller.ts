@@ -7,7 +7,7 @@ import {
   Post,
   Put,
   Query,
-  UploadedFile,
+  UploadedFile, UploadedFiles,
   UseGuards,
   UseInterceptors,
   UsePipes,
@@ -25,10 +25,10 @@ import {
   AdvertsResponseInterface,
   UserAdsWithBetsResponse,
 } from './interface/advertResponseInterface';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 import { FilesService } from '../files/files.service';
 import { fileMimetypeFilter } from '../files/filters/file-mimetype-filter';
-import { ParseFile } from '../files/pipes/parse-file.pipe';
+import {ParseFile, ParseFiles} from '../files/pipes/parse-file.pipe';
 import { UploadApiResponse } from 'cloudinary';
 import {MAX_IMAGE_SIZE, ORDER, ROLES_ID} from '../constans/constans';
 import { Roles } from '../roles/decorators/roles-auth.decorator';
@@ -45,6 +45,7 @@ import {
   GetAllAdsSwagger,
   GetOneAdSwagger, GetUsersAdsWithBetsSwagger, ModerConfirmRequestSwagger
 } from "../../swagger/adsSwagger";
+import {ApprovedUserGuard} from "../user/guards/approvedUser.guard";
 
 
 @ApiTags('advertisements')
@@ -58,26 +59,32 @@ export class AdvertisementsController {
   @ApiOperation({summary: 'Create advertisement'})
   @ApiResponse({status: 201, description: 'Create advertisement for register user', type: CreateAdResponseSwagger})
   @ApiSecurity('JWT-auth')
- @ApiBody({type: CreateAdSwagger})
+  @ApiBody({type: CreateAdSwagger})
   @ApiConsumes('multipart/form-data')
   @Post()
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, ApprovedUserGuard)
   @UsePipes(new ValidationPipe())
   @UseInterceptors(
-    FileInterceptor('files', {
+    FilesInterceptor('files', 4,{
       fileFilter: fileMimetypeFilter('image'),
       limits: { fileSize: MAX_IMAGE_SIZE },
     }),
   )
 
   async createAdvertisement(
-    @UploadedFile(ParseFile) file: Express.Multer.File, // получаем 1 файл, который нам отправляют
+    @UploadedFiles(ParseFiles) files: Array<Express.Multer.File>,
     @User() currentUser: UserEntity,
     @Body() createAdvertDto: CreateAdvertisementDto,
   ): Promise<AdvertResponseInterfaceForCreate> {
-    const imgSavedData: UploadApiResponse =
-      await this.filesService.getSavedImgData(file);
-    Object.assign(createAdvertDto, { img: imgSavedData.secure_url });
+    const imgSavedData = [];
+
+    for (const file of files) {
+      const imgUrl: UploadApiResponse = await this.filesService.getSavedImgData(file);
+      imgSavedData.push({img: imgUrl.secure_url})
+    }
+
+    Object.assign(createAdvertDto, {images: imgSavedData});
+
     const advertisement: AdvertisementsEntity =
       await this.advertisementsService.createAdvertisement(
         currentUser,
@@ -164,27 +171,33 @@ export class AdvertisementsController {
     );
   }
 
-  @ApiOperation({summary: 'Editing advertisement by a moderator'})
-  @ApiResponse({status: 200, description: 'Editing advertisement by a moderator'})
+  @ApiOperation({summary: 'Editing advertisement by a user'})
+  @ApiResponse({status: 200, description: 'Editing advertisement by a user'})
   @ApiSecurity('JWT-auth')
   @Put('/update')
-  @UseGuards(AuthGuard, RolesGuard)
+  @UseGuards(AuthGuard, ApprovedUserGuard)
   @UsePipes(new ValidationPipe())
   @UseInterceptors(
-    FileInterceptor('files', {
+    FilesInterceptor('files', 4,{
       fileFilter: fileMimetypeFilter('image'),
       limits: { fileSize: MAX_IMAGE_SIZE },
     }),
   )
   async updateAdData(
-    @UploadedFile() file: Express.Multer.File, // получаем 1 файл, который нам отправляют
+    @UploadedFiles() files: Array<Express.Multer.File>,
     @User() currentUser: UserEntity,
     @Body() updateAdvertDto: UpdateAdDataDto,
   ): PromiseOptional<void> {
-    if (file) {
-      const imgSavedData: UploadApiResponse =
-        await this.filesService.getSavedImgData(file);
-      Object.assign(updateAdvertDto, { img: imgSavedData.secure_url });
+
+    if (files && files.length > 0) {
+      const imgSavedData = [];
+
+      for (const file of files) {
+        const imgUrl: UploadApiResponse = await this.filesService.getSavedImgData(file);
+        imgSavedData.push({img: imgUrl.secure_url})
+      }
+
+      Object.assign(updateAdvertDto, {images: imgSavedData});
     }
 
     return this.advertisementsService.setUpdatedAd(

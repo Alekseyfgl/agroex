@@ -2,7 +2,8 @@ import { AdvertisementsEntity } from '../advertisements.entity';
 import { UserBetEntity } from '../../bets/user-bet.entity';
 import { Optional } from '../../interfacesAndTypes/optional.interface';
 import { ModerationStatus } from './interfacesAndTypes';
-import { UserType } from '../../user/interfacesAndTypes/user.type';
+import { User } from '../../user/interfacesAndTypes/user.type';
+import {AdvertisementsImagesEntity} from "../advertisements-images.entity";
 
 export type AdvertisementType = {
   id: number;
@@ -20,7 +21,7 @@ export type AdvertisementType = {
   moderationComment: Optional<string>;
   price: number;
   currency: string;
-  img: string;
+  images: AdvertisementsImagesEntity[];
   quantity: number;
   unit: string;
   createAt: Date;
@@ -29,7 +30,7 @@ export type AdvertisementType = {
 };
 
 export interface AdvertResponseInterface {
-  advertisement: AdvertisementType & { author: UserType } & {
+  advertisement: AdvertisementType & { author: User } & {
     userBets: UserBetEntity[];
   };
 }
@@ -48,12 +49,12 @@ export interface AdvertsResponseInterface {
 }
 
 export type LastBetInfoType = {
-  user_id_with_last_bet: number;
-  last_bet_value: string;
+  user_id: number;
+  bet_value: number;
 };
 
-export type UserAdsAndWithBets = AdvertisementType & LastBetInfoType;
+export type UserAdsAndWithBets = AdvertisementType & { userBets:  LastBetInfoType} & { author: User };
 
 export type UserAdsWithBetsResponse = AdvertisementType & {
-  lastBetInfo: LastBetInfoType;
-};
+  lastBetInfo: Pick<UserBetEntity, 'user_id' | 'betValue'>;
+} & { author: User };

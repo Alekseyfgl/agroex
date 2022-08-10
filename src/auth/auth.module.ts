@@ -4,9 +4,10 @@ import { AuthController } from './auth.controller';
 import { UserModule } from '../user/user.module';
 import { AuthGuard } from './guards/auth.guard';
 import { RolesGuard } from './guards/roles.guard';
+import {FilesModule} from "../files/files.module";
 
 @Module({
-  imports: [UserModule],
+  imports: [UserModule, FilesModule],
   controllers: [AuthController],
   providers: [AuthService, AuthGuard, RolesGuard],
 })

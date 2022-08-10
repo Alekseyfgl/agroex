@@ -3,6 +3,8 @@ import { OrdersEntity } from '../entities/orders.entity';
 import { UserEntity } from '../../user/user.entity';
 import { AdvertisementsEntity } from '../../advertisements/advertisements.entity';
 import { UserBetEntity } from '../../bets/user-bet.entity';
+import {userType} from "../../user/interfacesAndTypes/user.type";
+import {AdvertisementsImagesEntity} from "../../advertisements/advertisements-images.entity";
 
 export type OrdersType = OrdersEntity & { bet_id: number };
 
@@ -28,26 +30,32 @@ export type ApprovedAdsResponseInterface = {
   isModerated: boolean;
   isActive: boolean;
   moderationComment: Optional<string>;
-  price: string;
+  price: number;
   currency: string;
-  img: Optional<string>;
-  quantity: string;
+  images: AdvertisementsImagesEntity[];
+  quantity: number;
   unit: string;
   createAt: Date;
   updatedAt: Date;
   expireAdvert: Date;
   author: {
     id: number;
+    type: userType;
     email: string;
-    username: string;
+    name: string;
+    surname: string;
     phone: string;
     image: Optional<string>;
+    companyName: string;
+    companyTaxNumber: string;
+    bankAccount: string;
+    certificateImage: string;
     banned: boolean;
     banReason: Optional<string>;
   };
   orderInfo: {
     orderCreated: Date;
-    totalPrice: string;
+    totalPrice: number;
     bet_id: number;
     dealStatus: string;
   };

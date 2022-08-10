@@ -12,6 +12,8 @@ import { UserRolesEntity } from '../roles/user-roles.entity';
 import { AdvertisementsEntity } from '../advertisements/advertisements.entity';
 import { UserBetEntity } from '../bets/user-bet.entity';
 import {ApiProperty} from "@nestjs/swagger";
+import {userType} from "./interfacesAndTypes/user.type";
+import {ModerationStatus} from "../advertisements/interface/interfacesAndTypes";
 
 @Entity({ name: 'users' })
 export class UserEntity {
@@ -19,17 +21,45 @@ export class UserEntity {
   @PrimaryGeneratedColumn('increment')
   id: number;
 
+  @ApiProperty({example: 'person'})
+  @Column('varchar')
+  type: userType
+
+  @ApiProperty({example: 'an12469423'})
+  @Column('varchar', { unique: true })
+  uuid: string;
+
   @ApiProperty({example: 'anton@gmail.com'})
   @Column('varchar', { unique: true })
   email: string;
 
   @ApiProperty({example: 'Anton'})
-  @Column('varchar', { length: 50 })
-  username: string;
+  @Column('varchar', { length: 50, default: null })
+  name: string;
+
+  @ApiProperty({example: 'Ivanov'})
+  @Column('varchar', { length: 50, default: null })
+  surname: string;
 
   @ApiProperty({example: '+375333456778'})
   @Column('varchar', { length: 18 })
   phone: string;
+
+  @ApiProperty({example: 'Microsoft'})
+  @Column('varchar', {  default: null })
+  companyName: string;
+
+  @ApiProperty({example: '37654638920'})
+  @Column('varchar', {  default: null })
+  companyTaxNumber: string;
+
+  @ApiProperty({example: ''})
+  @Column('varchar', {  default: null })
+  bankAccount: string;
+
+  @ApiProperty({example: 'https://res.cloudinary.com/agroex-backend/image/upload/v1656319454/rs2k74crvmzu872fm5sh.webp'})
+  @Column('varchar', { default: null  })
+  certificateImage: string;
 
   @ApiProperty()
   @Column('varchar')
@@ -47,6 +77,13 @@ export class UserEntity {
   @Column('varchar', { default: null, length: 200 })
   banReason: string;
 
+  @ApiProperty()
+  @Column({ default: ModerationStatus.UNMODERATED })
+  moderationStatus: ModerationStatus;
+
+  @ApiProperty({default: null})
+  @Column('varchar', { default: null })
+  moderationComment: string | null;
 
   @ApiProperty({type: [UserRolesEntity]})
   @OneToMany(() => UserRolesEntity, (userRolesEntity) => userRolesEntity.user, {
@@ -61,7 +98,6 @@ export class UserEntity {
   async hashPassword() {
     this.password = await hash(this.password, numToEncode);
   }
-
 
   @OneToMany(
     () => AdvertisementsEntity,

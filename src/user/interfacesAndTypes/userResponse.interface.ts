@@ -1,5 +1,9 @@
 import { UserForRegistration } from '../../auth/interfacesAndTypes/userForRegistration';
 
-export interface UserResponseInterface {
+export interface UserResponseWithTokenInterface {
   user: UserForRegistration & { token: string };
+}
+
+export interface UserResponseInterface {
+  UserForRegistration;
 }

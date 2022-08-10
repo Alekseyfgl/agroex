@@ -14,7 +14,7 @@ import {
   NOTIFICATIONS_MESSAGE_LOT_WAS_BOUGHT,
   NOTIFICATIONS_MESSAGE_NEW_BET_WAS_PLACED,
   NOTIFICATIONS_MESSAGES,
-  NOTIFICATIONS_TITLE_YOUR_BET_OUTBID, NOTIFICATIONS_TYPES,
+  NOTIFICATIONS_TITLE_YOUR_BET_OUTBID, NOTIFICATIONS_TYPES, ROLES_ID,
 } from '../constans/constans';
 import { NotificationsService } from '../notifications/notifications.service';
 import { BetAndAdvertInterface } from './interface/bet.interface';
@@ -58,6 +58,12 @@ export class BetService {
     if (currentUserId === authorAdvertisementId) {
       throw new HttpException(MessageError.ACCESS_DENIED, HttpStatus.FORBIDDEN)
     }
+
+    user.userRoles.forEach(role => {
+      if (role.role_id.toString() === ROLES_ID.MODERATOR) {
+        throw new HttpException(MessageError.ACCESS_DENIED, HttpStatus.FORBIDDEN)
+      }
+    })
 
     if (isConfirmed) {
       throw new HttpException(MessageError.ADVERTISEMENT_ALREADY_CONFIRMED, HttpStatus.NOT_FOUND)

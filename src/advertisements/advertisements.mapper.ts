@@ -34,7 +34,7 @@ export const advertisementForGetBySlug = (
     moderationComment: advert.moderationComment,
     price: advert.price,
     currency: advert.currency,
-    img: advert.img,
+    images: advert.images,
     quantity: advert.quantity,
     unit: advert.unit,
     createAt: advert.createAt,
@@ -42,12 +42,22 @@ export const advertisementForGetBySlug = (
     expireAdvert: advert.expireAdvert,
     author: {
       id: advert.author.id,
+      uuid: advert.author.uuid,
+      type: advert.author.type,
       email: advert.author.email,
-      username: advert.author.username,
+      name: advert.author.name,
+      surname: advert.author.surname,
+      companyName: advert.author.companyName,
+      companyTaxNumber: advert.author.companyTaxNumber,
+      certificateImage: advert.author.certificateImage,
+      bankAccount: advert.author.bankAccount,
       phone: advert.author.phone,
       image: advert.author.image,
       banned: advert.author.banned,
+      userRoles: advert.author.userRoles,
       banReason: advert.author.banReason,
+      moderationStatus: advert.author.moderationStatus,
+      moderationComment: advert.author.moderationComment
     },
     userBets: advert.userBets, // UserBets : [{id,user_id,advertisement_id, created_at,expireBet,betValue,isActive},{...}]
   },
@@ -63,12 +73,12 @@ export const advertisementsResponseAll = (
 };
 
 export const userAdsWithActiveBets = (
-  ads: UserAdsAndWithBets[],
+  ads,
 ): UserAdsWithBetsResponse[] => {
   return ads.map(
     (ad: UserAdsAndWithBets): UserAdsWithBetsResponse => ({
       id: ad.id,
-      img: ad.img,
+      images: ad.images,
       createAt: ad.createAt,
       updatedAt: ad.updatedAt,
       authorId: ad.authorId,
@@ -88,9 +98,28 @@ export const userAdsWithActiveBets = (
       expireAdvert: ad.expireAdvert,
       moderationStatus: ad.moderationStatus,
       isConfirmed: ad.isConfirmed,
+      author: {
+        id: ad.author.id,
+        uuid: ad.author.uuid,
+        type: ad.author.type,
+        email: ad.author.email,
+        name: ad.author.name,
+        surname: ad.author.surname,
+        companyName: ad.author.companyName,
+        companyTaxNumber: ad.author.companyTaxNumber,
+        certificateImage: ad.author.certificateImage,
+        bankAccount: ad.author.bankAccount,
+        phone: ad.author.phone,
+        image: ad.author.image,
+        banned: ad.author.banned,
+        banReason: ad.author.banReason,
+        userRoles: ad.author.userRoles,
+        moderationStatus: ad.author.moderationStatus,
+        moderationComment: ad.author.moderationComment
+      },
       lastBetInfo: {
-        user_id_with_last_bet: ad.user_id_with_last_bet,
-        last_bet_value: ad.last_bet_value,
+        user_id: ad.userBets[0].user_id,
+        betValue: ad.userBets[0].betValue,
       },
     }),
   );

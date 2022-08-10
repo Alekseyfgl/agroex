@@ -18,6 +18,7 @@ export const enum ROLES_ID {
 
 export const enum MessageError {
   EMAIL_IS_TAKEN = 'This email is already taken',
+  PHONE_IS_TAKEN = 'This phone is already taken',
   INCORRECT_DATA = 'You entered incorrect data',
   USER_ID_NOT_FOUND = 'User with this id not found',
   NOT_AUTHORIZED = 'Not authorized',
@@ -25,6 +26,8 @@ export const enum MessageError {
   ROLE_OR_USER_NOT_FOUND = 'User or role not found',
   USER_NOT_FOUND = 'User not found',
   ACCESS_DENIED = 'Access denied',
+  USER_IS_NOT_APPROVED = 'User is not approved by moderator',
+  USER_IS_ALREADY_BEEN_APPROVED = 'User is already been approved',
   ADVERTISEMENT_NOT_FOUND = 'This advertisement was not found',
   ERROR_WHILE_SAVING_ON_CLOUDINARY = 'Error while saving on cloudinary',
   HIGHER_PRICE_THAN_SELLER = 'Your price is higher than the seller',
@@ -54,6 +57,20 @@ export const enum DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS {
   USERBETS_IS_ACTIVE = 'userBets.isActive = :isActive',
   SORT_BETS_BY_CREATE_AT = 'userBets.created_at',
   ADVERT_SLUG = 'advertisements.slug = :slug',
+  ACTIVE_ADV = 'activeAdvUserBet',
+  ACTIVE_ADV_ISACTIVE = 'activeAdvUserBet.isActive=:isActive',
+  IS_CURRENT_USER = 'userBets.user_id=:currentUser',
+  ADV_ORDERS = 'userBets.orders',
+  ORDERS_TABLE = 'orders',
+  ADV_IS_AUTHOR = 'advertisements.author.id = :authorId',
+  ORDERS_CREATED_FIELD = 'orders.orderCreated'
+}
+
+export const enum DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_IMG {
+  TABLE = 'advertisements',
+  LEFT_JOIN_AND_SELECT = 'advertisements.images',
+  IMG = 'images',
+  IMG_SELECT = 'images.img',
 }
 
 export const enum HOST_URL {

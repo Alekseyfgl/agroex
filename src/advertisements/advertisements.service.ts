@@ -20,12 +20,14 @@ import {
   NOTIFICATIONS_LINKTO,
   NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_APPROVED,
   NOTIFICATIONS_MESSAGE_YOUR_LOT_WAS_REJECTED,
-  NOTIFICATIONS_MESSAGES, NOTIFICATIONS_TYPES,
+  NOTIFICATIONS_MESSAGES, NOTIFICATIONS_TYPES, ROLES_ID,
 } from '../constans/constans';
 import { PromiseOptional } from '../interfacesAndTypes/optional.interface';
 import { QueryDto } from './dto/query.dto';
 import {Filterobj, ModerationStatus} from './interface/interfacesAndTypes';
 import {NotificationsService} from "../notifications/notifications.service";
+import {allApprovedAdsResponse} from "../orders/orders.mapper";
+import {ConfirmedOrdersInterface} from "../orders/interface/orders.interface";
 
 
 
@@ -41,6 +43,13 @@ export class AdvertisementsService {
     currentUser: UserEntity,
     createAdvertDto: CreateAdvertisementDto,
   ): Promise<AdvertisementsEntity> {
+
+    currentUser.userRoles.forEach(role => {
+      if (role.role_id.toString() === ROLES_ID.MODERATOR) {
+        throw new HttpException(MessageError.ACCESS_DENIED, HttpStatus.FORBIDDEN)
+      }
+    })
+
     return await this.advertisementsRepository.createAdvertisement(
       currentUser,
       createAdvertDto,
@@ -67,8 +76,9 @@ export class AdvertisementsService {
   async getAdsWithBetByAuthor(
     currentUserId: number,
   ): Promise<UserAdsWithBetsResponse[]> {
-    const ads: UserAdsAndWithBets[] =
+    const ads: AdvertisementsEntity[] =
       await this.advertisementsRepository.findAdsWithBetByUser(currentUserId);
+
     return userAdsWithActiveBets(ads);
   }
 
@@ -131,6 +141,10 @@ export class AdvertisementsService {
     }
 
     await this.advertisementsRepository.updateAdData(updateAdvertDto);
+  }
+
+  async getAllApprovedAds(currentUserId: number): Promise<AdvertisementsEntity[]> {
+    return await this.advertisementsRepository.getAllApprovedAds(currentUserId)
   }
 
   public buildAdvertisementResponseForCreate(

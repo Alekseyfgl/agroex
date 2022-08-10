@@ -5,6 +5,10 @@ import { ModerationStatus } from '../interface/interfacesAndTypes';
 import {ApiProperty} from "@nestjs/swagger";
 
 export class SetModerationStatusDto extends AdvertisementsEntity {
+
+  @IsNotEmpty()
+  slug: string;
+
   @IsEnum(ModerationStatus)
   @NotEquals(ModerationStatus.UNMODERATED)
   moderationStatus: ModerationStatus;

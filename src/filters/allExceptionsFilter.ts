@@ -15,7 +15,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
             ? exception.getResponse()
             : INTERNAL_SERVER_ERROR;
 
-        const arrMessage: string[] = Array.isArray(exceptionMessage.message) ?  exceptionMessage.message : [exceptionMessage]
+        const arrMessage: string[] = Array.isArray(exceptionMessage.message) ?  exceptionMessage.message : [exceptionMessage.message ? exceptionMessage.message : exceptionMessage]
 
         response
             .status(status)

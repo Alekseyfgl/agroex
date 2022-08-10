@@ -10,12 +10,12 @@ import { CreateAdvertisementDto } from './dto/createAdvertisement.dto';
 import {
   DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS,
   ORDER,
-  MessageError,
+  MessageError, DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_IMG,
 } from '../constans/constans';
 import {
   AdvertisementType,
   AdvertsResponseInterface,
-  UserAdsAndWithBets,
+  UserAdsAndWithBets, UserAdsWithBetsResponse,
 } from './interface/advertResponseInterface';
 import { createSlug } from '../helper/helper';
 import {AdType, Filterobj, ModerationStatus} from './interface/interfacesAndTypes';
@@ -25,6 +25,8 @@ import * as moment from 'moment';
 import * as _ from 'lodash';
 import { Dictionary } from 'lodash';
 import { QueryDto } from './dto/query.dto';
+import {generateSelect} from "@nestjs/cli/lib/questions/questions";
+import {ConfirmedOrdersInterface} from "../orders/interface/orders.interface";
 
 @EntityRepository(AdvertisementsEntity)
 export class AdvertisementsRepository extends AbstractRepository<AdvertisementsEntity> {
@@ -57,12 +59,19 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
           DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.USER,
         )
 
+        .leftJoin(
+            DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_IMG.LEFT_JOIN_AND_SELECT,
+            DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_IMG.IMG,
+        )
+
         .leftJoinAndSelect(
           DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.LEFT_JOIN_AND_SELECT_USERBETS,
           DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.USERBETS,
           DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.USERBETS_IS_ACTIVE,
           { isActive: true },
         )
+
+        .addSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_IMG.IMG_SELECT)
 
         .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ADVERT_SLUG, {
           slug: slug,
@@ -94,14 +103,25 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
 
   async findAdsWithBetByUser(
     currentUserId: number,
-  ): Promise<UserAdsAndWithBets[]> {
-    return this.repository.query(`SELECT DISTINCT adv.id, user_id_with_last_bet, last_bet_value, adv.*  FROM advertisements AS adv 
-                                                        LEFT JOIN "userBets" AS ub ON adv.id=ub.advertisement_id
-                                                        JOIN (SELECT adv.id, ub."betValue" AS last_bet_value, ub.user_id AS user_id_with_last_bet FROM advertisements AS adv 
-                                                        LEFT JOIN "userBets" AS ub ON adv.id=ub.advertisement_id
-                                                        WHERE ub."isActive"=true) AS activeAdv ON adv.id = activeAdv.id
-                                                        WHERE ub.user_id = ${currentUserId} AND adv."isActive"=true
-                                                        ORDER BY adv."updatedAt" DESC`);
+  ): Promise<AdvertisementsEntity[]> {
+    const queryBuilder =
+        getRepository(AdvertisementsEntity)
+            .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.TABLE)
+            .leftJoin(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_IMG.LEFT_JOIN_AND_SELECT, DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_IMG.IMG)
+            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.LEFT_JOIN_AND_SELECT_USERBETS,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ACTIVE_ADV,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ACTIVE_ADV_ISACTIVE, {isActive: true}
+                )
+            .leftJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.LEFT_JOIN_AND_SELECT, DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.USER)
+            .leftJoin(
+            DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.LEFT_JOIN_AND_SELECT_USERBETS,
+            DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.USERBETS)
+            .addSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_IMG.IMG_SELECT)
+            .where(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ISACTIVE, {isActive: true})
+            .andWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.IS_CURRENT_USER, {currentUser:currentUserId })
+            .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.SORT_COLUMN_BY_UPDATED_AT, ORDER.DESC)
+
+            return await queryBuilder.getMany()
   }
 
   async findAll(
@@ -123,6 +143,13 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
           DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.USERBETS_IS_ACTIVE,
           { isActive: true },
         )
+
+        .leftJoin(
+            DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_IMG.LEFT_JOIN_AND_SELECT,
+            DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_IMG.IMG,
+        )
+
+        .addSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_IMG.IMG_SELECT)
 
         .addOrderBy(
           DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.SORT_BETS_BY_CREATE_AT,
@@ -231,14 +258,42 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
   }
 
   async updateAdData(updateAdvertDto: AdvertisementsEntity): Promise<void> {
-    const updateObj = _.omit(updateAdvertDto, ['slug']);
+    const updateObj: Dictionary<any> = _.omit(updateAdvertDto, ['slug']);
     updateObj.moderationStatus = ModerationStatus.UNMODERATED;
     updateObj.isModerated = false;
-    await this.repository.update(
-      {
-        slug: updateAdvertDto.slug,
-      },
-      updateObj,
-    );
+
+    const advData: AdvertisementsEntity = await this.repository.findOne({slug: updateAdvertDto.slug})
+    await this.repository.merge(advData, updateObj)
+
+    if (updateObj.images) {
+      await this.repository.query(`DELETE FROM "advertisementsImages" WHERE "advertisement_id"=${advData.id}`)
+    }
+
+    await this.repository.save(advData)
   }
+
+  async getAllApprovedAds(currentUserId: number): Promise<AdvertisementsEntity[]> {
+    const queryBuilder: SelectQueryBuilder<AdvertisementsEntity> =
+
+        getRepository(AdvertisementsEntity)
+            .createQueryBuilder(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.TABLE)
+            .leftJoinAndSelect(
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.LEFT_JOIN_AND_SELECT,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.USER,)
+            .leftJoinAndSelect(
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.LEFT_JOIN_AND_SELECT_USERBETS,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.USERBETS,)
+            .leftJoin(
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_IMG.LEFT_JOIN_AND_SELECT,
+                DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_IMG.IMG,
+            )
+            .addSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_IMG.IMG_SELECT)
+            .innerJoinAndSelect(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ADV_ORDERS, DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ORDERS_TABLE)
+            .andWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ADV_IS_AUTHOR, {authorId: currentUserId})
+            .orWhere(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.IS_CURRENT_USER, {currentUser: currentUserId})
+            .addOrderBy(DB_RELATIONS_ADVERTISEMENTS_AND_USER_AND_BETS.ORDERS_CREATED_FIELD, ORDER.DESC)
+
+    return await queryBuilder.getMany();
+  }
+
 }

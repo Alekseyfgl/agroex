@@ -26,18 +26,25 @@ export class FilesService {
     // return res;
   }
 
-  //конвертируем файл
   async convertToWebP(file: Buffer): Promise<Buffer> {
     return sharp(file).webp().toBuffer();
   }
 
   async getSavedImgData(file: MFile) {
-    let saveFile: MFile;
+    let saveFile: MFile,
+        buffer: Buffer,
+        mimetype: string = file.mimetype;
 
-    const buffer: Buffer = await this.convertToWebP(file.buffer);
+    if (file.mimetype.includes('image')) {
+      buffer = await this.convertToWebP(file.buffer);
+    } else {
+      buffer = file.buffer;
+    }
+
     saveFile = new MFile({
       originalname: `${file.originalname.split('.')[0]}.webp`,
       buffer,
+      mimetype
     });
 
     return this.saveFiles(saveFile);
