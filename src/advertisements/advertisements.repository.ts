@@ -258,11 +258,11 @@ export class AdvertisementsRepository extends AbstractRepository<AdvertisementsE
   }
 
   async updateAdData(updateAdvertDto: AdvertisementsEntity): Promise<void> {
-    const updateObj = _.omit(updateAdvertDto, ['slug']);
+    const updateObj: Dictionary<any> = _.omit(updateAdvertDto, ['slug']);
     updateObj.moderationStatus = ModerationStatus.UNMODERATED;
     updateObj.isModerated = false;
 
-    const advData = await this.repository.findOne({slug: updateAdvertDto.slug})
+    const advData: AdvertisementsEntity = await this.repository.findOne({slug: updateAdvertDto.slug})
     await this.repository.merge(advData, updateObj)
 
     if (updateObj.images) {

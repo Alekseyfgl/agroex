@@ -10,7 +10,7 @@ export class ModerationDataDto {
     readonly userId: number;
 
     @IsEnum(ModerationStatus)
-    readonly moderationStatus: string;
+    readonly moderationStatus: ModerationStatus;
 
     @IsOptional()
     @IsString()

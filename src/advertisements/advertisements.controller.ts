@@ -77,7 +77,7 @@ export class AdvertisementsController {
     @Body() createAdvertDto: CreateAdvertisementDto,
   ): Promise<AdvertResponseInterfaceForCreate> {
     const imgSavedData = [];
-    console.log('in controleller ' + currentUser)
+
     for (const file of files) {
       const imgUrl: UploadApiResponse = await this.filesService.getSavedImgData(file);
       imgSavedData.push({img: imgUrl.secure_url})
